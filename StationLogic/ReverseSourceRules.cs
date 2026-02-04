@@ -988,6 +988,18 @@ new Dictionary<string, List<SourceMeta>>
         return (match.IstCode, nodeIndex);
     }
 
+    public static IEnumerable<string> GetCategories()
+    {
+        return _mappings.Keys.OrderBy(k => k);
+    }
+
+    public static IEnumerable<SourceMeta> GetVariables(string category)
+    {
+        if (_mappings.TryGetValue(category, out var list))
+            return list.OrderBy(m => m.TypeName);
+        return Enumerable.Empty<SourceMeta>();
+    }
+
     // Хелпер: вытаскивает имя и индекс из "NAME[123]"
     private static (string Name, int? Index) ParseNodeId(string id)
     {

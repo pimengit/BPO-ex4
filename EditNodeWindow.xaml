@@ -1,0 +1,41 @@
+﻿<Window x:Class="BPO_ex4.EditNodeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Connection Editor" Height="380" Width="450" 
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+
+    <Border Padding="15">
+        <StackPanel>
+            <TextBlock Name="TxtTitle" Text="Edit Connection" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
+
+            <GroupBox Header="Target (Where signal goes)" Margin="0,0,0,10">
+                <StackPanel Margin="5">
+                    <TextBlock Name="LblTarget" Text="Target: AVTODO_AR[8]" FontWeight="SemiBold"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <TextBlock Text="Logic Group (Column): " Foreground="Gray"/>
+                        <TextBlock Name="TxtGroupInfo" Text="5 (OR)" FontWeight="Bold"/>
+                        <TextBlock Name="TxtModeInfo" Text=" [Editing Input #2]" Foreground="Blue" Margin="10,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Source (Where signal comes from)" Margin="0,0,0,15">
+                <StackPanel Margin="5">
+                    <TextBlock Text="1. Select Category:" Margin="0,0,0,2"/>
+                    <ComboBox Name="CmbCategory" SelectionChanged="CmbCategory_SelectionChanged" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="2. Select Variable Type:" Margin="0,0,0,2"/>
+                    <ComboBox Name="CmbVariable" DisplayMemberPath="TypeName" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="3. Variable Index (Number):" Margin="0,0,0,2"/>
+                    <TextBox Name="TxtIndex" Text="0" Padding="2"/>
+                </StackPanel>
+            </GroupBox>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                <Button Content="Cancel" IsCancel="True" Width="80" Height="25" Margin="0,0,10,0"/>
+                <Button Content="Save" Click="BtnSave_Click" Width="100" Height="25" FontWeight="Bold"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</Window>

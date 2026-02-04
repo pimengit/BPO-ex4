@@ -1,91 +1,147 @@
 ﻿using OfficeOpenXml;
-using System.Linq;
+using System;
 using System.Collections.Generic;
-using BPO_ex4.StationLogic;
+using System.IO;
+using System.Linq;
+using BPO_ex4.StationLogic; // Проверьте namespace
 
-public static class ExcelUpdater
+namespace BPO_ex4.Excel
 {
-    public static void UpdateCell(string filePath, string sheetName, int objectIndex, int groupIndex, int inputIndex, Node newSourceNode)
+    public static class ExcelUpdater
     {
-        using var pkg = new ExcelPackage(new System.IO.FileInfo(filePath));
-        var ws = pkg.Workbook.Worksheets[sheetName];
-
-        // 1. ИЩЕМ СТРОКУ (Row) по индексу объекта
-        // В ExcelParser индекс читался из колонки 2 (col = 2), но надо проверить парсер.
-        // В парсере: var idxCell = ws.Cells[row, 2].Value;
-        int targetRow = -1;
-        int startRow = 5;
-
-        for (int r = startRow; r <= ws.Dimension.End.Row; r++)
+        // 1. ОБНОВЛЕНИЕ СУЩЕСТВУЮЩЕЙ ЯЧЕЙКИ
+        public static void UpdateCell(string filePath, string sheetName, int objectIndex, int groupIndex, int inputIndex, Node newSourceNode)
         {
-            var cellVal = ws.Cells[r, 2].Value?.ToString(); // Колонка B
-            if (cellVal == objectIndex.ToString())
-            {
-                targetRow = r;
-                break;
-            }
+            using var pkg = new ExcelPackage(new FileInfo(filePath));
+            var ws = pkg.Workbook.Worksheets[sheetName];
+            if (ws == null) throw new Exception($"Sheet {sheetName} not found");
+
+            int targetRow = FindRowByIndex(ws, objectIndex);
+            var colIndices = GetGroupColumns(ws, groupIndex);
+
+            if (inputIndex >= colIndices.Count)
+                throw new Exception($"Group {groupIndex} has only {colIndices.Count} inputs. Use AddInputToGroup instead.");
+
+            int targetColIst = colIndices[inputIndex];
+
+            // Получаем код для записи
+            (string istCode, int? numVal) = ReverseSourceRules.Resolve(sheetName, newSourceNode);
+
+            // Пишем
+            ws.Cells[targetRow, targetColIst].Value = istCode;
+            ws.Cells[targetRow, targetColIst - 1].Value = numVal; // Колонка №
+
+            pkg.Save();
         }
 
-        if (targetRow == -1) throw new System.Exception($"Object [{objectIndex}] not found in sheet {sheetName}");
-
-        // 2. ИЩЕМ КОЛОНКУ (Col) по маске заголовка
-        // Нам нужно воспроизвести логику "GroupsMapping" из ExcelParser
-        var groupsMapping = RebuildGroupsMapping(ws);
-
-        if (groupIndex >= groupsMapping.Count)
-            throw new System.Exception($"Group {groupIndex} not found in mask");
-
-        var colIndices = groupsMapping[groupIndex];
-
-        if (inputIndex >= colIndices.Count)
-            throw new System.Exception($"Input slot {inputIndex} not found in Group {groupIndex}");
-
-        int targetCol = colIndices[inputIndex]; // Это колонка "Ист" (Source)
-
-        // 3. КОНВЕРТИРУЕМ Node ID -> Excel Code ("2.3", "3.0")
-        // Это самое важное: нам нужен "Обратный SourceRules"
-        (string istCode, int? numVal) = ReverseSourceRules.Resolve(sheetName, newSourceNode);
-
-        // 4. ЗАПИСЫВАЕМ
-        // Колонка Ист
-        ws.Cells[targetRow, targetCol].Value = istCode;
-
-        // Колонка № (всегда слева от Ист, см. парсер: numCell = cIndex - 1)
-        if (numVal.HasValue)
-            ws.Cells[targetRow, targetCol - 1].Value = numVal.Value;
-        else
-            ws.Cells[targetRow, targetCol - 1].Value = null;
-
-        pkg.Save();
-    }
-
-    // Тот же код, что в ExcelParser, только возвращает карту
-    private static List<List<int>> RebuildGroupsMapping(ExcelWorksheet ws)
-    {
-        var map = new List<List<int>>();
-        map.Add(new List<int>()); // Нулевая группа пустая
-
-        int col = 5;
-        List<int> currentGroup = null;
-
-        while (true)
+        // 2. ДОБАВЛЕНИЕ НОВОГО ВХОДА (Вставка колонок)
+        public static void AddInputToGroup(string filePath, string sheetName, int objectIndex, int groupIndex, Node newSourceNode)
         {
-            var maskVal = ws.Cells[1, col].Value?.ToString();
-            if (string.IsNullOrWhiteSpace(maskVal)) break;
+            using var pkg = new ExcelPackage(new FileInfo(filePath));
+            var ws = pkg.Workbook.Worksheets[sheetName];
 
-            if (maskVal == "1")
-            {
-                currentGroup = new List<int>();
-                currentGroup.Add(col); // Добавляем колонку "Ист"
-                map.Add(currentGroup);
-            }
-            else if (maskVal == "0")
-            {
-                if (currentGroup != null)
-                    currentGroup.Add(col);
-            }
-            col += 2; // Шаг 2, так как пары (№, Ист)
+            // Находим строку объекта
+            int targetRow = FindRowByIndex(ws, objectIndex);
+
+            // Находим границы текущей группы
+            var colIndices = GetGroupColumns(ws, groupIndex);
+
+            // Нам нужно вставить ПОСЛЕ последнего входа этой группы
+            // Последняя колонка "Ист" текущей группы
+            int lastColInGroup = colIndices.Last();
+            int insertAtCol = lastColInGroup + 1; // Вставляем сразу за ней
+
+            // Вставляем 2 колонки (№ и Ист)
+            ws.InsertColumn(insertAtCol, 2);
+
+            // ОБНОВЛЯЕМ ШАПКУ (МАСКУ)
+            // Новые колонки должны принадлежать этой же группе, значит маска должна быть "0" (продолжение)
+            // insertAtCol - это будет колонка "№", insertAtCol+1 - это "Ист"
+            // Маска пишется над "Ист" (четные/нечетные надо проверить по файлу, обычно маска над Ист)
+            // В твоем парсере маска читается из Row 1.
+
+            // Если мы вставили колонки, старая маска сдвинулась вправо.
+            // Нам нужно в insertAtCol + 1 (новая колонка Ист) записать "0".
+            ws.Cells[1, insertAtCol + 1].Value = "0";
+
+            // ЗАПИСЫВАЕМ ДАННЫЕ
+            (string istCode, int? numVal) = ReverseSourceRules.Resolve(sheetName, newSourceNode);
+
+            ws.Cells[targetRow, insertAtCol + 1].Value = istCode; // Ист
+            ws.Cells[targetRow, insertAtCol].Value = numVal;      // №
+
+            pkg.Save();
         }
-        return map;
+
+        // 3. СОЗДАНИЕ НОВОЙ ПЕРЕМЕННОЙ (Вставка строки)
+        public static void CreateNewObject(string filePath, string sheetName, int newIndex, string description)
+        {
+            using var pkg = new ExcelPackage(new FileInfo(filePath));
+            var ws = pkg.Workbook.Worksheets[sheetName];
+
+            // Ищем последнюю заполненную строку (где есть индекс)
+            int lastRow = 5;
+            while (ws.Cells[lastRow + 1, 2].Value != null)
+            {
+                lastRow++;
+            }
+
+            int newRow = lastRow + 1;
+
+            // Пишем индекс (Колонка B / 2)
+            ws.Cells[newRow, 2].Value = newIndex;
+
+            // Пишем описание (Колонка C / 3)
+            ws.Cells[newRow, 3].Value = description;
+
+            // Можно скопировать форматирование с предыдущей строки, если нужно
+            // ws.Cells[lastRow, 1, lastRow, ws.Dimension.End.Column].Copy(ws.Cells[newRow, 1]);
+
+            pkg.Save();
+        }
+
+        // --- ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ---
+
+        private static int FindRowByIndex(ExcelWorksheet ws, int index)
+        {
+            int startRow = 5;
+            for (int r = startRow; r <= ws.Dimension.End.Row; r++)
+            {
+                var val = ws.Cells[r, 2].Value?.ToString();
+                if (val == index.ToString()) return r;
+            }
+            throw new Exception($"Object index {index} not found.");
+        }
+
+        private static List<int> GetGroupColumns(ExcelWorksheet ws, int targetGroupIndex)
+        {
+            var indices = new List<int>();
+            int col = 5;
+            int currentGroupIdx = 0;
+
+            while (true)
+            {
+                var maskVal = ws.Cells[1, col].Value?.ToString();
+                if (string.IsNullOrWhiteSpace(maskVal)) break;
+
+                if (maskVal == "1") currentGroupIdx++;
+
+                if (currentGroupIdx == targetGroupIndex)
+                {
+                    indices.Add(col); // Первая колонка группы ("Ист")
+
+                    // Ищем продолжение ("0")
+                    int nextCol = col + 2;
+                    while (ws.Cells[1, nextCol].Value?.ToString() == "0")
+                    {
+                        indices.Add(nextCol);
+                        nextCol += 2;
+                    }
+                    return indices;
+                }
+                col += 2;
+            }
+            throw new Exception($"Group {targetGroupIndex} not found in mask.");
+        }
     }
 }

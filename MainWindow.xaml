@@ -19,7 +19,17 @@
                 <RowDefinition Height="1.5*"/>
             </Grid.RowDefinitions>
 
-            <Button Name="BtnLoad" Content="Load Excel Project" Padding="10,5" Click="BtnLoad_Click" Background="#DDDDDD"/>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Name="BtnLoad" Content="Load Project" Margin="0,0,5,0" Click="BtnLoad_Click" Background="#DDDDDD"/>
+
+                <Button Name="BtnBack" Content="⬅ Back" Grid.Column="1" Width="60" 
+            Click="BtnBack_Click" IsEnabled="False" FontWeight="Bold"/>
+            </Grid>
             <TextBox Name="TxtSearchType" Grid.Row="1" Margin="0,5" Padding="5" TextChanged="TxtSearchType_TextChanged"/>
             <ListBox Name="LstTypes" Grid.Row="2" SelectionChanged="LstTypes_SelectionChanged" BorderBrush="Gray"/>
             <GridSplitter Grid.Row="3" HorizontalAlignment="Stretch" Background="LightGray"/>
