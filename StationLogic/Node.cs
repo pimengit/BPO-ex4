@@ -6,9 +6,10 @@ namespace BPO_ex4.StationLogic
 {
     public class Node
     {
-        public string Id;
-        public bool Value;
-        public string Description;
+        public string Id { get; set; }
+        public string Description { get; set; }
+        public bool Value { get; set; }
+        public object LogicSource;
 
         // Событие для логов и внешних подписчиков
         public event Action<Node>? Changed;

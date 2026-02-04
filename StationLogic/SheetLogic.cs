@@ -10,7 +10,7 @@ namespace BPO_ex4.StationLogic
 
         // Было: protected Node[] X;
         // Стало: Массив списков. Каждый элемент массива соответствует одной "1" в шапке Excel.
-        protected List<Node>[] Groups;
+        public List<Node>[] Groups;
 
         public TimeSpan OnDelay { get; protected set; } = TimeSpan.Zero;
         public TimeSpan OffDelay { get; protected set; } = TimeSpan.Zero;

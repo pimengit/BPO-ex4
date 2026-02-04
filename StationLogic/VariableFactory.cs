@@ -6,6 +6,7 @@ namespace BPO_ex4.StationLogic
     public static class VariableFactory
     {
         public static Node Create(
+
             Context ctx,
             string sheet,
             int index,
@@ -15,6 +16,7 @@ namespace BPO_ex4.StationLogic
         {
             var selfId = $"{sheet}[{index}]";
             var self = ctx.Get(selfId);
+            self.LogicSource = logic;
             //self.OnDelay = TimeSpan.Zero;
             //self.OffDelay = TimeSpan.FromMilliseconds(1);
             self.Description = description;
