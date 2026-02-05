@@ -18,8 +18,11 @@ namespace BPO_ex4.Excel
 
             foreach (var ws in pkg.Workbook.Worksheets)
             {
-                if (ws.Name.Contains("_CONF")) continue;
-                ParseSheet(ws, ctx);
+                if (ws.Name.Contains("_CONF") || ws.Name.Contains("Station_ID")) continue;
+                if (ws.Name.Contains("_"))
+                {
+                    ParseSheet(ws, ctx); 
+                }
             }
         }
 

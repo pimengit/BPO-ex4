@@ -15,6 +15,10 @@ namespace BPO_ex4
 {
     public partial class MainWindow : Window
     {
+        private SimulationEngine _engine;
+
+        // ... (в конструкторе или ReloadData)
+        
         private Context _ctx;
         private List<Node> _allNodesCache;
         private List<string> _uniqueTypes;
@@ -161,6 +165,17 @@ namespace BPO_ex4
             TxtNodeValue.Foreground = val ? Brushes.LimeGreen : Brushes.Red;
         }
 
+        // Метод-костыль, чтобы дать UI время на отрисовку
+        public static void AllowUIToUpdate()
+        {
+            DispatcherFrame frame = new DispatcherFrame();
+            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Render, new DispatcherOperationCallback(delegate (object parameter)
+            {
+                (parameter as DispatcherFrame).Continue = false;
+                return null;
+            }), frame);
+            Dispatcher.PushFrame(frame);
+        }
         // ==========================================
         //  МГНОВЕННОЕ ИЗМЕНЕНИЕ (БЕЗ EXCEL)
         // ==========================================
@@ -169,13 +184,16 @@ namespace BPO_ex4
             if (n.Id.StartsWith("CONST")) return;
 
             // 1. Меняем значение
-            n.Value = !n.Value;
+            //n.Value = !n.Value;
 
             // 2. МГНОВЕННЫЙ ПЕРЕСЧЕТ
-            RecomputeFast();
+            //RecomputeFast();
+            _engine.InjectChange(n, !n.Value);
 
-            // 3. Обновляем UI
             RenderTable(_currentNode);
+
+            // "Пни" интерфейс, чтобы он обновился
+            AllowUIToUpdate();
         }
 
         // ==========================================
@@ -258,7 +276,7 @@ namespace BPO_ex4
         // ==========================================
         private void BtnLoad_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new OpenFileDialog { Filter = "Excel Files|*.xlsx" };
+            var dlg = new OpenFileDialog { Filter = "Excel Files|*.xlsm" };
             if (dlg.ShowDialog() == true)
             {
                 _loadedExcelPath = dlg.FileName;
@@ -273,6 +291,7 @@ namespace BPO_ex4
 
         private void ReloadData()
         {
+            _engine = new SimulationEngine(_ctx);
             Mouse.OverrideCursor = Cursors.Wait;
             try
             {
