@@ -9,7 +9,17 @@ namespace BPO_ex4.StationLogic
         public string Id { get; set; }
         public string Description { get; set; }
         public bool Value { get; set; }
-        public object LogicSource;
+        public SheetLogic LogicSource { get; set; }
+
+        public List<Node> Dependents { get; set; } = new List<Node>();
+
+        // Делегат для вычисления (подменяется в VariableFactory)
+        public Func<bool> Compute { get; set; } = () => false;
+
+        public override string ToString()
+        {
+            return $"{Id} = {Value}";
+        }
 
         // Событие для логов и внешних подписчиков
         public event Action<Node>? Changed;
@@ -17,8 +27,6 @@ namespace BPO_ex4.StationLogic
         // Событие: "Таймер прошел, я готова применить отложенное значение"
         public event Action<Node>? DelayedUpdateReady;
 
-        public Func<bool> Compute;
-        public List<Node> Dependents = new();
 
         public TimeSpan OnDelay = TimeSpan.Zero;
         public TimeSpan OffDelay = TimeSpan.Zero;

@@ -5,55 +5,79 @@ using System.Text.RegularExpressions;
 
 namespace BPO_ex4.StationLogic
 {
-    public class GroupInfo
+    public class TableRow
     {
-        public string OperatorType; // "OR", "AND", "V", "Unknown"
-        public bool IsInverted;     // Стоит ли "!" перед группой
+        public int RowIndex { get; set; }
+        public Dictionary<int, string> Cells { get; set; } = new Dictionary<int, string>();
     }
 
     public static class LogicAnalyzer
     {
         private static Dictionary<string, string> _fileCache = new Dictionary<string, string>();
-
-        // Папка, где лежат .cs файлы (рядом с exe)
         public static string LogicFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LogicSheets");
 
         public static void LoadAllFiles()
         {
+            _fileCache.Clear();
             if (!Directory.Exists(LogicFolderPath)) return;
+
             foreach (var file in Directory.GetFiles(LogicFolderPath, "*.cs"))
             {
                 var name = Path.GetFileNameWithoutExtension(file);
-                // Читаем весь файл, убираем переносы строк для простоты поиска
-                var content = File.ReadAllText(file).Replace("\r", "").Replace("\n", " ");
-                _fileCache[name] = content;
+                string content = File.ReadAllText(file);
+
+                // Очистка от мусора
+                content = Regex.Replace(content, @"//.*", "");
+                content = content.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ");
+
+                // Мягкий поиск return
+                var match = Regex.Match(content, @"return\s*([\s\S]*?);");
+                if (match.Success)
+                {
+                    _fileCache[name] = match.Groups[1].Value.Trim();
+                }
             }
         }
 
-        public static GroupInfo AnalyzeGroup(string sheetName, int groupIndex)
+        public static List<TableRow> GetTruthTable(string sheetName)
         {
-            if (!_fileCache.TryGetValue(sheetName, out string content))
-                return new GroupInfo { OperatorType = "UNK", IsInverted = false };
+            var rows = new List<TableRow>();
 
-            // Ищем паттерны:
-            // !OR(5)  -> Type=OR, Inv=true
-            // AND(5)  -> Type=AND, Inv=false
-            // !V(2)   -> Type=V, Inv=true
-
-            // Regex ищет: (знак ! возможен) (имя оператора) (пробелы) ( (индекс) )
-            string pattern = $@"(!?)\s*(OR|AND|V)\s*\(\s*{groupIndex}\s*\)";
-
-            var match = Regex.Match(content, pattern);
-            if (match.Success)
+            // Если файла нет в кэше, создаем "Фейковую" строку
+            // Это нужно, чтобы в UI отрисовались хотя бы ЗАГОЛОВКИ столбцов
+            if (!_fileCache.TryGetValue(sheetName, out string code))
             {
-                return new GroupInfo
-                {
-                    IsInverted = match.Groups[1].Value == "!",
-                    OperatorType = match.Groups[2].Value
-                };
+                // Fallback: одна пустая строка
+                rows.Add(new TableRow { RowIndex = 0 });
+                return rows;
             }
 
-            return new GroupInfo { OperatorType = "UNK", IsInverted = false };
+            // Парсим реальный код
+            var parts = code.Split(new[] { "||" }, StringSplitOptions.None);
+            for (int i = 0; i < parts.Length; i++)
+            {
+                var rawRow = parts[i];
+                var tableRow = new TableRow { RowIndex = i };
+                var matches = Regex.Matches(rawRow, @"(!?)\s*(?:V|OR|AND)\s*\(\s*(\d+)\s*\)");
+
+                foreach (Match m in matches)
+                {
+                    bool isNot = m.Groups[1].Value == "!";
+                    if (int.TryParse(m.Groups[2].Value, out int groupIdx))
+                    {
+                        tableRow.Cells[groupIdx] = isNot ? "0" : "1";
+                    }
+                }
+                rows.Add(tableRow);
+            }
+            return rows;
+        }
+
+        public static string GetGroupType(string sheetName, int groupIdx)
+        {
+            if (!_fileCache.TryGetValue(sheetName, out string code)) return "";
+            var m = Regex.Match(code, $@"(OR|AND|V)\s*\(\s*{groupIdx}\s*\)");
+            return m.Success ? m.Groups[1].Value : "";
         }
     }
 }

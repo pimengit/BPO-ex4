@@ -1,33 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using BPO_ex4.StationLogic; // Для ReverseSourceRules и Node
-using BPO_ex4.Excel;        // Для ExcelUpdater
+using BPO_ex4.StationLogic;
+using BPO_ex4.Excel;
 
 namespace BPO_ex4
 {
+    public class InstanceItem
+    {
+        public int Index { get; set; }
+        public string Description { get; set; }
+        public override string ToString() => Index.ToString();
+    }
+
     public partial class EditNodeWindow : Window
     {
         private Node _targetNode;
         private int _groupIndex;
-        private int _inputIndex; // -1 означает "Добавление нового", >=0 означает "Редактирование"
-        private string _excelPath;
+        private int _inputIndex;
+        private ExcelSession _session;
+        private List<Node> _allNodes;
 
-        /// <summary>
-        /// Конструктор окна редактирования/добавления.
-        /// </summary>
-        /// <param name="target">Целевая нода (куда подключаем)</param>
-        /// <param name="groupIdx">Номер группы логики (AND/OR)</param>
-        /// <param name="inputIdx">Индекс входа в группе. Передай -1 для ДОБАВЛЕНИЯ.</param>
-        /// <param name="excelPath">Путь к файлу Excel</param>
-        public EditNodeWindow(Node target, int groupIdx, int inputIdx, string excelPath)
+        public EditNodeWindow(Node target, int groupIdx, int inputIdx, ExcelSession session, List<Node> allNodes)
         {
             InitializeComponent();
             _targetNode = target;
             _groupIndex = groupIdx;
             _inputIndex = inputIdx;
-            _excelPath = excelPath;
+            _session = session;
+            _allNodes = allNodes;
 
             LoadData();
             UpdateUi();
@@ -35,7 +38,6 @@ namespace BPO_ex4
 
         private void LoadData()
         {
-            // Загружаем категории из ReverseSourceRules
             CmbCategory.ItemsSource = ReverseSourceRules.GetCategories();
         }
 
@@ -62,6 +64,25 @@ namespace BPO_ex4
             {
                 CmbVariable.ItemsSource = ReverseSourceRules.GetVariables(category);
                 CmbVariable.SelectedIndex = -1;
+                CmbIndex.ItemsSource = null;
+            }
+        }
+
+        private void CmbVariable_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CmbVariable.SelectedItem is SourceMeta meta)
+            {
+                var existingInstances = _allNodes
+                    .Where(n => GetTypeName(n.Id) == meta.TypeName)
+                    .Select(n => new InstanceItem
+                    {
+                        Index = GetIndex(n.Id),
+                        Description = n.Description
+                    })
+                    .OrderBy(x => x.Index)
+                    .ToList();
+
+                CmbIndex.ItemsSource = existingInstances;
             }
         }
 
@@ -69,68 +90,66 @@ namespace BPO_ex4
         {
             try
             {
-                // 1. Валидация
                 if (CmbVariable.SelectedItem is not SourceMeta selectedMeta)
                 {
-                    MessageBox.Show("Please select a variable type.");
+                    MessageBox.Show("Select variable type!");
                     return;
                 }
 
-                if (!int.TryParse(TxtIndex.Text, out int indexNum))
+                if (!int.TryParse(CmbIndex.Text, out int indexNum))
                 {
-                    MessageBox.Show("Index must be a valid number.");
+                    MessageBox.Show("Enter valid index!");
                     return;
                 }
 
-                // 2. Создаем временную ноду-источник
-                // (Updater'у нужна нода, чтобы получить из нее ID и распарсить обратно в Excel код)
                 string newId = $"{selectedMeta.TypeName}[{indexNum}]";
-                var sourceNode = new Node { Id = newId, Value = false }; // Value не важно для записи
+                var sourceNode = new Node { Id = newId, Value = false };
 
-                // 3. Сохраняем в Excel
-                // Нам нужно распарсить ID целевой ноды, чтобы узнать имя листа и индекс объекта
-                // Пример ID: "AVTODO_AR[8]" -> Sheet="AVTODO_AR", Index=8
-                string sheetName = GetSheetName(_targetNode.Id);
-                int objectIndex = GetObjectIndex(_targetNode.Id);
+                string sheetName = GetTypeName(_targetNode.Id);
+                int objectIndex = GetIndex(_targetNode.Id);
 
+                // ВЫЗОВ МЕТОДОВ SESSION (ТЕПЕРЬ СИГНАТУРЫ СОВПАДАЮТ)
+                // Внутри BtnSave_Click, перед закрытием окна:
+
+                // ... создание sourceNode ...
+
+                // 1. Пишем в Excel (Сессия)
                 if (_inputIndex == -1)
-                {
-                    // РЕЖИМ ДОБАВЛЕНИЯ (ADD)
-                    ExcelUpdater.AddInputToGroup(_excelPath, sheetName, objectIndex, _groupIndex, sourceNode);
-                }
+                    _session.AddInputInMemory(sheetName, objectIndex, _groupIndex, sourceNode);
                 else
-                {
-                    // РЕЖИМ РЕДАКТИРОВАНИЯ (UPDATE)
-                    ExcelUpdater.UpdateCell(_excelPath, sheetName, objectIndex, _groupIndex, _inputIndex, sourceNode);
-                }
+                    _session.UpdateCellInMemory(sheetName, objectIndex, _groupIndex, _inputIndex, sourceNode);
 
-                MessageBox.Show("Successfully saved to Excel!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                // 2. ПИШЕМ В ЛОГИКУ (ПАМЯТЬ) - ЧТОБЫ БЫЛО МГНОВЕННО!
+                if (_inputIndex == -1)
+                    LogicPatcher.AddInputToRuntime(_targetNode, _groupIndex, sourceNode);
+                else
+                    LogicPatcher.UpdateInputInRuntime(_targetNode, _groupIndex, _inputIndex, sourceNode);
+
+                // 3. Сохраняем файл на диск (можно убрать, если хочешь сохранять только при выходе)
+                _session.Save();
+
                 DialogResult = true;
                 Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving to Excel:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error saving: {ex.Message}");
             }
         }
 
-        // Хелперы для парсинга ID (можно вынести в общий класс)
-        private string GetSheetName(string id)
+        private string GetTypeName(string id)
         {
             int idx = id.IndexOf('[');
             return idx > 0 ? id.Substring(0, idx) : id;
         }
 
-        private int GetObjectIndex(string id)
+        private int GetIndex(string id)
         {
             int start = id.IndexOf('[') + 1;
             int end = id.IndexOf(']');
-            if (start > 0 && end > start)
-            {
-                if (int.TryParse(id.Substring(start, end - start), out int result))
-                    return result;
-            }
-            return 0; // Ошибка или константа
+            if (start > 0 && end > start && int.TryParse(id.Substring(start, end - start), out int res))
+                return res;
+            return 0;
         }
     }
 }

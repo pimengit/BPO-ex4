@@ -10,46 +10,45 @@ namespace BPO_ex4.Excel
     {
         public static void Load(string path, Context ctx)
         {
-            using var pkg = new ExcelPackage(new FileInfo(path));
+            if (!File.Exists(path)) throw new FileNotFoundException("File not found", path);
+
+            // Используем поток, чтобы не блокировать файл
+            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using var pkg = new ExcelPackage(stream);
 
             foreach (var ws in pkg.Workbook.Worksheets)
             {
-                if (ws.Name.Contains("_CONF"))
-                    continue;
-                Console.WriteLine($"Parsing sheet: {ws.Name}");
+                if (ws.Name.Contains("_CONF")) continue;
                 ParseSheet(ws, ctx);
             }
         }
 
         static void ParseSheet(ExcelWorksheet ws, Context ctx)
         {
-            // 1. АНАЛИЗ МАСКИ
-            // Мы запоминаем индексы колонок Excel, которые относятся к одной группе
+            // 1. АНАЛИЗ МАСКИ (Ваша надежная логика без Dimension)
             var groupsMapping = new List<List<int>>();
+            groupsMapping.Add(new List<int>()); // 0-я группа пустая
+
             int col = 5;
-
-            // Добавляем пустую группу для индекса 0, чтобы нумерация шла с 1 (как в ТТ)
-            groupsMapping.Add(new List<int>());
-
             List<int> currentGroup = null;
 
             while (true)
             {
+                // Используем .Value, так как .Text может зависеть от ширины колонки или зума
                 var maskVal = ws.Cells[1, col].Value?.ToString();
+
+                // Если пусто - значит конец таблицы
                 if (string.IsNullOrWhiteSpace(maskVal)) break;
 
                 if (maskVal == "1")
                 {
-                    // Новая группа
                     currentGroup = new List<int>();
                     currentGroup.Add(col);
                     groupsMapping.Add(currentGroup);
                 }
                 else if (maskVal == "0")
                 {
-                    // Продолжение предыдущей группы
-                    if (currentGroup != null)
-                        currentGroup.Add(col);
+                    if (currentGroup != null) currentGroup.Add(col);
                 }
                 col += 2;
             }
@@ -58,67 +57,58 @@ namespace BPO_ex4.Excel
             int row = 5;
             while (true)
             {
-                var stopend = ws.Cells[row, 3].Value;
+                var stopend = ws.Cells[row, 3].Value?.ToString();
                 var idxCell = ws.Cells[row, 2].Value;
 
-                // Проверяем конец таблицы
-                if (stopend == "") break;
-                if (idxCell == null) break; // Доп. проверка, чтобы не упасть на пустом индекса
+                // Условия выхода
+                if (string.IsNullOrEmpty(stopend)) break;
+                if (idxCell == null || string.IsNullOrWhiteSpace(idxCell.ToString())) break;
 
-                if (!int.TryParse(idxCell.ToString(), out int objectIndex)) break;
+                if (!int.TryParse(idxCell.ToString(), out int objectIndex))
+                {
+                    row++; continue;
+                }
 
-                // Создаем структуру для SheetLogic: массив списков
+                // Создаем структуру для групп
                 var inputs = new List<Node>[groupsMapping.Count];
 
-                // Заполняем группы
-                for (int i = 1; i < groupsMapping.Count; i++) // i=1, т.к. 0 пропускаем
+                for (int i = 1; i < groupsMapping.Count; i++)
                 {
                     var colIndices = groupsMapping[i];
                     var nodeList = new List<Node>();
 
                     foreach (var cIndex in colIndices)
                     {
-                        // Твои исправленные индексы:
-                        // numCell = cIndex + 1
-                        // istCell = cIndex + 2
-                        var istCell = ws.Cells[row, cIndex].Value;
-                        var numCell = ws.Cells[row, cIndex - 1].Value;
+                        var istCell = ws.Cells[row, cIndex].Value?.ToString();
+                        var numCell = ws.Cells[row, cIndex - 1].Value?.ToString();
 
-                        if (istCell != null && !string.IsNullOrWhiteSpace(istCell.ToString()))
+                        if (!string.IsNullOrWhiteSpace(istCell))
                         {
-                            string ist = istCell.ToString().Trim();
+                            string ist = istCell.Trim();
+                            if (ist.Length > 20 && ist.Contains(" ")) continue;
 
-                            // Доп. защита: если текст слишком длинный и содержит пробелы (похоже на коммент), пропускаем
-                            if (ist.Length > 15 && ist.Contains(" "))
-                                continue;
+                            int? num = int.TryParse(numCell, out int n) ? n : (int?)null;
 
-                            int? num = null;
-                            if (numCell != null && int.TryParse(numCell.ToString(), out int n))
-                                num = n;
-
-                            // 🛡️ БЛОК ЗАЩИТЫ ОТ ОШИБОК ПАРСИНГА
                             try
                             {
+                                // Важно: SourceRules должен быть у вас в проекте
                                 string srcId = SourceRules.Resolve(ws.Name, ist, num);
                                 nodeList.Add(ctx.Get(srcId));
                             }
-                            catch (Exception ex)
-                            {
-                                // Если попался мусор вместо адреса — пишем желтым в консоль и идем дальше
-                                Console.ForegroundColor = ConsoleColor.Yellow;
-                                Console.WriteLine($"[WARN] {ws.Name} Row {row}: Ignored '{ist}' (Group {i}). Err: {ex.Message}");
-                                Console.ResetColor();
-                            }
+                            catch { }
                         }
                     }
                     inputs[i] = nodeList;
                 }
 
                 // 3. СОЗДАНИЕ
-                var logic = CreateLogic(ws.Name);
-                var desc = ws.Cells[row, 3].Value?.ToString();
-
-                VariableFactory.Create(ctx, ws.Name, objectIndex, inputs, logic, desc);
+                try
+                {
+                    var logic = CreateLogic(ws.Name);
+                    // Вызываем Фабрику (она пропишет Dependents)
+                    VariableFactory.Create(ctx, ws.Name, objectIndex, inputs, logic, stopend);
+                }
+                catch { }
 
                 row++;
             }
@@ -128,8 +118,18 @@ namespace BPO_ex4.Excel
         {
             var typeName = $"BPO_ex4.LogicSheets.{sheetName}";
             var type = Type.GetType(typeName);
+
             if (type == null)
-                throw new Exception($"Logic class not found: {typeName}");
+            {
+                foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    type = asm.GetType(typeName);
+                    if (type != null) break;
+                }
+            }
+
+            // Если не нашли логику - возвращаем пустую заглушку, чтобы не падало
+            if (type == null) return new SheetLogic();
 
             return (SheetLogic)Activator.CreateInstance(type);
         }

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BPO_ex4.StationLogic
 {
-    public abstract class SheetLogic
+    public class SheetLogic
     {
         protected Node Self;
 
@@ -29,39 +29,44 @@ namespace BPO_ex4.StationLogic
         // ==========================================
 
         // V(i) - Берет значение первой переменной в группе (для одиночных входов)
-        protected bool V(int i)
+        protected bool V(int idx)
         {
-            if (Groups[i].Count == 0) return false; // Защита от пустых
-            return Groups[i][0].Value;
+            if (Groups == null || idx < 0 || idx >= Groups.Length) return false;
+
+            var group = Groups[idx];
+            return group != null && group.Count > 0 && group[0].Value;
         }
 
-        // OR(i) - Логическое СЛОЖЕНИЕ (ИЛИ) всех переменных в группе i
-        // Соответствует значку "Сумма" в ТТ
-        protected bool OR(int i)
+        protected bool OR(int idx)
         {
-            var group = Groups[i];
-            for (int k = 0; k < group.Count; k++)
-            {
-                if (group[k].Value) return true;
-            }
+            if (Groups == null || idx < 0 || idx >= Groups.Length) return false;
+
+            var group = Groups[idx];
+            if (group == null) return false;
+
+            foreach (var n in group)
+                if (n.Value) return true;
             return false;
         }
 
-        // AND(i) - Логическое УМНОЖЕНИЕ (И) всех переменных в группе i
-        // Соответствует конструкции, когда все элементы должны быть 1
-        protected bool AND(int i)
+        protected bool AND(int idx)
         {
-            var group = Groups[i];
-            for (int k = 0; k < group.Count; k++)
-            {
-                if (!group[k].Value) return false;
-            }
+            if (Groups == null || idx < 0 || idx >= Groups.Length) return false;
+
+            var group = Groups[idx];
+            if (group == null) return false;
+
+            foreach (var n in group)
+                if (!n.Value) return false;
             return true;
         }
 
         // !V(i) - Инверсия одиночного (синтаксический сахар)
         protected bool Not(int i) => !V(i);
 
-        public abstract bool Compute();
+        public virtual bool Compute()
+        {
+            return false;
+        }
     }
 }
