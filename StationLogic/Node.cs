@@ -16,10 +16,10 @@ namespace BPO_ex4.StationLogic
         // Делегат для вычисления (подменяется в VariableFactory)
         public Func<bool> Compute { get; set; } = () => false;
 
-        public override string ToString()
+        /*public override string ToString()
         {
             return $"{Id} = {Value}";
-        }
+        }*/
 
         // Событие для логов и внешних подписчиков
         public event Action<Node>? Changed;
@@ -28,8 +28,8 @@ namespace BPO_ex4.StationLogic
         public event Action<Node>? DelayedUpdateReady;
 
 
-        public TimeSpan OnDelay = TimeSpan.Zero;
-        public TimeSpan OffDelay = TimeSpan.Zero;
+        public TimeSpan OnDelay { get; set; } = TimeSpan.Zero;
+        public TimeSpan OffDelay { get; set; } = TimeSpan.Zero;
 
         // Внутреннее состояние для задержек
         private bool _pendingValue;
@@ -94,6 +94,60 @@ namespace BPO_ex4.StationLogic
 
             return false; // Сейчас значение еще старое
         }
+
+        public TimeSpan GetTotalOnDelay(int depth = 0)
+        {
+            if (depth > 20) return TimeSpan.Zero; // Защита от бесконечной рекурсии (циклов)
+
+            // 1. Моя задержка (учитываем, если > 50мс)
+            var myDelay = OnDelay.TotalMilliseconds > 50 ? OnDelay : TimeSpan.Zero;
+
+            // 2. Ищем максимальную задержку среди родителей, которые сейчас TRUE (активный путь)
+            //    (Или можно брать всех родителей, зависит от логики. Обычно смотрят активный путь)
+            TimeSpan maxParentDelay = TimeSpan.Zero;
+
+            if (LogicSource != null && LogicSource.Groups != null)
+            {
+                foreach (var group in LogicSource.Groups)
+                {
+                    if (group == null) continue;
+                    foreach (var parent in group)
+                    {
+                        // Если вы хотите суммировать ВСЕ пути, уберите проверку parent.Value
+                        // Если только активный путь сигнала - оставьте.
+                        // Для надежности пока берем просто максимум из всех родителей:
+                        var pDelay = parent.GetTotalOnDelay(depth + 1);
+                        if (pDelay > maxParentDelay) maxParentDelay = pDelay;
+                    }
+                }
+            }
+
+            return maxParentDelay + myDelay;
+        }
+
+        public TimeSpan GetTotalOffDelay(int depth = 0)
+        {
+            if (depth > 20) return TimeSpan.Zero;
+
+            var myDelay = OffDelay.TotalMilliseconds > 50 ? OffDelay : TimeSpan.Zero;
+            TimeSpan maxParentDelay = TimeSpan.Zero;
+
+            if (LogicSource != null && LogicSource.Groups != null)
+            {
+                foreach (var group in LogicSource.Groups)
+                {
+                    if (group == null) continue;
+                    foreach (var parent in group)
+                    {
+                        var pDelay = parent.GetTotalOffDelay(depth + 1);
+                        if (pDelay > maxParentDelay) maxParentDelay = pDelay;
+                    }
+                }
+            }
+            return maxParentDelay + myDelay;
+        }
+
+        public override string ToString() => $"{Id} = {Value}";
 
         /// <summary>
         /// Вызывается Контекстом, когда таймер истек.

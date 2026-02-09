@@ -8,6 +8,7 @@ using BPO_ex4.Excel;
 
 namespace BPO_ex4
 {
+    // Класс для выпадающего списка
     public class InstanceItem
     {
         public int Index { get; set; }
@@ -20,17 +21,24 @@ namespace BPO_ex4
         private Node _targetNode;
         private int _groupIndex;
         private int _inputIndex;
-        private ExcelSession _session;
         private List<Node> _allNodes;
 
-        public EditNodeWindow(Node target, int groupIdx, int inputIdx, ExcelSession session, List<Node> allNodes)
+        // !!! ЭТИХ СВОЙСТВ НЕ ХВАТАЛО !!!
+        public Node ResultSourceNode { get; private set; }
+        public string TargetSheetName { get; private set; }
+        public int TargetObjectIndex { get; private set; }
+
+        // Конструктор теперь принимает List<Node> allNodes
+        public EditNodeWindow(Node target, int groupIdx, int inputIdx, List<Node> allNodes)
         {
             InitializeComponent();
             _targetNode = target;
             _groupIndex = groupIdx;
             _inputIndex = inputIdx;
-            _session = session;
             _allNodes = allNodes;
+
+            TargetSheetName = GetTypeName(target.Id);
+            TargetObjectIndex = GetIndex(target.Id);
 
             LoadData();
             UpdateUi();
@@ -102,38 +110,16 @@ namespace BPO_ex4
                     return;
                 }
 
+                // Создаем результат (виртуальную ноду)
                 string newId = $"{selectedMeta.TypeName}[{indexNum}]";
-                var sourceNode = new Node { Id = newId, Value = false };
-
-                string sheetName = GetTypeName(_targetNode.Id);
-                int objectIndex = GetIndex(_targetNode.Id);
-
-                // ВЫЗОВ МЕТОДОВ SESSION (ТЕПЕРЬ СИГНАТУРЫ СОВПАДАЮТ)
-                // Внутри BtnSave_Click, перед закрытием окна:
-
-                // ... создание sourceNode ...
-
-                // 1. Пишем в Excel (Сессия)
-                if (_inputIndex == -1)
-                    _session.AddInputInMemory(sheetName, objectIndex, _groupIndex, sourceNode);
-                else
-                    _session.UpdateCellInMemory(sheetName, objectIndex, _groupIndex, _inputIndex, sourceNode);
-
-                // 2. ПИШЕМ В ЛОГИКУ (ПАМЯТЬ) - ЧТОБЫ БЫЛО МГНОВЕННО!
-                if (_inputIndex == -1)
-                    LogicPatcher.AddInputToRuntime(_targetNode, _groupIndex, sourceNode);
-                else
-                    LogicPatcher.UpdateInputInRuntime(_targetNode, _groupIndex, _inputIndex, sourceNode);
-
-                // 3. Сохраняем файл на диск (можно убрать, если хочешь сохранять только при выходе)
-                _session.Save();
+                ResultSourceNode = new Node { Id = newId, Value = false };
 
                 DialogResult = true;
                 Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving: {ex.Message}");
+                MessageBox.Show($"Error: {ex.Message}");
             }
         }
 
