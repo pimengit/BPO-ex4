@@ -47,22 +47,7 @@
 
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="#DDD"/>
 
-        <TabControl x:Name="MainTabs" Grid.Column="2" Margin="5">
-            <TabControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Header}" Margin="0,0,5,0"/>
-                        <Button Content="x" 
-                                Width="15" Height="15" 
-                                FontSize="10" 
-                                Background="Transparent" 
-                                BorderThickness="0" 
-                                Foreground="Red"
-                                Click="BtnCloseTab_Click"
-                                Tag="{Binding}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </TabControl.ItemTemplate>
-        </TabControl>
+        <TabControl x:Name="MainTabs" Grid.Column="2" Margin="5"/>
+
     </Grid>
 </Window>

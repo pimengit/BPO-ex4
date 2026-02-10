@@ -51,8 +51,10 @@
                                             <DataTemplate>
                                                 <Button Margin="0,2" Height="24"
                                                         Tag="{Binding LogicNode}"
+                                                        CommandParameter="{Binding DataContext.GroupIndex, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                         ToolTip="{Binding Description}"
                                                         PreviewMouseDown="BtnVar_MouseDown">
+
                                                     <Button.Style>
                                                         <Style TargetType="Button">
                                                             <Setter Property="Background" Value="White"/>
@@ -73,14 +75,15 @@
 
                                                     <Button.ContextMenu>
                                                         <ContextMenu>
-                                                            <MenuItem Header="Toggle Value (Изменить)" Click="CtxToggle_Click" Tag="{Binding LogicNode}"/>
+                                                            <MenuItem Header="Toggle Value (Изменить)" Click="CtxToggle_Click" Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                                             <Separator/>
-                                                            <MenuItem Header="Edit Connection... (Редактировать)" Click="CtxEdit_Click" Tag="{Binding LogicNode}"/>
+                                                            <MenuItem Header="Edit Connection... (Редактировать)" Click="CtxEdit_Click" Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
 
                                                             <MenuItem Header="Add New to Group... (Добавить)" Click="CtxAdd_Click" 
-                                  Tag="{Binding DataContext.GroupIndex, RelativeSource={RelativeSource AncestorType=Border}}"/>
+                                                                      Tag="{Binding PlacementTarget.CommandParameter, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                                         </ContextMenu>
                                                     </Button.ContextMenu>
+
                                                 </Button>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
@@ -113,7 +116,6 @@
                                                     <StackPanel VerticalAlignment="Center">
                                                         <TextBlock Text="{Binding Text}" 
                                                                    HorizontalAlignment="Center" FontWeight="Bold" Foreground="#555"/>
-
                                                         <TextBlock Text="{Binding TimerInfo}" 
                                                                    FontSize="8" Foreground="Blue" 
                                                                    HorizontalAlignment="Center" 
