@@ -7,13 +7,13 @@ namespace BPO_ex4.LogicSheets
     {
         public ROUTEPOINTER_RMSM()
         {
-            OnDelay  = TimeSpan.FromMicroseconds(1);
+            OnDelay  = TimeSpan.FromMilliseconds(50);
             OffDelay = TimeSpan.FromMilliseconds(50);
         }
 
         public override bool Compute()
         {
-            return V(1) && V(2) && V(3);
+            return (AND(1) && V(2));
         }
     }
 }

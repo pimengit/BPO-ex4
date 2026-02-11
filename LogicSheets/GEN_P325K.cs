@@ -7,16 +7,13 @@ namespace BPO_ex4.LogicSheets
     {
         public GEN_P325K()
         {
-            OnDelay  = TimeSpan.FromMicroseconds(1);
+            OnDelay  = TimeSpan.FromMilliseconds(50);
             OffDelay = TimeSpan.FromMilliseconds(50);
         }
 
         public override bool Compute()
         {
-            return (V(5) && V(6)) ||
-                   (V(7) && V(8)) ||
-                   (V(1) && V(3) && V(10)) ||
-                   (V(2) && V(4) && V(9));
+            return (V(5) && V(6)) || (V(7) && V(8)) || (V(1) && V(3) && V(10)) || (V(2) && V(4) && V(9));
         }
     }
 }

@@ -8,12 +8,12 @@ namespace BPO_ex4.LogicSheets
         public DC_tDC3()
         {
             OnDelay  = TimeSpan.FromMilliseconds(50);
-            OffDelay = TimeSpan.FromMilliseconds(50);
+            OffDelay = TimeSpan.FromMilliseconds(3000);
         }
 
         public override bool Compute()
         {
-            return V(1) && V(2);
+            return (V(1) && V(2));
         }
     }
 }

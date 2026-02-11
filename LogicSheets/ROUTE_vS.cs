@@ -8,12 +8,12 @@ namespace BPO_ex4.LogicSheets
         public ROUTE_vS()
         {
             OnDelay  = TimeSpan.FromMilliseconds(50);
-            OffDelay = TimeSpan.FromMilliseconds(50);
+            OffDelay = TimeSpan.FromMilliseconds(600);
         }
 
         public override bool Compute()
         {
-            return V(1) && V(2) && V(3) && V(4) && V(5) && V(6) && V(7);
+            return (!OR(1) && V(2) && !V(3) && V(4)) || (!OR(1) && V(5) && V(6) && V(7)) || (!OR(1) && V(2) && !V(4));
         }
     }
 }

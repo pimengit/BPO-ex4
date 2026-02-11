@@ -7,18 +7,18 @@ namespace BPO_ex4.LogicSheets
     {
         public GEN_P225K()
         {
-            OnDelay  = TimeSpan.FromMicroseconds(1);
+            OnDelay  = TimeSpan.FromMilliseconds(50);
             OffDelay = TimeSpan.FromMilliseconds(50);
         }
 
         public override bool Compute()
         {
-            return (!V(3) && V(7) && V(8)) ||
-                               (!V(4) && V(10) && V(11)) ||
-                               (V(1) && V(5) && V(14)) ||
-                               (V(2) && V(6) && V(13)) ||
-                               (V(3) && V(7) && V(9)) ||
-                               (V(4) && V(10) && V(12));
+            return (!V(3) && V(7) && OR(8)) 
+                || (!V(4) && V(10) && OR(11)) 
+                || (V(1) && V(5) && V(14)) 
+                || (V(2) && V(6) && V(13)) 
+                || (V(3) && V(7) && OR(9)) 
+                || (V(4) && V(10) && OR(12));
         }
     }
 }

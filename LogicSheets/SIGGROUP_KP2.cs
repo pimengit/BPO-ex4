@@ -7,13 +7,13 @@ namespace BPO_ex4.LogicSheets
     {
         public SIGGROUP_KP2()
         {
-            OnDelay  = TimeSpan.FromMilliseconds(50);
+            OnDelay  = TimeSpan.FromMilliseconds(15000);
             OffDelay = TimeSpan.FromMilliseconds(50);
         }
 
         public override bool Compute()
         {
-            return V(1) && V(2) && V(3) && V(4) && V(5);
+            return (!V(1) && !V(2) && V(3) && V(4) && !V(5));
         }
     }
 }

@@ -7,7 +7,7 @@ namespace BPO_ex4.LogicSheets
     {
         public SECT_MSP()
         {
-            OnDelay = TimeSpan.FromSeconds(3);
+            OnDelay = TimeSpan.FromSeconds(1.5);
             OffDelay = TimeSpan.FromMilliseconds(50);
         }
 

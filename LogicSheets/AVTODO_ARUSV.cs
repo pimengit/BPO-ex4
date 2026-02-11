@@ -13,7 +13,7 @@ namespace BPO_ex4.LogicSheets
         //уточнить
         public override bool Compute()
         {
-            return V(1) && !V(2) && !OR(3) && V(4) && AND(5) && !OR(6) && !V(7) && !OR(8) && !V(9);
+            return (V(1) && !V(2) && !OR(3) && V(4) && AND(5) && !OR(6) && !V(7) && !OR(8) && !V(9));
         }
     }
 }

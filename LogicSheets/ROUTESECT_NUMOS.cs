@@ -7,13 +7,13 @@ namespace BPO_ex4.LogicSheets
     {
         public ROUTESECT_NUMOS()
         {
-            OnDelay  = TimeSpan.FromMicroseconds(1);
+            OnDelay  = TimeSpan.FromMilliseconds(50);
             OffDelay = TimeSpan.FromMilliseconds(50);
         }
 
         public override bool Compute()
         {
-            return V(1) && V(2);
+            return (V(1) && !V(2));
         }
     }
 }

@@ -7,7 +7,7 @@ namespace BPO_ex4.LogicSheets
     {
         public KGU_PKGU()
         {
-            OnDelay  = TimeSpan.FromMicroseconds(1);
+            OnDelay  = TimeSpan.FromMilliseconds(50);
             OffDelay = TimeSpan.FromMilliseconds(50);
         }
 
@@ -17,6 +17,7 @@ namespace BPO_ex4.LogicSheets
                    V(3) && !V(4) && V(5) ||
                    V(3) && V(6) ||
                    V(2) && V(3) && !V(4);
+
         }
     }
 }

@@ -13,7 +13,7 @@ namespace BPO_ex4.LogicSheets
 
         public override bool Compute()
         {
-            return OR(1) && OR(2) && !OR(3) && !OR(4);
+            return (OR(1) && OR(2) && !OR(3) && !OR(4));
         }
     }
 }

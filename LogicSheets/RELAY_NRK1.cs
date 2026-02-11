@@ -7,13 +7,13 @@ namespace BPO_ex4.LogicSheets
     {
         public RELAY_NRK1()
         {
-            OnDelay  = TimeSpan.FromMilliseconds(50);
+            OnDelay  = TimeSpan.FromMilliseconds(600);
             OffDelay = TimeSpan.FromMilliseconds(50);
         }
 
         public override bool Compute()
         {
-            return V(1) && V(2) && V(3) && V(4) && V(5) && V(6);
+            return (V(1) && !V(5) && !V(6)) || (V(2) && !V(5) && !V(6)) || (V(5) && V(6)) || (V(3) && !V(4)) || (!V(3) && V(4));
         }
     }
 }

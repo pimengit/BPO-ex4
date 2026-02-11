@@ -7,13 +7,13 @@ namespace BPO_ex4.LogicSheets
     {
         public SWITCH_Tp()
         {
-            OnDelay  = TimeSpan.FromMilliseconds(50);
+            OnDelay  = TimeSpan.FromMilliseconds(1500);
             OffDelay = TimeSpan.FromMilliseconds(50);
         }
 
         public override bool Compute()
         {
-            return V(1) && V(2) && V(3) && V(4) && V(5) && V(6) && V(7);
+            return (!V(2) && !V(3)) || (V(4)) || (V(5)) || (V(6)) || (V(7)) || (V(1));
         }
     }
 }

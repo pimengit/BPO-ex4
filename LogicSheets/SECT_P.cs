@@ -10,7 +10,7 @@ namespace BPO_ex4.LogicSheets
             OnDelay  = TimeSpan.FromMilliseconds(50);
             OffDelay = TimeSpan.FromMilliseconds(50);
         }
-
+        //
         public override bool Compute()
         {
             return V(1) && AND(2);

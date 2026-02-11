@@ -7,7 +7,7 @@ namespace BPO_ex4.LogicSheets
     {
         public KOD_KNOD()
         {
-            OnDelay  = TimeSpan.FromMicroseconds(1);
+            OnDelay  = TimeSpan.FromMilliseconds(50);
             OffDelay = TimeSpan.FromMilliseconds(50);
         }
 

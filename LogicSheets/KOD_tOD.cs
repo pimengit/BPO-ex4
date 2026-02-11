@@ -7,13 +7,13 @@ namespace BPO_ex4.LogicSheets
     {
         public KOD_tOD()
         {
-            OnDelay  = TimeSpan.FromMicroseconds(1);
+            OnDelay  = TimeSpan.FromMilliseconds(10000);
             OffDelay = TimeSpan.FromMilliseconds(50);
         }
 
         public override bool Compute()
         {
-            return V(1) && V(2) && V(3) && V(4);
+            return (!V(1) && V(2) && !V(3) && !V(4));
         }
     }
 }

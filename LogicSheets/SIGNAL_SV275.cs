@@ -8,12 +8,12 @@ namespace BPO_ex4.LogicSheets
         public SIGNAL_SV275()
         {
             OnDelay  = TimeSpan.FromMilliseconds(50);
-            OffDelay = TimeSpan.FromMilliseconds(50);
+            OffDelay = TimeSpan.FromMilliseconds(300);
         }
 
         public override bool Compute()
         {
-            return V(1) && V(2) && V(3) && V(4) && V(5);
+            return (OR(2)) || (V(1));
         }
     }
 }
