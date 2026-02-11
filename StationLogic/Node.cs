@@ -16,10 +16,10 @@ namespace BPO_ex4.StationLogic
         // Делегат для вычисления (подменяется в VariableFactory)
         public Func<bool> Compute { get; set; } = () => false;
 
-        public override string ToString()
+        /*public override string ToString()
         {
             return $"{Id} = {Value}";
-        }
+        }*/
 
         // Событие для логов и внешних подписчиков
         public event Action<Node>? Changed;
@@ -28,8 +28,8 @@ namespace BPO_ex4.StationLogic
         public event Action<Node>? DelayedUpdateReady;
 
 
-        public TimeSpan OnDelay = TimeSpan.Zero;
-        public TimeSpan OffDelay = TimeSpan.Zero;
+        public TimeSpan OnDelay { get; set; } = TimeSpan.Zero;
+        public TimeSpan OffDelay { get; set; } = TimeSpan.Zero;
 
         // Внутреннее состояние для задержек
         private bool _pendingValue;
@@ -94,6 +94,94 @@ namespace BPO_ex4.StationLogic
 
             return false; // Сейчас значение еще старое
         }
+
+        // === РАСЧЕТ СУММАРНОЙ ЗАДЕРЖКИ (ОПТИМИЗИРОВАННЫЙ) ===
+
+        public TimeSpan GetTotalOnDelay()
+        {
+            // Создаем временную память (кэш) для одного расчета
+            // Это решает проблему "зависания", когда узлы считаются по 1000 раз
+            var cache = new Dictionary<string, TimeSpan>();
+            return GetOnDelayRecursive(this, 0, cache);
+        }
+
+        private TimeSpan GetOnDelayRecursive(Node node, int depth, Dictionary<string, TimeSpan> cache)
+        {
+            // 1. Ограничитель глубины (снизил до 15, этого за глаза)
+            if (depth > 15) return TimeSpan.Zero;
+
+            // 2. Если мы уже считали эту ноду в этом проходе — возвращаем готовое
+            if (cache.TryGetValue(node.Id, out var cachedVal)) return cachedVal;
+
+            // 3. Своя задержка
+            var myDelay = node.OnDelay.TotalMilliseconds > 50 ? node.OnDelay : TimeSpan.Zero;
+            TimeSpan maxParentDelay = TimeSpan.Zero;
+
+            if (node.LogicSource != null && node.LogicSource.Groups != null)
+            {
+                foreach (var group in node.LogicSource.Groups)
+                {
+                    if (group == null) continue;
+                    foreach (var parent in group)
+                    {
+                        // !!! ВАЖНАЯ ОПТИМИЗАЦИЯ !!!
+                        // Считаем накопленную задержку только по тем путям, где ТЕЧЕТ ТОК (Value = True).
+                        // Зачем нам знать задержку пути, который выключен?
+                        if (!parent.Value) continue;
+
+                        var pDelay = GetOnDelayRecursive(parent, depth + 1, cache);
+                        if (pDelay > maxParentDelay) maxParentDelay = pDelay;
+                    }
+                }
+            }
+
+            var result = maxParentDelay + myDelay;
+
+            // Запоминаем результат
+            cache[node.Id] = result;
+            return result;
+        }
+
+        // --- То же самое для Off Delay ---
+
+        public TimeSpan GetTotalOffDelay()
+        {
+            var cache = new Dictionary<string, TimeSpan>();
+            return GetOffDelayRecursive(this, 0, cache);
+        }
+
+        private TimeSpan GetOffDelayRecursive(Node node, int depth, Dictionary<string, TimeSpan> cache)
+        {
+            if (depth > 15) return TimeSpan.Zero;
+            if (cache.TryGetValue(node.Id, out var cachedVal)) return cachedVal;
+
+            var myDelay = node.OffDelay.TotalMilliseconds > 50 ? node.OffDelay : TimeSpan.Zero;
+            TimeSpan maxParentDelay = TimeSpan.Zero;
+
+            if (node.LogicSource != null && node.LogicSource.Groups != null)
+            {
+                foreach (var group in node.LogicSource.Groups)
+                {
+                    if (group == null) continue;
+                    foreach (var parent in group)
+                    {
+                        // Для OFF задержки логика может быть сложнее, но обычно
+                        // мы смотрим задержку того, кто сейчас держит сигнал.
+                        // Если хотите считать по всем — уберите if, но с кэшем это будет работать быстро.
+                        // if (parent.Value) continue; // (Тут логика зависит от типа элемента И/ИЛИ)
+
+                        var pDelay = GetOffDelayRecursive(parent, depth + 1, cache);
+                        if (pDelay > maxParentDelay) maxParentDelay = pDelay;
+                    }
+                }
+            }
+
+            var result = maxParentDelay + myDelay;
+            cache[node.Id] = result;
+            return result;
+        }
+
+        public override string ToString() => $"{Id} = {Value}";
 
         /// <summary>
         /// Вызывается Контекстом, когда таймер истек.

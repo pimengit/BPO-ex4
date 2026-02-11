@@ -161,46 +161,46 @@ namespace BPO_ex4.StationLogic
                     return $"ROUTESECT_40CUM6[{num}]";
 
                 if (ist == "6.15")
-                    return $"ROUTESECT_CPZ6[{num}]";
+                    return $"ROUTESECT_CPz6[{num}]";
 
                 if (ist == "6.14")
-                    return $"ROUTESECT_CPZ5[{num}]";
+                    return $"ROUTESECT_CPz5[{num}]";
 
                 if (ist == "6.13")
-                    return $"ROUTESECT_CPZ4[{num}]";
+                    return $"ROUTESECT_CPz4[{num}]";
 
                 if (ist == "6.12")
-                    return $"ROUTESECT_CPZ3[{num}]";
+                    return $"ROUTESECT_CPz3[{num}]";
 
                 if (ist == "6.11")
-                    return $"ROUTESECT_CPZ2[{num}]";
+                    return $"ROUTESECT_CPz2[{num}]";
 
                 if (ist == "6.10")
-                    return $"ROUTESECT_CPZ1[{num}]";
+                    return $"ROUTESECT_CPz1[{num}]";
 
                 if (ist == "7.15")
-                    return $"ROUTESECT_NPZ6[{num}]";
+                    return $"ROUTESECT_NPz6[{num}]";
 
                 if (ist == "7.14")
-                    return $"ROUTESECT_NPZ5[{num}]";
+                    return $"ROUTESECT_NPz5[{num}]";
 
                 if (ist == "7.13")
-                    return $"ROUTESECT_NPZ4[{num}]";
+                    return $"ROUTESECT_NPz4[{num}]";
 
                 if (ist == "7.12")
-                    return $"ROUTESECT_NPZ3[{num}]";
+                    return $"ROUTESECT_NPz3[{num}]";
 
                 if (ist == "7.11")
-                    return $"ROUTESECT_NPZ2[{num}]";
+                    return $"ROUTESECT_NPz2[{num}]";
 
                 if (ist == "7.10")
-                    return $"ROUTESECT_NPZ1[{num}]";
+                    return $"ROUTESECT_NPz1[{num}]";
 
                 if (ist == "7.4")
-                    return $"ROUTE_Z_M[{num}]";
+                    return $"ROUTE_z_M[{num}]";
 
                 if (ist == "7.2")
-                    return $"ROUTE_Z_MDOP[{num}]";
+                    return $"ROUTE_z_Mdop[{num}]";
 
                 if (ist == "7.1")
                     return $"SECT_MSP[{num}]";
@@ -355,7 +355,7 @@ namespace BPO_ex4.StationLogic
                     return $"ROUTE_MA[{num}]";
 
                 if (ist == "2.3")
-                    return $"ROUTE_PZ_M[{num}]";
+                    return $"ROUTE_Pz_M[{num}]";
 
                 if (ist == "2.2")
                     return $"ROUTESECT_OPz[{num}]";
@@ -391,7 +391,7 @@ namespace BPO_ex4.StationLogic
                     return $"SECT_LS[{num}]";
 
                 if (ist == "3.3")
-                    return $"SECT_LZ[{num}]";
+                    return $"SECT_Lz[{num}]";
 
                 if (ist == "3.2")
                     return $"SECT_P[{num}]";
@@ -406,13 +406,13 @@ namespace BPO_ex4.StationLogic
                     return $"SECT_LS45[{num}]";
 
                 if (ist == "5.15")
-                    return $"SECT_ZD125[{num}]";
+                    return $"SECT_zD125[{num}]";
 
                 if (ist == "5.14")
-                    return $"SECT_ZD13[{num}]";
+                    return $"SECT_zD13[{num}]";
 
                 if (ist == "5.13")
-                    return $"SECT_ZD45[{num}]";
+                    return $"SECT_zD45[{num}]";
 
                 if (ist == "5.6")
                     return $"SECT_VPN[{num}]";
@@ -454,7 +454,7 @@ namespace BPO_ex4.StationLogic
                     return $"SPEED_HV[{num}]";
 
                 if (ist == "7.2")
-                    return $"ROUTE_Z_M[{num}]";
+                    return $"ROUTE_z_M[{num}]";
 
                 if (ist == "7.1")
                     return $"ROUTE_KN[{num}]";
@@ -558,10 +558,10 @@ namespace BPO_ex4.StationLogic
                     return $"AVTOSTOP_OA[{num}]";
 
                 if (ist == "3.6")
-                    return $"AVTOSTOP_ZA[{num}]";
+                    return $"AVTOSTOP_zA[{num}]";
 
                 if (ist == "3.5")
-                    return $"SIGGROUP_Z[{num}]";
+                    return $"SIGGROUP_z[{num}]";
 
                 if (ist == "3.4")
                     return $"SIGNAL_PS[{num}]";
@@ -736,7 +736,7 @@ namespace BPO_ex4.StationLogic
                     return $"STAGE_VSAB[{num}]";
 
                 if (ist == "2.12")
-                    return $"ROUTE_VS[{num}]";
+                    return $"ROUTE_vS[{num}]";
 
                 if (ist == "2.11")
                     return $"SPEED_FH[{num}]";
@@ -784,7 +784,7 @@ namespace BPO_ex4.StationLogic
                     return $"KOD_OD2[{num}]";
 
                 if (ist == "3.12")
-                    return $"SIGGROUP_Z[{num}]";
+                    return $"SIGGROUP_z[{num}]";
 
                 if (ist == "3.11")
                     return $"ROUTE_SU[{num}]";
@@ -835,7 +835,7 @@ namespace BPO_ex4.StationLogic
                     return $"STAGE_CAK[{num}]";
 
                 if (ist == "4.9")
-                    return $"SECT_ZD125[{num}]";
+                    return $"SECT_zD125[{num}]";
 
                 if (ist == "4.8")
                     return $"PARTROUTE_Zc[{num}]";
@@ -983,7 +983,7 @@ namespace BPO_ex4.StationLogic
                     return $"IS_KS[{num}]";
 
                 if (ist == "4.2")
-                    return $"IS_TKS[{num}]";
+                    return $"IS_Tks[{num}]";
 
                 if (ist == "7.15")
                 {
@@ -1133,10 +1133,10 @@ namespace BPO_ex4.StationLogic
                     return $"SWITCH_PKT[{num}]";
 
                 if (ist == "3.8")
-                    return $"MAKET_T2M[{num}]";
+                    return $"MAKET_t2M[{num}]";
 
                 if (ist == "3.7")
-                    return $"SWITCH_TP[{num}]";
+                    return $"SWITCH_Tp[{num}]";
 
                 if (ist == "3.6")
                     return $"SWITCH_MS[{num}]";
@@ -1184,7 +1184,7 @@ namespace BPO_ex4.StationLogic
                     return $"SWITCH_VMU[{num}]";
 
                 if (ist == "4.5")
-                    return $"SWITCH_ZSTR[{num}]";
+                    return $"SWITCH_zStr[{num}]";
 
                 if (ist == "4.4")
                     return $"MAKET_MP[{num}]";
@@ -1409,7 +1409,7 @@ namespace BPO_ex4.StationLogic
                     return $"AVTODO_AOP[{num}]";
 
                 if (ist == "4.3")
-                    return $"AVTODO_DARSB[{num}]";
+                    return $"AVTODO_DARsb[{num}]";
 
                 if (ist == "4.2")
                     return $"AVTODO_DAR[{num}]";
@@ -1421,7 +1421,7 @@ namespace BPO_ex4.StationLogic
                     return $"ROUTE_PP[{num}]";
 
                 if (ist == "5.5")
-                    return $"SIGGROUP_Z[{num}]";
+                    return $"SIGGROUP_z[{num}]";
 
                 if (ist == "5.4")
                     return $"ROUTE_GS[{num}]";
@@ -1436,7 +1436,7 @@ namespace BPO_ex4.StationLogic
                     return $"AVTODO_ACH[{num}]";
 
                 if (ist == "7.1")
-                    return $"ROUTE_VS[{num}]";
+                    return $"ROUTE_vS[{num}]";
 
                 throw new Exception($"AVTODO: unknown ist={ist}");
             }
@@ -1480,25 +1480,25 @@ namespace BPO_ex4.StationLogic
                     return $"KOD_OD2[{num}]";
 
                 if (ist == "3.12")
-                    return $"PARTROUTE_STRCH[{num}]";
+                    return $"PARTROUTE_STRch[{num}]";
 
                 if (ist == "3.11")
                     return $"SIGGROUP_IA[{num}]";
 
                 if (ist == "3.10")
-                    return $"ROUTE_PZ_M[{num}]";
+                    return $"ROUTE_Pz_M[{num}]";
 
                 if (ist == "3.9")
                     return $"ROUTE_MSTR[{num}]";
 
                 if (ist == "3.8")
-                    return $"ROUTE_Z_M[{num}]";
+                    return $"ROUTE_z_M[{num}]";
 
                 if (ist == "3.7")
                     return $"SIGNAL_BSV[{num}]";
 
                 if (ist == "3.6")
-                    return $"ROUTE_Z_MDOP[{num}]";
+                    return $"ROUTE_z_Mdop[{num}]";
 
                 if (ist == "3.5")
                     return $"SECT_MSP[{num}]";
@@ -1525,7 +1525,7 @@ namespace BPO_ex4.StationLogic
                     return $"SWITCH_SZP[{num}]";
 
                 if (ist == "4.11")
-                    return $"ROUTE_MPZ[{num}]";
+                    return $"ROUTE_MPz[{num}]";
 
                 if (ist == "4.10")
                     return $"SIGGROUP_RI[{num}]";
@@ -1564,7 +1564,7 @@ namespace BPO_ex4.StationLogic
                     return $"ROUTE_SU[{num}]";
 
                 if (ist == "5.14")
-                    return $"ROUTE_VS[{num}]";
+                    return $"ROUTE_vS[{num}]";
 
                 if (ist == "5.13")
                     return $"ROUTE_S[{num}]";
@@ -1591,7 +1591,7 @@ namespace BPO_ex4.StationLogic
                     return $"ROUTE_PP[{num}]";
 
                 if (ist == "5.5")
-                    return $"SIGGROUP_Z[{num}]";
+                    return $"SIGGROUP_z[{num}]";
 
                 if (ist == "5.4")
                     return $"ROUTE_GS[{num}]";
@@ -1669,10 +1669,10 @@ namespace BPO_ex4.StationLogic
                     return $"SIGNAL_RO_ARS[{num}]";
 
                 if (ist == "7.5")
-                    return $"SIGNAL_1ZHO[{num}]";
+                    return $"SIGNAL_1zHO[{num}]";
 
                 if (ist == "7.4")
-                    return $"SIGNAL_2ZHO[{num}]";
+                    return $"SIGNAL_2zHO[{num}]";
 
                 if (ist == "7.3")
                     return $"STAGE_SVP[{num}]";
@@ -1681,7 +1681,7 @@ namespace BPO_ex4.StationLogic
                     return $"METALL_KVR[{num}]";
 
                 if (ist == "7.1")
-                    return $"ROUTE_VS[{num}]";
+                    return $"ROUTE_vS[{num}]";
 
                 if (ist == "7.0")
                     return $"KGU_KKGU[{num}]";
@@ -1736,13 +1736,13 @@ namespace BPO_ex4.StationLogic
                     return $"SIGGROUP_KPS[{num}]";
 
                 if (ist == "3.2")
-                    return $"ALARMSIG_VZS[{num}]";
+                    return $"ALARMSIG_VzS[{num}]";
 
                 if (ist == "4.8")
                     return $"AVTODO_AR[{num}]";
 
                 if (ist == "4.3")
-                    return $"ROUTE_MPZ[{num}]";
+                    return $"ROUTE_MPz[{num}]";
 
                 if (ist == "4.1")
                     return $"SECT_MSP[{num}]";
@@ -1763,7 +1763,7 @@ namespace BPO_ex4.StationLogic
                     return $"SWITCH_MK[{num}]";
 
                 if (ist == "5.0")
-                    return $"PARTROUTE_STRCH[{num}]";
+                    return $"PARTROUTE_STRch[{num}]";
 
                 if (ist == "6.11")
                     return $"SECURITY_OHR[{num}]";
@@ -1799,7 +1799,7 @@ namespace BPO_ex4.StationLogic
                     return $"ROUTE_KN[{num}]";
 
                 if (ist == "3.12")
-                    return $"SIGGROUP_Z[{num}]";
+                    return $"SIGGROUP_z[{num}]";
 
                 if (ist == "3.11")
                     return $"ROUTE_GS[{num}]";
@@ -2003,7 +2003,7 @@ namespace BPO_ex4.StationLogic
                     return $"SIGNAL_PSO[{num}]";
 
                 if (ist == "3.10")
-                    return $"SIGNAL_ZO[{num}]";
+                    return $"SIGNAL_zO[{num}]";
 
                 if (ist == "3.9")
                     return $"SIGNAL_BO[{num}]";
@@ -2018,10 +2018,10 @@ namespace BPO_ex4.StationLogic
                     return $"SIGNAL_KO[{num}]";
 
                 if (ist == "3.5")
-                    return $"SIGNAL_1ZHO[{num}]";
+                    return $"SIGNAL_1zHO[{num}]";
 
                 if (ist == "3.4")
-                    return $"SIGNAL_2ZHO[{num}]";
+                    return $"SIGNAL_2zHO[{num}]";
 
                 if (ist == "3.3")
                     return $"METALL_KVR[{num}]";
@@ -2117,7 +2117,7 @@ namespace BPO_ex4.StationLogic
                     return $"STAGE_SVP[{num}]";
 
                 if (ist == "5.1")
-                    return $"ROUTE_VS[{num}]";
+                    return $"ROUTE_vS[{num}]";
 
                 if (ist == "5.0")
                     return $"SECT_P[{num}]";
@@ -2273,7 +2273,7 @@ namespace BPO_ex4.StationLogic
                     return $"DC_DC[{num}]";
 
                 if (ist == "4.13")
-                    return $"MAKET_TMV[{num}]";
+                    return $"MAKET_tMV[{num}]";
 
                 if (ist == "4.9")
                     return $"MAKET_MP[{num}]";
@@ -2309,7 +2309,7 @@ namespace BPO_ex4.StationLogic
                     return $"SWITCH_MSD[{num}]";
 
                 if (ist == "5.1")
-                    return $"MAKET_T2M[{num}]";
+                    return $"MAKET_t2M[{num}]";
 
                 if (ist == "6.3")
                     return $"MAKET_MI[{num}]";
@@ -2347,13 +2347,13 @@ namespace BPO_ex4.StationLogic
                 if (ist == "1.3")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"ALARMSIG_VZS_DK[{num}:{ch}]";
+                    return $"ALARMSIG_VzS_DK[{num}:{ch}]";
                 }
 
                 if (ist == "1.4")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"ALARMSIG_OVZS_DK[{num}:{ch}]";
+                    return $"ALARMSIG_OVzS_DK[{num}:{ch}]";
                 }
 
                 if (ist == "4.7")
@@ -2375,10 +2375,10 @@ namespace BPO_ex4.StationLogic
                     return $"DC_CZVL[{num}]";
 
                 if (ist == "6.5")
-                    return $"ALARMSIG_OVZS[{num}]";
+                    return $"ALARMSIG_OVzS[{num}]";
 
                 if (ist == "6.4")
-                    return $"ALARMSIG_VZS[{num}]";
+                    return $"ALARMSIG_VzS[{num}]";
 
 
                 throw new Exception($"ALARMSIG: unknown ist={ist}");
@@ -2429,7 +2429,7 @@ namespace BPO_ex4.StationLogic
                     return $"SWITCH_PK[{num}]";
 
                 if (ist == "4.7")
-                    return $"SIGGROUP_Z[{num}]";
+                    return $"SIGGROUP_z[{num}]";
 
 
 
@@ -2632,13 +2632,13 @@ namespace BPO_ex4.StationLogic
                     return $"ROUTESECT_40NUM1[{num}]";
 
                 if (ist == "4.7")
-                    return $"SPEED_80S[{num}]";
+                    return $"SPEED_80s[{num}]";
 
                 if (ist == "4.6")
-                    return $"SPEED_70S[{num}]";
+                    return $"SPEED_70s[{num}]";
 
                 if (ist == "4.5")
-                    return $"SPEED_60S[{num}]";
+                    return $"SPEED_60s[{num}]";
 
                 if (ist == "4.4")
                     return $"SPEED_40S[{num}]";
@@ -2888,7 +2888,7 @@ namespace BPO_ex4.StationLogic
                     return $"GEN_NKG2[{num}]";
 
                 if (ist == "5.4")
-                    return $"GEN_CPnK[{num}]";
+                    return $"GEN_CPnk[{num}]";
 
                 if (ist == "5.3")
                     return $"STAGE_CHN[{num}]";
@@ -2906,7 +2906,7 @@ namespace BPO_ex4.StationLogic
                     return $"GEN_NKG1[{num}]";
 
                 if (ist == "6.4")
-                    return $"GEN_NPNK[{num}]";
+                    return $"GEN_NPnk[{num}]";
 
                 if (ist == "6.3")
                     return $"STAGE_NN[{num}]";
@@ -2915,7 +2915,7 @@ namespace BPO_ex4.StationLogic
                     return $"GEN_AOG1[{num}]";
 
                 if (ist == "6.1")
-                    return $"GEN_N0[{num}]";
+                    return $"GEN_n0[{num}]";
 
                 if (ist == "7.14")
                     return $"GEN_AL[{num}]";
@@ -3097,19 +3097,19 @@ namespace BPO_ex4.StationLogic
                     return $"ROUTE_1ZHLVMR[{num}]";
 
                 if (ist == "3.6")
-                    return $"ROUTE_SLV[{num}]";
+                    return $"ROUTE_SLv[{num}]";
 
                 if (ist == "3.5")
-                    return $"ROUTE_BLV[{num}]";
+                    return $"ROUTE_BLv[{num}]";
 
                 if (ist == "3.4")
-                    return $"ROUTE_ZLV[{num}]";
+                    return $"ROUTE_zlv[{num}]";
 
                 if (ist == "3.3")
-                    return $"ROUTE_2ZHLV[{num}]";
+                    return $"ROUTE_2ZHLv[{num}]";
 
                 if (ist == "3.2")
-                    return $"ROUTE_KLV[{num}]";
+                    return $"ROUTE_KLv[{num}]";
 
                 if (ist == "4.12")
                     return $"SIGNAL_IS[{num}]";
@@ -3139,13 +3139,13 @@ namespace BPO_ex4.StationLogic
                     return $"ALARMSIG_RKZ[{num}]";
 
                 if (ist == "4.3")
-                    return $"ALARMSIG_VZS[{num}]";
+                    return $"ALARMSIG_VzS[{num}]";
 
                 if (ist == "4.2")
                     return $"ALARMSIG_ZVL[{num}]";
 
                 if (ist == "4.1")
-                    return $"PARTROUTE_UVZVCH[{num}]";
+                    return $"PARTROUTE_UVzVch[{num}]";
 
                 if (ist == "4.0")
                     return $"SIGNAL_PSS[{num}]";
@@ -3189,7 +3189,7 @@ namespace BPO_ex4.StationLogic
                     return $"KOD_OOD[{num}]";
 
                 if (ist == "4.13")
-                    return $"KOD_TOD[{num}]";
+                    return $"KOD_tOD[{num}]";
 
                 if (ist == "4.12")
                     return $"SIGNAL_SVOD2[{num}]";
@@ -3420,7 +3420,7 @@ namespace BPO_ex4.StationLogic
                     return $"ROUTE_MSTR[{num}]";
 
                 if (ist == "3.12")
-                    return $"SIGGROUP_Z[{num}]";
+                    return $"SIGGROUP_z[{num}]";
 
                 if (ist == "3.10")
                     return $"SIGGROUP_IA[{num}]";
@@ -3483,7 +3483,7 @@ namespace BPO_ex4.StationLogic
                     return $"SWITCH_MK[{num}]";
 
                 if (ist == "5.0")
-                    return $"PARTROUTE_STRCH[{num}]";
+                    return $"PARTROUTE_STRch[{num}]";
 
 
                 throw new Exception($"KN: unknown ist={ist}");
@@ -3669,10 +3669,10 @@ namespace BPO_ex4.StationLogic
                     return $"SIGNAL_OKO[{num}]";
 
                 if (ist == "3.3")
-                    return $"SECT_ZD45[{num}]";
+                    return $"SECT_zD45[{num}]";
 
                 if (ist == "3.2")
-                    return $"SECT_ZD13[{num}]";
+                    return $"SECT_zD13[{num}]";
 
                 if (ist == "4.15")
                     return $"OKSE_RMS[{num}]";
@@ -3717,7 +3717,7 @@ namespace BPO_ex4.StationLogic
                     return $"SPEED_HV[{num}]";
 
                 if (ist == "4.1")
-                    return $"SECT_LZ[{num}]";
+                    return $"SECT_Lz[{num}]";
 
                 if (ist == "4.0")
                     return $"SECT_LS[{num}]";
@@ -3789,10 +3789,10 @@ namespace BPO_ex4.StationLogic
                     return $"SIGNAL_PSO[{num}]";
 
                 if (ist == "6.9")
-                    return $"SIGNAL_1ZHO[{num}]";
+                    return $"SIGNAL_1zHO[{num}]";
 
                 if (ist == "6.8")
-                    return $"SIGNAL_2ZHO[{num}]";
+                    return $"SIGNAL_2zHO[{num}]";
 
                 if (ist == "6.7")
                     return $"SIGNAL_BO[{num}]";
@@ -3801,13 +3801,13 @@ namespace BPO_ex4.StationLogic
                     return $"SIGNAL_SO[{num}]";
 
                 if (ist == "6.5")
-                    return $"SIGNAL_ZO[{num}]";
+                    return $"SIGNAL_zO[{num}]";
 
                 if (ist == "6.4")
                     return $"SIGNAL_KO[{num}]";
 
                 if (ist == "6.3")
-                    return $"SIGGROUP_Z[{num}]";
+                    return $"SIGGROUP_z[{num}]";
 
                 if (ist == "6.2")
                     return $"PARTROUTE_UCH[{num}]";
@@ -3837,7 +3837,7 @@ namespace BPO_ex4.StationLogic
                     return $"STAGE_OP_U[{num}]";
 
                 if (ist == "7.9")
-                    return $"ROUTE_VS[{num}]";
+                    return $"ROUTE_vS[{num}]";
 
                 if (ist == "7.8")
                     return $"METALL_MKBV[{num}]";
@@ -3858,7 +3858,7 @@ namespace BPO_ex4.StationLogic
                     return $"SECT_BRC[{num}]";
 
                 if (ist == "7.2")
-                    return $"SECT_ZD125[{num}]";
+                    return $"SECT_zD125[{num}]";
 
                 if (ist == "7.1")
                     return $"SECT_P[{num}]";

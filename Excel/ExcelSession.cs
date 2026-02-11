@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using OfficeOpenXml;
-using BPO_ex4.StationLogic; // Убедитесь, что Node здесь виден
+using BPO_ex4.StationLogic;
 
 namespace BPO_ex4.Excel
 {
@@ -11,122 +11,177 @@ namespace BPO_ex4.Excel
     {
         private ExcelPackage _package;
         private string _filePath;
-
         public bool IsLoaded => _package != null;
 
         public void Load(string path)
         {
-            Dispose();
+            if (!File.Exists(path)) throw new FileNotFoundException("File not found", path);
             _filePath = path;
-            // Открываем с правами на чтение и запись, но разрешаем другим читать (FileShare.Read)
-            var stream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read);
+
+            if (_package != null) _package.Dispose();
+
+            // Открываем поток с правами на чтение и запись
+            var stream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             _package = new ExcelPackage(stream);
-        }
-
-        private ExcelWorksheet GetSheet(string sheetName)
-        {
-            if (_package == null) throw new Exception("Session not loaded");
-            
-            // Если имя не передано, берем первый лист
-            if (string.IsNullOrEmpty(sheetName)) 
-                return _package.Workbook.Worksheets.FirstOrDefault();
-            
-            var ws = _package.Workbook.Worksheets[sheetName];
-            if (ws == null) throw new Exception($"Sheet '{sheetName}' not found");
-            return ws;
-        }
-
-        // --- МЕТОДЫ ЗАПИСИ (5 аргументов и 4 аргумента) ---
-
-        public void UpdateCellInMemory(string sheetName, int objectIndex, int groupIndex, int inputIndex, Node newSourceNode)
-        {
-            var ws = GetSheet(sheetName);
-            int targetRow = FindRowByIndex(ws, objectIndex);
-            var colIndices = GetGroupColumns(ws, groupIndex);
-
-            if (inputIndex >= colIndices.Count) throw new Exception("Input index out of range");
-
-            int targetColIst = colIndices[inputIndex];
-            
-            (string istCode, int? numVal) = ReverseSourceRules.Resolve(ws.Name, newSourceNode);
-
-            ws.Cells[targetRow, targetColIst].Value = istCode;
-            ws.Cells[targetRow, targetColIst - 1].Value = numVal;
-        }
-
-        public void AddInputInMemory(string sheetName, int objectIndex, int groupIndex, Node newSourceNode)
-        {
-            var ws = GetSheet(sheetName);
-            int targetRow = FindRowByIndex(ws, objectIndex);
-            var colIndices = GetGroupColumns(ws, groupIndex);
-            
-            int lastColInGroup = colIndices.Last(); 
-            int insertAtCol = lastColInGroup + 1;
-
-            // Вставляем 2 колонки
-            ws.InsertColumn(insertAtCol, 2);
-            // Обновляем маску заголовка (строка 1)
-            ws.Cells[1, insertAtCol + 1].Value = "0"; 
-
-            (string istCode, int? numVal) = ReverseSourceRules.Resolve(ws.Name, newSourceNode);
-            
-            ws.Cells[targetRow, insertAtCol + 1].Value = istCode;
-            ws.Cells[targetRow, insertAtCol].Value = numVal;
         }
 
         public void Save()
         {
-            if (_package != null) _package.Save();
+            if (_package != null)
+            {
+                _package.Save(); // Сохраняем изменения на диск
+            }
         }
 
         public void Dispose()
         {
             _package?.Dispose();
-            _package = null;
         }
 
-        // --- ХЕЛПЕРЫ ПОИСКА ---
-        private int FindRowByIndex(ExcelWorksheet ws, int index)
+        // === ГЛАВНЫЙ МЕТОД ЗАПИСИ (С АВТО-РАСШИРЕНИЕМ) ===
+
+        public void AddInputInMemory(string sheetName, int objectIndex, int groupIndex, Node newSourceNode)
         {
-            int startRow = 5;
-            int endRow = ws.Dimension?.End.Row ?? 5000;
-            for (int r = startRow; r <= endRow; r++)
+            var ws = GetSheet(sheetName);
+            int row = FindObjectRow(ws, objectIndex);
+
+            // Получаем список колонок (Value), которые уже есть у этой группы
+            var cols = GetGroupColumns(ws, groupIndex);
+
+            // 1. Пробуем найти пустую ячейку в существующих колонках
+            foreach (var col in cols)
             {
-                // Сравниваем как текст, чтобы избежать ошибок типов
-                if (ws.Cells[r, 2].Text == index.ToString()) return r;
+                var cellValue = ws.Cells[row, col].Text;
+                if (string.IsNullOrWhiteSpace(cellValue))
+                {
+                    // Место есть -> пишем и выходим
+                    WriteNodeToCells(ws, row, col, newSourceNode);
+                    return;
+                }
             }
-            throw new Exception($"Index {index} not found on sheet {ws.Name}");
+
+            // 2. Если места нет -> РАСШИРЯЕМ ГРУППУ
+            if (cols.Count > 0)
+            {
+                int lastValCol = cols[cols.Count - 1]; // Последняя колонка значений этой группы
+
+                // Нам нужно вставить 2 новых столбца СРАЗУ ПОСЛЕ последней колонки
+                // Индекс вставки = lastValCol + 1
+                int insertIndex = lastValCol + 1;
+
+                // Вставляем 2 столбца (один под Индекс, второй под Значение)
+                ws.InsertColumn(insertIndex, 2);
+
+                // === ВАЖНО: ПРОПИСЫВАЕМ МАСКУ ===
+                // Новый столбец значений будет под индексом (insertIndex + 1)
+                // Ставим там "0", чтобы пометить его как продолжение группы
+                ws.Cells[1, insertIndex + 1].Value = "0";
+
+                // Пишем данные в эти новые колонки
+                WriteNodeToCells(ws, row, insertIndex + 1, newSourceNode);
+            }
+            else
+            {
+                throw new Exception($"Group {groupIndex} columns not found!");
+            }
         }
 
+        public void UpdateCellInMemory(string sheetName, int objectIndex, int groupIndex, int inputIndex, Node newSourceNode)
+        {
+            var ws = GetSheet(sheetName);
+            int row = FindObjectRow(ws, objectIndex);
+            var cols = GetGroupColumns(ws, groupIndex);
+
+            if (inputIndex < cols.Count)
+            {
+                int targetCol = cols[inputIndex];
+                WriteNodeToCells(ws, row, targetCol, newSourceNode);
+            }
+            else
+            {
+                // Если пытаемся обновить несуществующий индекс, можно тоже вызвать расширение, 
+                // но обычно Update вызывается для существующих ячеек.
+                throw new Exception($"Input index {inputIndex} out of range for Excel structure.");
+            }
+        }
+
+        // === ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ===
+
+        private ExcelWorksheet GetSheet(string name)
+        {
+            var ws = _package.Workbook.Worksheets[name];
+            if (ws == null) throw new Exception($"Sheet {name} not found in Excel.");
+            return ws;
+        }
+
+        private int FindObjectRow(ExcelWorksheet ws, int objIndex)
+        {
+            int row = 5;
+            while (true)
+            {
+                var cellVal = ws.Cells[row, 2].Value;
+                if (cellVal == null) break;
+
+                if (cellVal.ToString() == objIndex.ToString()) return row;
+
+                row++;
+                if (row > 10000) break;
+            }
+            throw new Exception($"Object index {objIndex} not found in sheet {ws.Name}");
+        }
+
+        private void WriteNodeToCells(ExcelWorksheet ws, int row, int col, Node node)
+        {
+            // Разбираем ID вида TYPE[INDEX] на имя и номер
+            string name = node.Id;
+            string index = "";
+
+            if (node.Id.Contains("["))
+            {
+                int start = node.Id.IndexOf("[");
+                int end = node.Id.IndexOf("]");
+                name = node.Id.Substring(0, start);
+                index = node.Id.Substring(start + 1, end - start - 1);
+            }
+
+            // Пишем: Col = Имя, Col-1 = Номер
+            ws.Cells[row, col].Value = name;
+            ws.Cells[row, col - 1].Value = index;
+        }
+
+        // Надежный поиск колонок (такой же, как мы сделали ранее)
         private List<int> GetGroupColumns(ExcelWorksheet ws, int targetGroupIndex)
         {
-            var indices = new List<int>();
+            var result = new List<int>();
+            int currentGroupCounter = 0;
             int col = 5;
-            int currentGroupIdx = 0;
-            int maxCol = ws.Dimension?.End.Column ?? 500;
 
-            while (col < maxCol)
+            while (true)
             {
                 var maskVal = ws.Cells[1, col].Text;
                 if (string.IsNullOrWhiteSpace(maskVal)) break;
 
-                if (maskVal == "1") currentGroupIdx++;
+                if (maskVal == "1") currentGroupCounter++;
 
-                if (currentGroupIdx == targetGroupIndex)
+                if (currentGroupCounter == targetGroupIndex)
                 {
-                    indices.Add(col);
-                    // Проверяем продолжение группы (маска "0")
-                    int nextCol = col + 2; 
-                    while (nextCol < maxCol && ws.Cells[1, nextCol].Text == "0")
+                    result.Add(col);
+                    int subCol = col + 2;
+                    while (true)
                     {
-                        indices.Add(nextCol);
-                        nextCol += 2;
+                        var subMask = ws.Cells[1, subCol].Text;
+                        if (subMask == "0")
+                        {
+                            result.Add(subCol);
+                            subCol += 2;
+                        }
+                        else return result;
                     }
-                    return indices;
                 }
                 col += 2;
+                if (col > 2000) break;
             }
-            throw new Exception($"Group {targetGroupIndex} not found");
+            throw new Exception($"Group {targetGroupIndex} not found in header mask.");
         }
     }
 }
