@@ -49,7 +49,7 @@ namespace BPO_ex4.StationLogic
                     if (_hasPending)
                     {
                         _hasPending = false; // Сброс таймера (дребезг)
-                        AppLogger.Log($"CANCEL TIMER: {Id} (signal lost)");
+                        //AppLogger.Log($"CANCEL TIMER: {Id} (signal lost)");
                     }
                 }
                 return false; // Изменений нет
@@ -83,7 +83,7 @@ namespace BPO_ex4.StationLogic
             }
 
             // ЛОГ О ЗАПУСКЕ ТАЙМЕРА
-            AppLogger.Log($"START TIMER: {Id} -> {newValue} ({delay.TotalSeconds}s)");
+            //AppLogger.Log($"START TIMER: {Id} -> {newValue} ({delay.TotalSeconds}s)");
 
             var ms = delay.TotalMilliseconds;
             if (ms < 0 || ms > int.MaxValue) ms = 0;

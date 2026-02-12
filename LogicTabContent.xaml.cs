@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading; // !!! НУЖНО ДЛЯ AllowUIToUpdate !!!
 using BPO_ex4.StationLogic;
 using BPO_ex4.Excel;
 using BPO_ex4.ViewModels;
@@ -40,9 +41,27 @@ namespace BPO_ex4
             RenderTable(startNode);
         }
 
+        // === ПРИНУДИТЕЛЬНОЕ ОБНОВЛЕНИЕ UI ===
+        // Тот самый метод, который заставляет WPF отрисовать кадр немедленно
+        public static void AllowUIToUpdate()
+        {
+            DispatcherFrame frame = new DispatcherFrame();
+            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Render, new DispatcherOperationCallback(delegate (object parameter)
+            {
+                (parameter as DispatcherFrame).Continue = false;
+                return null;
+            }), frame);
+            Dispatcher.PushFrame(frame);
+        }
+
         public void RefreshUI()
         {
-            if (_currentNode != null) RenderTable(_currentNode);
+            if (_currentNode != null)
+            {
+                RenderTable(_currentNode);
+                // Пнем интерфейс, чтобы он отрисовался сразу
+                AllowUIToUpdate();
+            }
         }
 
         private void RenderTable(Node node)
@@ -151,55 +170,40 @@ namespace BPO_ex4
 
                 if (e.ChangedButton == MouseButton.Middle)
                 {
-                    // КОЛЕСИКО -> Новая вкладка
                     NewTabRequested?.Invoke(realNode);
                     e.Handled = true;
                 }
                 else if (e.ChangedButton == MouseButton.Left)
                 {
-                    // ЛКМ -> Проваливаемся
                     RenderTable(realNode);
+                    AllowUIToUpdate(); // Пнем UI при переходе
                     e.Handled = true;
                 }
-                // ПКМ (Right) мы НЕ трогаем, чтобы сработало стандартное ContextMenu из XAML
             }
         }
 
         // === ОБРАБОТЧИКИ МЕНЮ ===
-
-        // 1. Изменить значение
         private void CtxToggle_Click(object sender, RoutedEventArgs e)
         {
             if ((sender as MenuItem).Tag is Node n)
             {
-                var realNode = _ctx.Get(n.Id); // На всякий случай берем свежую
+                var realNode = _ctx.Get(n.Id);
                 ChangeValue(realNode);
             }
         }
 
-        // 2. Редактировать связь
         private void CtxEdit_Click(object sender, RoutedEventArgs e)
         {
             if ((sender as MenuItem).Tag is Node clickedNode)
             {
-                // Ищем, в какой группе и под каким индексом эта нода
                 var (groupIdx, inputIdx) = FindInputIndices(_currentNode, clickedNode);
-
-                if (groupIdx != -1)
-                {
-                    OpenEditWindow(groupIdx, inputIdx);
-                }
-                else
-                {
-                    MessageBox.Show("Could not find this input in the current logic structure.");
-                }
+                if (groupIdx != -1) OpenEditWindow(groupIdx, inputIdx);
+                else MessageBox.Show("Could not find this input.");
             }
         }
 
-        // 3. Добавить в группу
         private void CtxAdd_Click(object sender, RoutedEventArgs e)
         {
-            // Tag здесь - это GroupIndex (int), который мы привязали в XAML
             if (int.TryParse((sender as MenuItem).Tag?.ToString(), out int groupIdx))
             {
                 OpenEditWindow(groupIdx, -1);
@@ -211,11 +215,20 @@ namespace BPO_ex4
         private void ChangeValue(Node n)
         {
             if (n.Id.StartsWith("CONST")) return;
+
+            // 1. Меняем значение в движке
             _engine.InjectChange(n, !n.Value);
+
+            // 2. Уведомляем другие вкладки
             GlobalChangeRequested?.Invoke();
+
+            // 3. Обновляем текущую (на всякий случай, хотя GlobalChangeRequested тоже может это сделать)
+            RenderTable(_currentNode);
+
+            // 4. !!! МАГИЯ: Заставляем отрисоваться прямо сейчас !!!
+            AllowUIToUpdate();
         }
 
-        // Метод поиска индексов (который был раньше в MainWindow)
         private (int groupIdx, int inputIdx) FindInputIndices(Node center, Node input)
         {
             if (center.LogicSource is SheetLogic logic && logic.Groups != null)
@@ -241,6 +254,7 @@ namespace BPO_ex4
                 RenderTable(_ctx.Get(prevId));
                 if (_history.Count > 0 && _history.Peek() == prevId) _history.Pop();
                 BtnBack.IsEnabled = _history.Count > 0;
+                AllowUIToUpdate();
             }
         }
 
@@ -249,7 +263,6 @@ namespace BPO_ex4
             if (sender is Button btn && btn.Tag is int g) OpenEditWindow(g, -1);
         }
 
-        // === ИСПРАВЛЕННЫЙ МЕТОД РЕДАКТИРОВАНИЯ ===
         private void OpenEditWindow(int groupIdx, int inputIdx)
         {
             if (!_session.IsLoaded) { MessageBox.Show("Load file first!"); return; }
@@ -261,22 +274,19 @@ namespace BPO_ex4
                 {
                     var selectedNode = _ctx.Get(win.ResultSourceNode.Id);
 
-                    // 1. Пишем в память Excel (БЫСТРО)
                     if (inputIdx == -1)
+                    {
                         _session.AddInputInMemory(win.TargetSheetName, win.TargetObjectIndex, groupIdx, selectedNode);
-                    else
-                        _session.UpdateCellInMemory(win.TargetSheetName, win.TargetObjectIndex, groupIdx, inputIdx, selectedNode);
-
-                    // 2. Пишем в память Графа (БЫСТРО)
-                    if (inputIdx == -1)
                         LogicPatcher.AddInputToRuntime(_currentNode, groupIdx, selectedNode);
+                    }
                     else
+                    {
+                        _session.UpdateCellInMemory(win.TargetSheetName, win.TargetObjectIndex, groupIdx, inputIdx, selectedNode);
                         LogicPatcher.UpdateInputInRuntime(_currentNode, groupIdx, inputIdx, selectedNode);
+                    }
 
-                    // 3. УВЕДОМЛЕНИЕ О ИЗМЕНЕНИЯХ (НО НЕ СОХРАНЕНИЕ НА ДИСК!)
                     GlobalChangeRequested?.Invoke();
-
-                    // УБРАНО: _session.Save(); -> Теперь это происходит только в MainWindow по кнопке или таймеру
+                    AllowUIToUpdate(); // Пнем UI после редактирования
                 }
                 catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
             }
