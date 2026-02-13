@@ -26,12 +26,20 @@ namespace BPO_ex4
 
         public event NewTabRequestedHandler NewTabRequested;
         public event Action GlobalChangeRequested;
-
+        private bool _isDirty = false; // Флаг: "Данные устарели, надо перерисовать"
         public LogicTabContent()
         {
             InitializeComponent();
+            this.IsVisibleChanged += LogicTabContent_IsVisibleChanged;
         }
-
+        private void LogicTabContent_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            // Если мы стали видимы (IsVisible == true) И данные устарели -> обновляемся
+            if ((bool)e.NewValue && _isDirty)
+            {
+                RefreshUI();
+            }
+        }
         public void Initialize(Context ctx, SimulationEngine engine, ExcelSession session, List<Node> cache, Node startNode)
         {
             _ctx = ctx;
@@ -56,10 +64,18 @@ namespace BPO_ex4
 
         public void RefreshUI()
         {
+            if (!this.IsVisible)
+            {
+                _isDirty = true;
+                return;
+            }
+
+            // Если мы дошли сюда, значит вкладка видна. Сбрасываем флаг.
+            _isDirty = false;
+
             if (_currentNode != null)
             {
                 RenderTable(_currentNode);
-                // Пнем интерфейс, чтобы он отрисовался сразу
                 AllowUIToUpdate();
             }
         }

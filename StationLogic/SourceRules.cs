@@ -736,7 +736,7 @@ namespace BPO_ex4.StationLogic
                     return $"STAGE_VSAB[{num}]";
 
                 if (ist == "2.12")
-                    return $"ROUTE_vS[{num}]";
+                    return $"STAGE_VS[{num}]";
 
                 if (ist == "2.11")
                     return $"SPEED_FH[{num}]";
@@ -1681,7 +1681,7 @@ namespace BPO_ex4.StationLogic
                     return $"METALL_KVR[{num}]";
 
                 if (ist == "7.1")
-                    return $"ROUTE_vS[{num}]";
+                    return $"STAGE_VS[{num}]";
 
                 if (ist == "7.0")
                     return $"KGU_KKGU[{num}]";
@@ -2117,7 +2117,7 @@ namespace BPO_ex4.StationLogic
                     return $"STAGE_SVP[{num}]";
 
                 if (ist == "5.1")
-                    return $"ROUTE_vS[{num}]";
+                    return $"STAGE_VS[{num}]";
 
                 if (ist == "5.0")
                     return $"SECT_P[{num}]";
@@ -3103,7 +3103,7 @@ namespace BPO_ex4.StationLogic
                     return $"ROUTE_BLv[{num}]";
 
                 if (ist == "3.4")
-                    return $"ROUTE_zlv[{num}]";
+                    return $"ROUTE_zLv[{num}]";
 
                 if (ist == "3.3")
                     return $"ROUTE_2ZHLv[{num}]";

@@ -8,7 +8,21 @@ namespace BPO_ex4.StationLogic
     {
         public string Id { get; set; }
         public string Description { get; set; }
-        public bool Value { get; set; }
+        private bool _value;
+        public bool Value
+        {
+            get => _value;
+            set
+            {
+                if (_value != value)
+                {
+                    _value = value;
+                    // ТЕПЕРЬ ЛЮБОЕ ИЗМЕНЕНИЕ ВЫЗЫВАЕТ СОБЫТИЕ!
+                    // И график сразу узнает об этом.
+                    Changed?.Invoke(this);
+                }
+            }
+        }
         public SheetLogic LogicSource { get; set; }
 
         public List<Node> Dependents { get; set; } = new List<Node>();

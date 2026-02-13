@@ -32,8 +32,12 @@ namespace BPO_ex4.Excel
             var groupsMapping = new List<List<int>>();
             groupsMapping.Add(new List<int>()); // 0-я группа пустая
 
-            int col = 5;
-            List<int> currentGroup = null;
+            int col;
+            if (ws.Name.Contains("UV_EX"))
+                col = 6;
+            else
+                col = 5;
+                List<int> currentGroup = null;
 
             while (true)
             {

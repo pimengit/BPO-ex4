@@ -146,14 +146,14 @@ namespace BPO_ex4
         private void ApplyHardcodedDefaults(Context ctx)
         {
             // 1. Хардкод конкретных имен (если они точно есть)
-            var specificNames = new List<string> { "NV", "K_1", "POWER_ON" };
-            foreach (var name in specificNames)
+            //var specificNames = new List<string> { "NV", "K_1", "POWER_ON" };
+            /*/foreach (var name in specificNames)
             {
                 // Тут можно использовать Get, если вы уверены на 100%
                 // Но лучше проверить через Contains, если он есть, или просто Get, так как их мало
                 var node = ctx.Get(name);
                 node.Value = true;
-            }
+            }*/
 
             // 2. МАССОВОЕ ВКЛЮЧЕНИЕ ПО МАСКЕ (Без создания мусора)
             // Мы бежим только по тем нодам, которые реально загрузились из файла
@@ -184,6 +184,15 @@ namespace BPO_ex4
                     content.RefreshUI();
                 }
             }
+        }
+
+        private void BtnOpenScheme_Click(object sender, RoutedEventArgs e)
+        {
+            if (_ctx == null) return;
+
+            // Передаем _ctx И _engine
+            var schemeWin = new StationViewWindow(_ctx, _engine);
+            schemeWin.Show();
         }
 
 
