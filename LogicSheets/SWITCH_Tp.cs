@@ -7,8 +7,8 @@ namespace BPO_ex4.LogicSheets
     {
         public SWITCH_Tp()
         {
-            OnDelay  = TimeSpan.FromMilliseconds(1500);
-            OffDelay = TimeSpan.FromMilliseconds(50);
+            OnDelay  = TimeSpan.FromMilliseconds(50);
+            OffDelay = TimeSpan.FromMilliseconds(1500);
         }
 
         public override bool Compute()

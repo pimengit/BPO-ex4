@@ -22,6 +22,7 @@ namespace BPO_ex4.Visuals
 
 
         public ICommand RightClickCommand { get; private set; }
+        public ICommand LeftClickCommand { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -30,13 +31,14 @@ namespace BPO_ex4.Visuals
             ClickCommand = new SimpleCommand(ToggleValue);
             ZrCommand = new SimpleCommand(ToggleValue);
             RightClickCommand = new SimpleCommand(OnRightClick);
+            LeftClickCommand = new SimpleCommand(OnLeftClick);
         }
 
         protected virtual void OnLeftClick()
         {
             // По дефолту (для секций) - просто инверсия одиночной ноды
-            if (_node != null && _engine != null)
-                _engine.InjectChange(_node, !_node.Value);
+           // if (_node != null && _engine != null)
+             //   _engine.InjectChange(_node, !_node.Value);
         }
 
         protected virtual void OnRightClick()

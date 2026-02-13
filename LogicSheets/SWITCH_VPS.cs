@@ -7,8 +7,8 @@ namespace BPO_ex4.LogicSheets
     {
         public SWITCH_VPS()
         {
-            OnDelay  = TimeSpan.FromMilliseconds(450);
-            OffDelay = TimeSpan.FromMilliseconds(50);
+            OnDelay  = TimeSpan.FromMilliseconds(50);
+            OffDelay = TimeSpan.FromMilliseconds(450);
         }
 
         public override bool Compute()

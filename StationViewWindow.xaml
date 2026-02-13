@@ -83,7 +83,7 @@
                  Cursor="Hand">
 
                                 <Ellipse.InputBindings>
-                                    <MouseBinding Gesture="LeftClick" Command="{Binding ClickCommand}"/>
+                                    <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}"/>
                                     <MouseBinding Gesture="RightClick" Command="{Binding RightClickCommand}"/>
                                 </Ellipse.InputBindings>
                             </Ellipse>

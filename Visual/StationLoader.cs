@@ -35,7 +35,6 @@ namespace BPO_ex4.Visuals
                     double x = double.Parse(el.Attribute("x")?.Value ?? "0", culture);
                     double y = double.Parse(el.Attribute("y")?.Value ?? "0", culture);
                     string name = el.Attribute("name")?.Value ?? "???";
-                    name = "Стрелка " + name;
                     var swVm = new SwitchViewModel(x, y, name);
                     swVm.BindToLogic(ctx, engine);
                     collection.Add(swVm);
