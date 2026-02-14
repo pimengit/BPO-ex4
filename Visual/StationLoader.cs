@@ -30,6 +30,28 @@ namespace BPO_ex4.Visuals
                 // Если в XML просто <object ... type="switch"> то искать надо иначе, 
                 // но судя по tracks->section, у тебя структура по типам папок.
 
+                var garsElements = doc.Descendants("gars_indicators")
+                      .Elements("object");
+
+                foreach (var el in garsElements)
+                {
+                    // Парсим атрибуты
+                    double x = double.Parse(el.Attribute("x")?.Value ?? "0", culture);
+                    double y = double.Parse(el.Attribute("y")?.Value ?? "0", culture);
+
+                    // Ширина может быть width, dw или w
+                    double w = double.Parse(el.Attribute("width")?.Value ?? el.Attribute("dw")?.Value ?? "60", culture);
+
+                    // Имя для связки с переменными
+                    string name = el.Attribute("name")?.Value ?? "???";
+                    int number = int.Parse(el.Attribute("number")?.Value ?? "???");
+
+                    var garsVm = new GarsViewModel(x, y, w, name, number);
+                    garsVm.BindToLogic(ctx, engine);
+
+                    collection.Add(garsVm);
+                }
+
                 foreach (var el in switchElements)
                 {
                     double x = double.Parse(el.Attribute("x")?.Value ?? "0", culture);

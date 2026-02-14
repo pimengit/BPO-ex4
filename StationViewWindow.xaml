@@ -50,6 +50,20 @@
                                        IsHitTestVisible="False"/>
                         </Grid>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type vis:GarsViewModel}">
+                        <Border Width="{Binding Width}" Height="{Binding Height}" Background="White" BorderBrush="Black" BorderThickness="1" ToolTip="{Binding Name}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding TextLeft}" Foreground="Black" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"/>
+                                <Rectangle Grid.Column="1" Width="1" Fill="Black" Margin="0,2"/>
+                                <TextBlock Grid.Column="2" Text="{Binding TextRight}" Foreground="Black" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type vis:ZrViewModel}">
                         <Grid>
                             <Rectangle Width="{Binding Width}" 

@@ -17,6 +17,8 @@ namespace BPO_ex4.Visuals
         public int ZIndex { get; set; } = 0;
         public string Name { get; set; }
 
+        public int Number { get; set; }
+
         public ICommand ClickCommand { get; private set; }
         public ICommand ZrCommand { get; private set; }
 
