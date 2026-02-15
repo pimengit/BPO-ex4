@@ -22,6 +22,8 @@ namespace BPO_ex4.StationLogic
             return nodes.Count;
         }
 
+        public Dictionary<string, List<SignalColor>> LightConfigs { get; set; } = new Dictionary<string, List<SignalColor>>();
+
         /// <summary>
         /// Возвращает список всех узлов (понадобится для рисования диаграмм).
         /// </summary>

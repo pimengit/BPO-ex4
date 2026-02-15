@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BPO_ex4.StationLogic
 {
@@ -19,7 +21,8 @@ namespace BPO_ex4.StationLogic
                     _value = value;
                     // ТЕПЕРЬ ЛЮБОЕ ИЗМЕНЕНИЕ ВЫЗЫВАЕТ СОБЫТИЕ!
                     // И график сразу узнает об этом.
-                    Changed?.Invoke(this);
+                    RaiseChanged();
+                    //Changed?.Invoke(this);
                 }
             }
         }
@@ -133,8 +136,25 @@ namespace BPO_ex4.StationLogic
         {
             if (Value == newValue) return false;
             Value = newValue;
-            Changed?.Invoke(this); // Уведомляем движок
+            //Changed?.Invoke(this); // Уведомляем движок
             return true;
+        }
+
+        private void RaiseChanged()
+        {
+            var handler = Changed;
+            if (handler == null) return;
+
+            var app = Application.Current;
+            if (app != null && !app.Dispatcher.CheckAccess())
+            {
+                // синхронный вызов в UI-потоке — чтобы исключить гонки внутри WPF binding engine
+                app.Dispatcher.Invoke(() => handler(this));
+            }
+            else
+            {
+                handler(this);
+            }
         }
 
         // Таймеры (кэш)

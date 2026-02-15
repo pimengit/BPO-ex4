@@ -18,14 +18,92 @@ namespace BPO_ex4.Excel
 
             foreach (var ws in pkg.Workbook.Worksheets)
             {
+                if (ws.Name.Contains("Address")) ParseTrafficLights(ws, ctx);
                 if (ws.Name.Contains("_CONF") || ws.Name.Contains("Station_ID")) continue;
                 if (ws.Name.Contains("_"))
                 {
                     ParseSheet(ws, ctx); 
                 }
+                
             }
         }
 
+
+
+        // Вызови этот метод внутри основного Load, когда найдешь вкладку Adress
+        public static void ParseTrafficLights(ExcelWorksheet ws, Context ctx)
+        {
+            ctx.LightConfigs.Clear();
+
+            if (ws.Dimension == null) return;
+            int endRow = ws.Dimension.End.Row;
+
+            // 1. ПОИСК СТАРТА (МГНОВЕННО)
+            // Выгружаем ТОЛЬКО колонку B (Тип) в память
+            var typeColumn = ws.Cells[1, 2, endRow, 2].Value as object[,];
+            int startRow = -1;
+
+            // Бежим по массиву в памяти (это наносекунды)
+            for (int i = 0; i < typeColumn.GetLength(0); i++)
+            {
+                var val = typeColumn[i, 0]?.ToString();
+                if (val != null && val.Contains("Светофор", StringComparison.OrdinalIgnoreCase))
+                {
+                    startRow = i + 1; // Excel индекс = индекс массива + 1
+                    break; // Нашли! Выходим.
+                }
+            }
+
+            // Если светофоров нет вообще — выходим
+            if (startRow == -1) return;
+
+            // 2. ЧИТАЕМ ДАННЫЕ С НУЖНОЙ СТРОКИ
+            // Берем данные с startRow до конца. Колонки B, C, D (2,3,4)
+            var range = ws.Cells[startRow, 2, endRow, 5];
+            object[,] values = range.Value as object[,];
+
+            if (values == null) return;
+
+            int rowsCount = values.GetLength(0);
+            string currentLightName = null;
+
+            for (int r = 0; r < rowsCount; r++)
+            {
+                // Индексы в куске: 0=B (Тип), 1=C (Имя), 2=D (Цвет)
+                string typeVal = values[r, 0]?.ToString();
+                string nameVal = values[r, 1]?.ToString();
+                string colorVal = values[r, 3]?.ToString();
+
+                // 3. ЛОГИКА ПАРСИНГА
+                // Если есть ИМЯ - это начало нового блока
+                if (!string.IsNullOrWhiteSpace(nameVal))
+                {
+                    currentLightName = null; // Сброс, чтобы не писать в старый
+
+                    // Если тип не пустой и это Светофор -> Запоминаем имя
+                    if (!string.IsNullOrWhiteSpace(typeVal) &&
+                        typeVal.Contains("Светофор", StringComparison.OrdinalIgnoreCase))
+                    {
+                        currentLightName = nameVal.Trim();
+                        if (!ctx.LightConfigs.ContainsKey(currentLightName))
+                        {
+                            ctx.LightConfigs[currentLightName] = new List<SignalColor>();
+                        }
+                    }
+                    // Иначе (если это Реле/Датчик) currentLightName останется null
+                }
+
+                // Если мы внутри светофора -> пишем цвет
+                if (currentLightName != null && !string.IsNullOrWhiteSpace(colorVal))
+                {
+                    var color = SignalHelpers.Parse(colorVal);
+                    if (color != SignalColor.Unknown)
+                    {
+                        ctx.LightConfigs[currentLightName].Add(color);
+                    }
+                }
+            }
+        }
         static void ParseSheet(ExcelWorksheet ws, Context ctx)
         {
             // 1. АНАЛИЗ МАСКИ (Ваша надежная логика без Dimension)

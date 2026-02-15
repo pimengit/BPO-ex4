@@ -28,9 +28,17 @@ namespace BPO_ex4
 
                 // Передаем _engine в загрузчик
                 var objects = StationLoader.Load(xmlPath, ctx, _engine);
+                foreach (var section in objects.OfType<SectionViewModel>())
+                {
+                    if (section.LogicNode != null)
+                    {
+                        _engine.InjectChange(section.LogicNode, false);
+                        _engine.InjectChange(section.LogicNode, true);
 
-                MainCanvasControl.ItemsSource = objects;
-                Title = $"Схема станции (Объектов: {objects.Count})";
+                    }
+                    MainCanvasControl.ItemsSource = objects;
+                    Title = $"Схема станции (Объектов: {objects.Count})";
+                }
             }
             catch (Exception ex)
             {

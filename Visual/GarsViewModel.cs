@@ -92,12 +92,12 @@ namespace BPO_ex4.Visuals
             {
                 case 0: return "--";  // 000
                 case 1: return "САО";  // 001
-                case 2: return "325";  // 010
-                case 3: return "275";  // 011
-                case 4: return "225";  // 100
-                case 5: return "175";   // 101
-                case 6: return "125"; // 110 (Пример)
-                case 7: return "75"; // 111 (Пример)
+                case 2: return "РС";  // 010
+                case 3: return "0";  // 011
+                case 4: return "40";  // 100
+                case 5: return "60";   // 101
+                case 6: return "70"; // 110 (Пример)
+                case 7: return "80"; // 111 (Пример)
                 default: return "?";
             }
         }

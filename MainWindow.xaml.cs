@@ -173,7 +173,12 @@ namespace BPO_ex4
                     node.Value = true;
                 }
             }
+
+            
+
+
         }
+        
         private void OnGlobalChange()
         {
             // Проходим по всем открытым вкладкам и просим обновиться

@@ -33,6 +33,28 @@ namespace BPO_ex4.Visuals
                 var garsElements = doc.Descendants("gars_indicators")
                       .Elements("object");
 
+
+                var lightElements = doc.Descendants("x_light")
+                       .Elements("object");
+
+                foreach (var el in lightElements)
+                {
+                    double x = double.Parse(el.Attribute("x")?.Value ?? "0", culture);
+                    double y = double.Parse(el.Attribute("y")?.Value ?? "0", culture);
+                    string name = el.Attribute("name")?.Value ?? "???";
+
+                    // Считываем Number (ОБЯЗАТЕЛЬНО, это связь с OKSE)
+                    int number = int.Parse(el.Attribute("number")?.Value ?? "0");
+
+                    // Направление (odd/even) - пригодится для рисования мачты
+                    string dir = el.Attribute("dir")?.Value ?? "odd";
+
+                    var lightVm = new LightViewModel(x, y, number, name, dir);
+                    lightVm.BindToLogic(ctx, engine);
+
+                    collection.Add(lightVm);
+                }
+
                 foreach (var el in garsElements)
                 {
                     // Парсим атрибуты

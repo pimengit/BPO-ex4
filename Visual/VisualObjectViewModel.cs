@@ -12,6 +12,7 @@ namespace BPO_ex4.Visuals
         protected Node _node;
         protected SimulationEngine _engine;
 
+        public Node LogicNode => _node;
         public double X { get; set; }
         public double Y { get; set; }
         public int ZIndex { get; set; } = 0;
@@ -49,20 +50,45 @@ namespace BPO_ex4.Visuals
         }
 
         // === ГЛАВНОЕ ИСПРАВЛЕНИЕ: Метод для вызова события из наследников ===
-        protected void RaisePropertyChanged(string propertyName)
+        // ... остальной using и namespace остаются
+
+protected void RaisePropertyChanged(string propertyName)
+{
+    var app = System.Windows.Application.Current;
+
+    // Если приложения нет (например, юнит-тест) - просто вызываем
+    if (app == null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName ?? string.Empty));
+        return;
+    }
+
+    // Проверяем: мы сейчас в UI-потоке?
+    if (app.Dispatcher.CheckAccess())
+    {
+        // Да, в UI-потоке -> вызываем сразу
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName ?? string.Empty));
+    }
+    else
+    {
+        // Маршалим СИНХРОННО в UI-поток, чтобы избежать проблем с созданием DependencySource на другом потоке
+        // (Invoke блокирует текущий поток до выполнения делегата на UI-потоке)
+        try
         {
-            // Сразу делаем это в главном потоке, чтобы UI не ругался
-            /*System.Windows.Application.Current?.Dispatcher.Invoke(() =>
+            app.Dispatcher.Invoke(new Action(() =>
             {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            });*/
-            System.Windows.Application.Current?.Dispatcher.Invoke(() =>
-            {
-                // Если propertyName == null => используем string.Empty (обозначает "всё")
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName ?? string.Empty));
-            });
-        
+            }), System.Windows.Threading.DispatcherPriority.Normal);
         }
+        catch (Exception ex)
+        {
+            // Логируем — чтобы понять, если вдруг и это место падает
+            AppLogger.Log($"RaisePropertyChanged.Invoke exception: {ex}");
+            // По желанию: пробрасывать или подавлять
+            throw;
+        }
+    }
+}
 
         public virtual void BindToLogicSect(Context ctx, SimulationEngine engine)
         {
@@ -84,14 +110,40 @@ namespace BPO_ex4.Visuals
                     if (sectIn != null)
                     {
                         _node = sectIn;
-                        _node.Changed += (n) => OnLogicChanged();
+                        if (sectIn != null)
+                        {
+                            _node = sectIn;
+                            _node.Changed += (n) =>
+                            {
+                                var app = System.Windows.Application.Current;
+                                if (app != null && !app.Dispatcher.CheckAccess())
+                                    app.Dispatcher.Invoke(() => OnLogicChanged());
+                                else
+                                    OnLogicChanged();
+                            };
+                            OnLogicChanged();
+                            return;
+                        }
                         OnLogicChanged();
                         return;
                     }
                     if (relayKRK1 != null)
                     {
                         _node = relayKRK1;
-                        _node.Changed += (n) => OnLogicChanged();
+                        if (sectIn != null)
+                        {
+                            _node = relayKRK1;
+                            _node.Changed += (n) =>
+                            {
+                                var app = System.Windows.Application.Current;
+                                if (app != null && !app.Dispatcher.CheckAccess())
+                                    app.Dispatcher.Invoke(() => OnLogicChanged());
+                                else
+                                    OnLogicChanged();
+                            };
+                            OnLogicChanged();
+                            return;
+                        }
                         OnLogicChanged();
                         return;
                     }
@@ -111,7 +163,20 @@ namespace BPO_ex4.Visuals
             if (foundNode != null)
             {
                 _node = foundNode; // ПРИСВАИВАЕМ В РОДИТЕЛЬСКОЕ ПОЛЕ _node
-                _node.Changed += (n) => OnLogicChanged();
+                if (foundNode != null)
+                {
+                    _node = foundNode;
+                    _node.Changed += (n) =>
+                    {
+                        var app = System.Windows.Application.Current;
+                        if (app != null && !app.Dispatcher.CheckAccess())
+                            app.Dispatcher.Invoke(() => OnLogicChanged());
+                        else
+                            OnLogicChanged();
+                    };
+                    OnLogicChanged();
+                    return;
+                }
                 OnLogicChanged();
             }
             else
