@@ -19,7 +19,7 @@ namespace BPO_ex4
         private List<Node> _allNodesCache;
         private List<string> _uniqueTypes;
         private string _loadedExcelPath;
-
+        private string _loadedXMLPath;
         public MainWindow()
         {
             OfficeOpenXml.ExcelPackage.License.SetNonCommercialPersonal("User");
@@ -167,6 +167,10 @@ namespace BPO_ex4
                     node.Value = true;
                 }
 
+                if (node.Id.StartsWith("SWITCH_IN") && (node.Id.EndsWith("8]") || node.Id.EndsWith("9]")))
+                {
+                    node.Value = true;
+                }
                 // Пример для другой группы
                 if (node.Id.StartsWith("GEN_OUT"))
                 {
@@ -174,10 +178,10 @@ namespace BPO_ex4
                 }
             }
 
-            
-
-
         }
+
+
+        
         
         private void OnGlobalChange()
         {
@@ -194,9 +198,14 @@ namespace BPO_ex4
         private void BtnOpenScheme_Click(object sender, RoutedEventArgs e)
         {
             if (_ctx == null) return;
+            var dlg = new OpenFileDialog { Filter = "XML Files|*.xml" };
+            if (dlg.ShowDialog() == true)
+            {
+                _loadedXMLPath = dlg.FileName;
 
+            }
             // Передаем _ctx И _engine
-            var schemeWin = new StationViewWindow(_ctx, _engine);
+            var schemeWin = new StationViewWindow(_ctx, _engine, _loadedXMLPath);
             schemeWin.Show();
         }
 

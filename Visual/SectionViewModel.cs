@@ -1,12 +1,17 @@
 ﻿using BPO_ex4.StationLogic;
+using System.Linq;
 using System.Windows.Media;
 
 namespace BPO_ex4.Visuals
 {
     public class SectionViewModel : VisualObjectViewModel
     {
-        private Node _pzNode; //зеленая полоса
-        private Node _lzNode; //ложная занятость
+        // _node (из базового класса) будет отвечать за КЛИК (SECT_IN / KRK)
+
+        private Node _occupancyNode; // Новая переменная: Отвечает за ЦВЕТ (SECT_P)
+        private Node _pzNode;        // Зеленая полоса (Маршрут)
+        private Node _lzNode;        // Ложная занятость
+
         public double Width { get; set; }
         public double Height { get; set; } = 8;
 
@@ -14,18 +19,27 @@ namespace BPO_ex4.Visuals
         {
             get
             {
-                // 1. Если нет основной привязки (SECT_IN) -> Синий (Ошибка)
-                if (_node == null) return Brushes.Blue;
+                // 1. Если вообще ничего не нашли — Синий (Ошибка конфигурации)
+                if (_occupancyNode == null) return Brushes.Blue;
 
-                // 2. Если ЗАНЯТО (Value == false) -> Красный (Приоритет №1)
-                // Даже если маршрут задан, под поездом секция должна быть красной
-                if (!_node.Value && !_lzNode.Value) return Brushes.Red;
+                // 2. ПРОВЕРКА ЗАНЯТОСТИ (по SECT_P)
+                // Если SECT_P == false (0), значит путь занят -> Красный
+                // (При условии, что нет ложной занятости, или если LZ тоже влияет)
 
-                if (!_node.Value && _lzNode.Value) return Brushes.Yellow;
+                bool isOccupied = !_occupancyNode.Value; // 0 = Занято, 1 = Свободно
+                bool isLz = _lzNode != null && _lzNode.Value;
 
-                // 3. Если МАРШРУТ (PZ == true) -> Зеленый (Приоритет №2)
+                if (isOccupied)
+                {
+                    // Если занято и есть Ложная Занятость -> Желтый
+                    if (isLz) return Brushes.Yellow;
+
+                    // Иначе просто занято -> Красный
+                    return Brushes.Red;
+                }
+
+                // 3. Если МАРШРУТ (PZ == true) -> Зеленый
                 if (_pzNode != null && _pzNode.Value) return Brushes.Lime;
-
 
                 // 4. Иначе -> Серый (Свободно)
                 return Brushes.LightGray;
@@ -34,51 +48,81 @@ namespace BPO_ex4.Visuals
 
         public SectionViewModel(double x, double y, double w, string name)
         {
-            X = x;
-            Y = y;
-            Width = w;
-            Name = name;
+            X = x; Y = y; Width = w; Name = name;
         }
-
-
-
 
         public override void BindToLogicSect(Context ctx, SimulationEngine engine)
         {
-            // 1. Вызываем базовую логику (она найдет _node = SECT_IN через SECT_P)
-            base.BindToLogicSect(ctx, engine);
+            _engine = engine;
 
-            // 2. Ищем SECT_PZ по описанию (оно совпадает с Name, например "360")
-            _pzNode = ctx.GetAllNodes()
-                         .FirstOrDefault(n => n.Id.StartsWith("SECT_Pz") && n.Description == Name);
+            // ---------------------------------------------------------
+            // ШАГ 1: Ищем главную переменную отображения (SECT_P)
+            // ---------------------------------------------------------
+            // Она нужна для раскраски (Красный/Серый)
+            _occupancyNode = ctx.GetAllNodes()
+                                .FirstOrDefault(n => n.Id.StartsWith("SECT_P") && n.Description == Name);
 
-            _lzNode = ctx.GetAllNodes()
-             .FirstOrDefault(n => n.Id.StartsWith("SECT_Lz") && n.Description == Name);
-
-            if (_pzNode != null)
+            if (_occupancyNode != null)
             {
-                // Подписываемся на изменения PZ тоже!
-                _pzNode.Changed += (n) => OnLogicChanged();
+                // Подписываемся на изменение цвета
+                _occupancyNode.Changed += _ => OnLogicChanged();
             }
 
-            if (_lzNode != null)
+            // ---------------------------------------------------------
+            // ШАГ 2: Ищем переменную для КЛИКА (SECT_IN или RELAY_KRK)
+            // ---------------------------------------------------------
+            // Мы копаемся в исходниках SECT_P, чтобы найти, от чего она зависит
+            if (_occupancyNode != null && _occupancyNode.LogicSource?.Groups != null)
             {
-                // Подписываемся на изменения PZ тоже!
-                _lzNode.Changed += (n) => OnLogicChanged();
+                foreach (var group in _occupancyNode.LogicSource.Groups)
+                {
+                    if (group == null) continue;
+
+                    // Пытаемся найти входные переменные в этой группе
+                    var inputNode = group.FirstOrDefault(n => n.Id.StartsWith("SECT_IN") || n.Id.StartsWith("RELAY_KRK"));
+
+                    if (inputNode != null)
+                    {
+                        _node = inputNode; // Присваиваем в _node (базовый класс кликает по нему!)
+                        break; // Нашли - выходим
+                    }
+                }
             }
-            // Обновляем цвет сразу после привязки
+
+            // Если через группы не нашли (бывает сложная логика), 
+            // пробуем найти SECT_IN просто по имени (как запасной вариант)
+            if (_node == null)
+            {
+                _node = ctx.GetAllNodes().FirstOrDefault(n => n.Id.StartsWith("SECT_IN") && n.Description == Name);
+            }
+
+            // ---------------------------------------------------------
+            // ШАГ 3: Ищем доп. переменные (PZ, LZ)
+            // ---------------------------------------------------------
+            _pzNode = ctx.GetAllNodes().FirstOrDefault(n => n.Id.StartsWith("SECT_Pz") && n.Description == Name);
+            _lzNode = ctx.GetAllNodes().FirstOrDefault(n => n.Id.StartsWith("SECT_Lz") && n.Description == Name);
+
+            if (_pzNode != null) _pzNode.Changed += _ => OnLogicChanged();
+            if (_lzNode != null) _lzNode.Changed += _ => OnLogicChanged();
+
+            // Первичное обновление
             OnLogicChanged();
         }
-        // === ИСПРАВЛЕНИЕ ТУТ ===
+
         protected override void OnLogicChanged()
         {
-            // Используем метод родителя. 
-            // Dispatcher уже внутри него, так что тут просто одна строчка.
-            //RaisePropertyChanged(nameof(FillColor));
-            // где-то (в OnLogicChanged)
-            AppLogger.Log($"OnLogicChanged: {Name} -> FillColor now: {_node?.Value}");
-            RaisePropertyChanged(null);
-            //RaisePropertyChanged(nameof(FillColor));
+            // Используем безопасный вызов из базового класса (или твой вариант с Dispatcher)
+            RaisePropertyChanged(nameof(FillColor));
+        }
+
+        // Переопределяем клик (на всякий случай, если в базовом классе он не так работает)
+        protected override void OnLeftClick()
+        {
+            // Меняем состояние _node (это SECT_IN), а цвет перерисуется, когда движок пересчитает SECT_P
+            if (_node != null && _engine != null)
+            {
+                _engine.InjectChange(_node, !_node.Value);
+            }
         }
     }
 }

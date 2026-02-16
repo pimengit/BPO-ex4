@@ -6,7 +6,9 @@
         Background="#1E1E1E">
 
     <Grid>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" PanningMode="Both">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+                      VerticalScrollBarVisibility="Auto" 
+                      PanningMode="Both">
 
             <ItemsControl Name="MainCanvasControl">
 
@@ -28,49 +30,43 @@
 
                     <DataTemplate DataType="{x:Type vis:SectionViewModel}">
                         <Grid>
-                            <Rectangle Width="{Binding Width}" 
-                                       Height="{Binding Height}" 
+                            <Rectangle Width="{Binding Width}" Height="{Binding Height}" 
                                        Fill="{Binding FillColor}"
                                        Stroke="Black" StrokeThickness="1"
                                        RadiusX="1" RadiusY="1"
                                        ToolTip="{Binding Name}"
                                        Cursor="Hand">
-
                                 <Rectangle.InputBindings>
                                     <MouseBinding Gesture="LeftClick" Command="{Binding ClickCommand}"/>
                                 </Rectangle.InputBindings>
-
                             </Rectangle>
 
-                            <TextBlock Text="{Binding Name}" 
-                                       Foreground="Gray" 
-                                       FontSize="10" 
-                                       HorizontalAlignment="Center" 
-                                       Margin="0,-15,0,0"
+                            <TextBlock Text="{Binding Name}" Foreground="Gray" FontSize="10" 
+                                       HorizontalAlignment="Center" Margin="0,-15,0,0"
                                        IsHitTestVisible="False"/>
                         </Grid>
                     </DataTemplate>
+
                     <DataTemplate DataType="{x:Type vis:LightViewModel}">
                         <Grid>
-                            <TextBlock Text="{Binding Name}" 
-                       Foreground="White" FontSize="10" 
-                       HorizontalAlignment="Center" 
-                       Margin="0,-15,0,0"/>
+                            <TextBlock Text="{Binding Name}" Foreground="White" FontSize="10" 
+                                       HorizontalAlignment="Center" Margin="0,-15,0,0"/>
 
                             <Rectangle Width="4" Height="14" Fill="Gray" Margin="0,12,0,0"/>
-
                             <Rectangle Width="10" Height="2" Fill="Gray" VerticalAlignment="Bottom" Margin="0,12,0,-2"/>
 
                             <Ellipse Width="14" Height="14" 
-                     Fill="{Binding FillColor}"
-                     Stroke="White" StrokeThickness="1"
-                     ToolTip="{Binding Name}"
-                     Cursor="Hand">
-                            </Ellipse>
+                                     Fill="{Binding FillColor}"
+                                     Stroke="White" StrokeThickness="1"
+                                     ToolTip="{Binding Name}"
+                                     Cursor="Hand"/>
                         </Grid>
                     </DataTemplate>
+
                     <DataTemplate DataType="{x:Type vis:GarsViewModel}">
-                        <Border Width="{Binding Width}" Height="{Binding Height}" Background="White" BorderBrush="Black" BorderThickness="1" ToolTip="{Binding Name}">
+                        <Border Width="{Binding Width}" Height="{Binding Height}" 
+                                Background="White" BorderBrush="Black" BorderThickness="1" 
+                                ToolTip="{Binding Name}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -83,48 +79,40 @@
                             </Grid>
                         </Border>
                     </DataTemplate>
+
                     <DataTemplate DataType="{x:Type vis:ZrViewModel}">
                         <Grid>
-                            <Rectangle Width="{Binding Width}" 
-                                       Height="{Binding Height}" 
+                            <Rectangle Width="{Binding Width}" Height="{Binding Height}" 
                                        Fill="{Binding FillColor}"
                                        Stroke="Black" StrokeThickness="1"
                                        RadiusX="1" RadiusY="1"
                                        ToolTip="{Binding Name}"
                                        Cursor="Hand">
-
                                 <Rectangle.InputBindings>
                                     <MouseBinding Gesture="LeftClick" Command="{Binding ZrCommand}"/>
                                 </Rectangle.InputBindings>
-
                             </Rectangle>
-
-                            <TextBlock Text="{Binding Name}" 
-                                       Foreground="Gray" 
-                                       FontSize="10" 
-                                       HorizontalAlignment="Center" 
-                                       Margin="0,-15,0,0"
+                            <TextBlock Text="{Binding Name}" Foreground="Gray" FontSize="10" 
+                                       HorizontalAlignment="Center" Margin="0,-15,0,0"
                                        IsHitTestVisible="False"/>
                         </Grid>
                     </DataTemplate>
+
                     <DataTemplate DataType="{x:Type vis:SwitchViewModel}">
                         <Grid>
                             <Ellipse Width="20" Height="20" 
-                 Fill="{Binding FillColor}"
-                 Stroke="White" StrokeThickness="2"
-                 ToolTip="{Binding Name}"
-                 Cursor="Hand">
-
+                                     Fill="{Binding FillColor}"
+                                     Stroke="White" StrokeThickness="2"
+                                     ToolTip="{Binding Name}"
+                                     Cursor="Hand">
                                 <Ellipse.InputBindings>
                                     <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}"/>
                                     <MouseBinding Gesture="RightClick" Command="{Binding RightClickCommand}"/>
                                 </Ellipse.InputBindings>
                             </Ellipse>
-
-                            <TextBlock Text="{Binding Name}" 
-                   Foreground="Black" FontWeight="Bold" FontSize="10" 
-                   HorizontalAlignment="Center" VerticalAlignment="Center"
-                   IsHitTestVisible="False"/>
+                            <TextBlock Text="{Binding Name}" Foreground="Black" FontWeight="Bold" FontSize="10" 
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       IsHitTestVisible="False"/>
                         </Grid>
                     </DataTemplate>
 
@@ -133,8 +121,57 @@
         </ScrollViewer>
 
         <Border VerticalAlignment="Top" HorizontalAlignment="Left" 
-                Background="#CC000000" Padding="10" Margin="10" CornerRadius="5">
-            <TextBlock Text="ЛКМ по объекту - просмотр состояния" Foreground="White"/>
+                Background="#CCEEEEEE" 
+                BorderBrush="Gray" BorderThickness="1"
+                Margin="10,50,0,0" 
+                Padding="5" 
+                CornerRadius="3"
+                MaxWidth="400" MaxHeight="600">
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding RouteButtons}">
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="0"
+                                        Content="{Binding ShortId}" 
+                                        Width="30" Height="25"
+                                        Background="{Binding ButtonColor}"
+                                        Command="{Binding ClickCommand}"
+                                        FontWeight="Bold"
+                                        Margin="0,0,5,0"
+                                        Cursor="Hand"/>
+
+                                <TextBlock Grid.Column="1" 
+                                           Text="{Binding Description}" 
+                                           VerticalAlignment="Center" 
+                                           TextWrapping="Wrap" 
+                                           FontSize="11"
+                                           Foreground="Black"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+
+                </ItemsControl>
+            </ScrollViewer>
         </Border>
+
+        <Border VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+                Background="#CC000000" Padding="10" Margin="20" CornerRadius="5">
+            <TextBlock Text="ЛКМ - Управление | ПКМ - Доп. действия | Scroll - Зум (если реализован)" Foreground="White"/>
+        </Border>
+
     </Grid>
 </Window>

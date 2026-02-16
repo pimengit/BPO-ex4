@@ -60,7 +60,7 @@ namespace BPO_ex4.Visuals
                 var node = ctx.GetAllNodes().FirstOrDefault(n =>
                     n.Id.StartsWith(searchPrefix) &&       // Фильтр по номеру лампы
                     n.Description != null &&               // ЗАЩИТА ОТ ВЫЛЕТА
-                    n.Description.Contains(Name)           // Привязка к светофору
+                    n.Description.Contains($"({Name})")           // Привязка к светофору
                 );
 
                 if (node != null)
