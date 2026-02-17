@@ -46,6 +46,7 @@ namespace BPO_ex4.StationLogic
                 if (num == null)
                     throw new Exception($"ROUTESECT: missing num for ist={ist}");
 
+
                 if (ist == "2.0")
                     return $"SWITCH_MK[{num}]";
 
@@ -372,6 +373,8 @@ namespace BPO_ex4.StationLogic
                 if (ist == "3.14")
                     return $"RELAY_KRK1[{num}]";
 
+                if (ist == "3.1") return "CONST_1";
+
                 if (ist == "3.9")
                     return $"SECT_OUPN[{num}]";
 
@@ -495,6 +498,8 @@ namespace BPO_ex4.StationLogic
 
                 if (ist == "3.2")
                     return $"SECT_P[{num}]";
+
+                if (ist == "4.0") return "CONST_1";
 
                 if (ist == "4.7")
                     return $"KOD_OD2[{num}]";
@@ -885,6 +890,8 @@ namespace BPO_ex4.StationLogic
                 if (ist == "5.9")
                     return $"RELAY_KTK[{num}]";
 
+                if (ist == "5.7") return "CONST_1";
+
                 if (ist == "5.6")
                     return $"STAGE_SVPM[{num}]";
 
@@ -936,6 +943,8 @@ namespace BPO_ex4.StationLogic
 
                 if (ist == "3.13")
                     return $"KOD_OD2[{num}]";
+
+                if (ist == "3.12") return "CONST_1";
 
                 if (ist == "3.2")
                     return $"KOD_PNT[{num}]";
@@ -1296,6 +1305,8 @@ namespace BPO_ex4.StationLogic
 
                 if (ist == "7.2")
                     return $"SWITCH_T1os[{num}]";
+
+                if (ist == "7.0") return "CONST_1";
 
                 if (ist.StartsWith("0."))
                 {
@@ -1846,6 +1857,8 @@ namespace BPO_ex4.StationLogic
                 if (ist == "4.8")
                     return $"AVTODO_AR[{num}]";
 
+                if (ist == "4.0") return "CONST_1";
+
                 if (ist == "5.11")
                     return $"ROUTE_KNO[{num}]";
 
@@ -2140,6 +2153,8 @@ namespace BPO_ex4.StationLogic
                 if (ist == "6.10")
                     return $"SIGNAL_PS2[{num}]";
 
+                if (ist == "6.9") return "CONST_1";
+
                 if (ist == "6.8")
                     return $"SIGNAL_DPS2[{num}]";
 
@@ -2275,6 +2290,8 @@ namespace BPO_ex4.StationLogic
                 if (ist == "4.13")
                     return $"MAKET_tMV[{num}]";
 
+                if (ist == "4.12") return "CONST_1";
+
                 if (ist == "4.9")
                     return $"MAKET_MP[{num}]";
 
@@ -2358,6 +2375,8 @@ namespace BPO_ex4.StationLogic
 
                 if (ist == "4.7")
                     return $"KOD_OD2[{num}]";
+
+                if (ist == "4.5") return "CONST_1";
 
                 if (ist == "4.4")
                     return $"ALARMSIG_ORKZ[{num}]";
@@ -2573,6 +2592,8 @@ namespace BPO_ex4.StationLogic
 
                 if (ist == "2.3")
                     return $"ROUTE_SU[{num}]";
+
+                if (ist == "2.2") return "CONST_1";
 
                 if (ist == "2.1")
                     return $"SWITCH_PK[{num}]";
@@ -2796,6 +2817,8 @@ namespace BPO_ex4.StationLogic
 
                 if (ist == "2.8")
                     return $"GEN_OTK[{num}]";
+
+                if (ist == "2.7") return "CONST_1";
 
                 if (ist == "2.6")
                     return $"SIGNAL_ASS[{num}]";
@@ -3214,6 +3237,13 @@ namespace BPO_ex4.StationLogic
                     return $"KOD_LNK[{num}:{ch}]";
                 }
 
+                if (ist == "3.2")
+                {
+                    var ch = int.Parse(ist.Substring(2));
+                    return $"PRLD[{num}:{ch}]";
+                }
+
+
                 if (ist == "4.15")
                     return $"KOD_OD[{num}]";
 
@@ -3381,6 +3411,8 @@ namespace BPO_ex4.StationLogic
 
                 if (ist == "4.4")
                     return $"DC_CRI[{num}]";
+
+                if (ist == "4.3") return "CONST_1";
 
                 if (ist == "4.2")
                     return $"DC_CZVL[{num}]";
