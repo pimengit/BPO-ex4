@@ -10,6 +10,8 @@ namespace BPO_ex4.Visuals
         public int Number { get; set; }
         public string Direction { get; set; }
 
+        private Node _omoNode;
+
         // 1. Лампы (OKSE -> Цвет)
         private List<(Node Node, SignalColor Color)> _lamps = new List<(Node, SignalColor)>();
 
@@ -40,6 +42,31 @@ namespace BPO_ex4.Visuals
             _engine = engine;
             _lamps.Clear();
             _controlNodes.Clear();
+
+
+
+            // ---------------------------------------------------------
+            // ШАГ 2: Ищем переменную для КЛИКА (SECT_IN или RELAY_KRK)
+            // ---------------------------------------------------------
+            // Мы копаемся в исходниках SECT_P, чтобы найти, от чего она зависит
+            var sigparentSwitch = ctx.GetAllNodes()
+                                  .FirstOrDefault(n => n.Id.StartsWith("SIGNAL_OMO[") && n.Description.Contains(Name));
+
+            if (sigparentSwitch != null && sigparentSwitch.LogicSource?.Groups != null)
+            {
+                foreach (var group in sigparentSwitch.LogicSource.Groups)
+                {
+                    if (group == null) continue;
+                    foreach (var node in group)
+                    {
+                        if (node.Id.StartsWith("SIGNAL_OMO_DK"))
+                        {
+                            if (_omoNode == null) _omoNode = node;
+                        }
+                    }
+                }
+            }
+
 
             // 1. Получаем список цветов. 
             // ТАК КАК У ТЕБЯ List<SignalColor>, МЫ БЕРЕМ ЕГО НАПРЯМУЮ
@@ -156,6 +183,19 @@ namespace BPO_ex4.Visuals
             }
 
             RaisePropertyChanged(null);
+        }
+
+        protected override void OnLeftClick()
+        {
+            // Меняем состояние _node (это SECT_IN), а цвет перерисуется, когда движок пересчитает SECT_P
+            if (_omoNode != null && _engine != null)
+            {  
+                _engine.InjectChange(_omoNode, true);
+                System.Threading.Tasks.Task.Delay(1500).ContinueWith(_ =>
+                {
+                    _engine.InjectChange(_omoNode, false);
+                });
+            }
         }
 
         protected override void OnLogicChanged()
