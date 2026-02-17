@@ -41,7 +41,7 @@ namespace BPO_ex4
             // Ищем переменные, в названии которых есть "ROUTE_KN"
             // ВАЖНО: Используем двойные кавычки "...", так как это строка.
             var routeNodes = ctx.GetAllNodes()
-                                .Where(n => n.Id.Contains("ROUTE_KN"))
+                                .Where(n => n.Id.Contains("ROUTE_KN["))
                                 .OrderBy(n => n.Id);
 
             foreach (var node in routeNodes)

@@ -171,8 +171,13 @@ namespace BPO_ex4
                 {
                     node.Value = true;
                 }
+
+                if (node.Id.StartsWith("OKSEL"))
+                {
+                    node.Value = true;
+                }
                 // Пример для другой группы
-                if (node.Id.StartsWith("GEN_OUT"))
+                if (node.Id.StartsWith("OKSE_IspOsnS") || node.Id.StartsWith("OKSE_ActOsnS") || node.Id.StartsWith("SIGNAL_AL") || node.Id.StartsWith("OKSE_RM0") || node.Id.StartsWith("GEN_OUT"))
                 {
                     node.Value = true;
                 }

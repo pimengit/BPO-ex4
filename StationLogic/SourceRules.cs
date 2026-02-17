@@ -137,7 +137,7 @@ namespace BPO_ex4.StationLogic
                     return $"ROUTESECT_40NUM6[{num}]";
 
                 if (ist == "5.3")
-                   return $"IS_KS[{num}]";
+                    return $"IS_KS[{num}]";
 
                 if (ist == "5.9")
                     return $"ROUTESECT_40CUM[{num}]";
@@ -260,7 +260,7 @@ namespace BPO_ex4.StationLogic
                 }
 
                 // Команды
-                if (ist=="1.0")
+                if (ist == "1.0")
                 {
                     var ch = int.Parse(ist.Substring(2));
                     return $"SECT_CAVN_DK[{num}:{ch}]";
@@ -1394,7 +1394,7 @@ namespace BPO_ex4.StationLogic
                     return $"SECT_P[{num}]";
 
                 if (ist == "4.15")
-                    return $"PARTROUTE_UCH[{num}]";
+                    return $"PARTROUTE_Uch[{num}]";
 
                 if (ist == "4.14")
                     return $"DC_DOSK[{num}]";
@@ -1513,7 +1513,7 @@ namespace BPO_ex4.StationLogic
                     return $"SECT_P[{num}]";
 
                 if (ist == "4.15")
-                    return $"PARTROUTE_UCH[{num}]";
+                    return $"PARTROUTE_Uch[{num}]";
 
                 if (ist == "4.14")
                     return $"SWITCH_PZN[{num}]";
@@ -1703,7 +1703,7 @@ namespace BPO_ex4.StationLogic
 
                 // OUT: 0.x
                 if (ist == "3.15")
-                    return $"PARTROUTE_UCH[{num}]";
+                    return $"PARTROUTE_Uch[{num}]";
 
                 if (ist == "3.14")
                     return $"ROUTE_MSTR[{num}]";
@@ -1970,7 +1970,7 @@ namespace BPO_ex4.StationLogic
                 }
 
                 if (ist == "0.10")
-                    return $"GEN_AL[{num}]";
+                    return $"SIGNAL_AL[{num}]";
 
                 if (ist == "2.15")
                     return $"SIGNAL_PSS[{num}]";
@@ -2054,7 +2054,7 @@ namespace BPO_ex4.StationLogic
                     return $"SIGNAL_ASS[{num}]";
 
                 if (ist == "4.6")
-                    return $"PARTROUTE_UCH[{num}]";
+                    return $"PARTROUTE_Uch[{num}]";
 
                 if (ist == "4.5")
                     return $"OKSE_L1_1[{num}]";
@@ -2399,7 +2399,7 @@ namespace BPO_ex4.StationLogic
                     return $"SECURITY_DRU[{num}]";
 
                 if (ist == "2.6")
-                    return $"PARTROUTE_UCH[{num}]";
+                    return $"PARTROUTE_Uch[{num}]";
 
                 if (ist == "2.3")
                     return $"ROUTE_SU[{num}]";
@@ -2563,7 +2563,7 @@ namespace BPO_ex4.StationLogic
                     return $"KGU_KKGU[{num}]";
 
                 if (ist == "2.6")
-                    return $"PARTROUTE_UCH[{num}]";
+                    return $"PARTROUTE_Uch[{num}]";
 
                 if (ist == "2.5")
                     return $"KOD_OD2[{num}]";
@@ -2758,7 +2758,7 @@ namespace BPO_ex4.StationLogic
                 }
 
                 // OUT: 0.x
-                if (ist.StartsWith("0.") & (ist != "0.7" | ist != "0.6" | ist != "0.5"| ist != "0.4"| ist != "0.3"| ist != "0.2"))
+                if (ist.StartsWith("0.") & (ist != "0.7" | ist != "0.6" | ist != "0.5" | ist != "0.4" | ist != "0.3" | ist != "0.2"))
                 {
                     var ch = int.Parse(ist.Substring(2));
                     return $"GEN_OUT[{num}:{ch}]";
@@ -2804,7 +2804,7 @@ namespace BPO_ex4.StationLogic
                     return $"SIGNAL_SVOD[{num}]";
 
                 if (ist == "2.4")
-                    return $"PARTROUTE_UCH[{num}]";
+                    return $"PARTROUTE_Uch[{num}]";
 
                 if (ist == "2.3")
                     return $"GEN_ROPP[{num}]";
@@ -3003,70 +3003,102 @@ namespace BPO_ex4.StationLogic
 
 
 
-                if (ist.StartsWith("0.") & (ist != "0.9" | ist != "0.8" | ist != "0.7" | ist != "0.6" | ist != "0.5" | ist != "0.4" | ist != "0.3" | ist != "0.2" | ist != "0.1" | ist != "0.0"))
-                {
-                    var ch = int.Parse(ist.Substring(2));
-                    return $"GEN_OUT[{num}:{ch}]";
-                }
+
                 // OUT: 0.x
                 if (ist == "0.0")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"OKSE_L5_0[{num}:{ch}]";
+                    return $"OKSEL_L5_0[{num}:{ch}]";
                 }
 
                 if (ist == "0.1")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"OKSE_L5_1[{num}:{ch}]";
+                    return $"OKSEL_L5_1[{num}:{ch}]";
                 }
 
                 if (ist == "0.2")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"OKSE_L4_0[{num}:{ch}]";
+                    return $"OKSEl_L4_0[{num}:{ch}]";
                 }
 
                 if (ist == "0.3")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"OKSE_L4_1[{num}:{ch}]";
+                    return $"OKSEL_L4_1[{num}:{ch}]";
                 }
 
                 if (ist == "0.4")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"OKSE_L3_0[{num}:{ch}]";
+                    return $"OKSEL_L3_0[{num}:{ch}]";
                 }
 
                 if (ist == "0.5")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"OKSE_L3_1[{num}:{ch}]";
+                    return $"OKSEL_L3_1[{num}:{ch}]";
                 }
 
                 if (ist == "0.6")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"OKSE_L2_0[{num}:{ch}]";
+                    return $"OKSEL_L2_0[{num}:{ch}]";
                 }
 
                 if (ist == "0.7")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"OKSE_L2_1[{num}:{ch}]";
+                    return $"OKSEL_L2_1[{num}:{ch}]";
                 }
 
                 if (ist == "0.8")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"OKSE_L1_0[{num}:{ch}]";
+                    return $"OKSEL_L1_0[{num}:{ch}]";
                 }
 
                 if (ist == "0.9")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"OKSE_L1_1[{num}:{ch}]";
+                    return $"OKSEL_L1_1[{num}:{ch}]";
+                }
+
+                if (ist == "0.10")
+                {
+                    var ch = int.Parse(ist.Substring(2));
+                    return $"OKSE_RM0[{num}:{ch}]";
+                }
+
+                if (ist == "0.11")
+                {
+                    var ch = int.Parse(ist.Substring(2));
+                    return $"OKSE_RM1[{num}:{ch}]";
+                }
+
+                if (ist == "0.12")
+                {
+                    var ch = int.Parse(ist.Substring(2));
+                    return $"OKSE_IspRezS[{num}:{ch}]";
+                }
+
+                if (ist == "0.13")
+                {
+                    var ch = int.Parse(ist.Substring(2));
+                    return $"OKSE_ActRezS[{num}:{ch}]";
+                }
+
+                if (ist == "0.14")
+                {
+                    var ch = int.Parse(ist.Substring(2));
+                    return $"OKSE_IspOsnS[{num}:{ch}]";
+                }
+
+                if (ist == "0.15")
+                {
+                    var ch = int.Parse(ist.Substring(2));
+                    return $"OKSE_ActOsnS[{num}:{ch}]";
                 }
 
                 if (ist == "3.15")
@@ -3810,7 +3842,7 @@ namespace BPO_ex4.StationLogic
                     return $"SIGGROUP_z[{num}]";
 
                 if (ist == "6.2")
-                    return $"PARTROUTE_UCH[{num}]";
+                    return $"PARTROUTE_Uch[{num}]";
 
                 if (ist == "6.1")
                     return $"ROUTE_S[{num}]";
