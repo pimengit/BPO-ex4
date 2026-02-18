@@ -21,6 +21,7 @@ namespace BPO_ex4
 
 
 
+
         // 1. ОБЪЯВЛЯЕМ КОЛЛЕКЦИЮ (чтобы XAML её видел)
         public ObservableCollection<RouteButtonViewModel> RouteButtons { get; set; }
             = new ObservableCollection<RouteButtonViewModel>();
@@ -167,7 +168,7 @@ namespace BPO_ex4
             }
         }
 
-
+        
 
         private async void LoadScheme(Context ctx, string xmlpath)
         {
