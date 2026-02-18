@@ -20,6 +20,7 @@ namespace BPO_ex4.Visuals
 
         public int Number { get; set; }
 
+
         public ICommand ClickCommand { get; private set; }
         public ICommand ZrCommand { get; private set; }
 

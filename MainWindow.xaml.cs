@@ -49,7 +49,7 @@ namespace BPO_ex4
 
             ApplyHardcodedDefaults(_ctx);
             // 2. Инициализируем движок
-            _engine = new SimulationEngine();
+            _engine = new SimulationEngine(_ctx);
             // Если сработал таймер -> обновляем все вкладки
             _engine.UIUpdateRequested += OnGlobalChange;
 
@@ -181,6 +181,11 @@ namespace BPO_ex4
                 {
                     node.Value = true;
                 }
+
+                if (node.Id.StartsWith("ROUTE_PP"))  
+                {
+                    node.Value = true;
+                }
             }
 
         }
@@ -198,6 +203,14 @@ namespace BPO_ex4
                     content.RefreshUI();
                 }
             }
+        }
+
+        private void BtnRecompute_Click(object sender, RoutedEventArgs e)
+        {/*
+            if (_engine != null)
+            {
+                _engine.ForceRecomputeAll();
+            }*/
         }
 
         private void BtnOpenScheme_Click(object sender, RoutedEventArgs e)

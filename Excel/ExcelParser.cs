@@ -58,7 +58,8 @@ namespace BPO_ex4.Excel
             if (startRow == -1) return;
 
             // 2. ЧИТАЕМ ДАННЫЕ С НУЖНОЙ СТРОКИ
-            // Берем данные с startRow до конца. Колонки B, C, D (2,3,4)
+            // Берем данные с startRow до конца. Колонки B, C, D, E (2,3,4,5)
+            // Индексы массива: 0=B(Тип), 1=C(Имя), 2=D(Код?), 3=E(Цвет)
             var range = ws.Cells[startRow, 2, endRow, 5];
             object[,] values = range.Value as object[,];
 
@@ -69,10 +70,9 @@ namespace BPO_ex4.Excel
 
             for (int r = 0; r < rowsCount; r++)
             {
-                // Индексы в куске: 0=B (Тип), 1=C (Имя), 2=D (Цвет)
                 string typeVal = values[r, 0]?.ToString();
                 string nameVal = values[r, 1]?.ToString();
-                string colorVal = values[r, 3]?.ToString();
+                string colorVal = values[r, 3]?.ToString(); // Колонка E - Цвет
 
                 // 3. ЛОГИКА ПАРСИНГА
                 // Если есть ИМЯ - это начало нового блока
@@ -93,14 +93,14 @@ namespace BPO_ex4.Excel
                     // Иначе (если это Реле/Датчик) currentLightName останется null
                 }
 
-                // Если мы внутри светофора -> пишем цвет
-                if (currentLightName != null && !string.IsNullOrWhiteSpace(colorVal))
+                // Если мы находимся внутри блока светофора
+                if (currentLightName != null)
                 {
+                    // !!! ИЗМЕНЕНИЕ: Парсим цвет всегда, даже если строка пустая
                     var color = SignalHelpers.Parse(colorVal);
-                    if (color != SignalColor.Unknown)
-                    {
-                        ctx.LightConfigs[currentLightName].Add(color);
-                    }
+
+                    // Добавляем всегда (даже Unknown), чтобы сохранить правильный индекс (дырку)
+                    ctx.LightConfigs[currentLightName].Add(color);
                 }
             }
         }

@@ -6,11 +6,17 @@
         Background="#1E1E1E">
 
     <Grid>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+        <ScrollViewer Name="MapScrollViewer"
+                      HorizontalScrollBarVisibility="Auto" 
                       VerticalScrollBarVisibility="Auto" 
-                      PanningMode="Both">
+                      PanningMode="Both"
+                      PreviewMouseWheel="MapScrollViewer_PreviewMouseWheel">
 
             <ItemsControl Name="MainCanvasControl">
+
+                <ItemsControl.LayoutTransform>
+                    <ScaleTransform x:Name="MapScale" ScaleX="1" ScaleY="1"/>
+                </ItemsControl.LayoutTransform>
 
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -59,7 +65,10 @@
                                      Fill="{Binding FillColor}"
                                      Stroke="White" StrokeThickness="2"
                                      ToolTip="{Binding Name}"
-                                     Cursor="Hand">
+                                     Cursor="Hand"
+
+                                     PreviewMouseRightButtonDown="Light_OnRightDown"
+                                     PreviewMouseRightButtonUp="Light_OnRightUp">
                                 <Ellipse.InputBindings>
                                     <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}"/>
                                 </Ellipse.InputBindings>
@@ -124,13 +133,18 @@
             </ItemsControl>
         </ScrollViewer>
 
-        <Border VerticalAlignment="Top" HorizontalAlignment="Left" 
+        <Border x:Name="DraggablePanel"
+                VerticalAlignment="Top" HorizontalAlignment="Left" 
                 Background="#CCEEEEEE" 
                 BorderBrush="Gray" BorderThickness="1"
                 Margin="10,50,0,0" 
                 Padding="5" 
                 CornerRadius="3"
-                MaxWidth="400" MaxHeight="600">
+                MaxWidth="400" MaxHeight="600"
+                Cursor="SizeAll"
+                MouseLeftButtonDown="Panel_MouseDown"
+                MouseLeftButtonUp="Panel_MouseUp"
+                MouseMove="Panel_MouseMove">
 
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ItemsControl ItemsSource="{Binding RouteButtons}">
@@ -153,7 +167,7 @@
                                         Content="{Binding ShortId}" 
                                         Width="30" Height="25"
                                         Background="{Binding ButtonColor}"
-                                        Command="{Binding ClickCommand}"
+                                        Command="{Binding LeftClickCommand}"
                                         FontWeight="Bold"
                                         Margin="0,0,5,0"
                                         Cursor="Hand"/>
@@ -174,7 +188,7 @@
 
         <Border VerticalAlignment="Bottom" HorizontalAlignment="Right" 
                 Background="#CC000000" Padding="10" Margin="20" CornerRadius="5">
-            <TextBlock Text="ЛКМ - Управление | ПКМ - Доп. действия | Scroll - Зум (если реализован)" Foreground="White"/>
+            <TextBlock Text="ЛКМ - Управление | ПКМ - Доп. действия | Ctrl+Scroll - Зум" Foreground="White"/>
         </Border>
 
     </Grid>

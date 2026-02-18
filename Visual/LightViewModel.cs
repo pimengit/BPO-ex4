@@ -12,6 +12,11 @@ namespace BPO_ex4.Visuals
 
         private Node _omoNode;
 
+        private Node _psNode;
+
+        private bool _isRightPressed = false;       // Флаг: кнопка сейчас нажата?
+        private bool _longPressHandled = false;
+
         // 1. Лампы (OKSE -> Цвет)
         private List<(Node Node, SignalColor Color)> _lamps = new List<(Node, SignalColor)>();
 
@@ -62,6 +67,24 @@ namespace BPO_ex4.Visuals
                         if (node.Id.StartsWith("SIGNAL_OMO_DK"))
                         {
                             if (_omoNode == null) _omoNode = node;
+                        }
+                    }
+                }
+            }
+
+            var sigparentPS = ctx.GetAllNodes()
+                      .FirstOrDefault(n => n.Id.StartsWith("SIGNAL_PSK[") && n.Description.Contains(Name));
+
+            if (sigparentPS != null && sigparentPS.LogicSource?.Groups != null)
+            {
+                foreach (var group in sigparentPS.LogicSource.Groups)
+                {
+                    if (group == null) continue;
+                    foreach (var node in group)
+                    {
+                        if (node.Id.StartsWith("SIGNAL_PS_DK"))
+                        {
+                            if (_psNode == null) _psNode = node;
                         }
                     }
                 }
@@ -145,9 +168,12 @@ namespace BPO_ex4.Visuals
                 case SignalColor.Yellow: return "SIGNAL_1ZhO"; // Желтый
                 case SignalColor.Red: return "SIGNAL_KO";   // Красный
                 case SignalColor.White: return "SIGNAL_BO";   // Белый
+                case SignalColor.Violet: return "SIGNAL_PSO";   // Белый
                 default: return null;
             }
         }
+
+
 
         private void UpdateState()
         {
@@ -196,6 +222,30 @@ namespace BPO_ex4.Visuals
                     _engine.InjectChange(_omoNode, false);
                 });
             }
+        }
+
+        public void OnRightMouseDown()
+        {
+            if (_engine == null) return;
+
+            // ЛОГИКА: Какую переменную включать при удержании?
+            // Вариант А: Включаем Синий (или Белый), если он есть
+            // Вариант Б: Если у тебя есть специальная кнопка пригласительного, ищи её здесь.
+
+            // Пример: Берем кнопку для Синего (Blue)
+
+                _engine.InjectChange(_psNode, true); // ВКЛЮЧАЕМ
+
+            // Если синего нет, попробуем Белый
+
+        }
+
+        // Метод, когда отпустили ПКМ
+        public void OnRightMouseUp()
+        {
+            if (_engine == null) return;
+
+            _engine.InjectChange(_psNode, false); // ВКЛЮЧАЕМ
         }
 
         protected override void OnLogicChanged()

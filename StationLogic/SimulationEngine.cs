@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq; // <--- Нужно для ToList()
 using System.Windows.Threading;
 
 namespace BPO_ex4.StationLogic
@@ -7,7 +8,17 @@ namespace BPO_ex4.StationLogic
     public class SimulationEngine
     {
         private Queue<Node> _queue = new Queue<Node>();
+
+        // 1. Добавляем поле для контекста
+        private Context _context;
+
         public event Action UIUpdateRequested;
+
+        // 2. Конструктор, принимающий Context
+        public SimulationEngine(Context ctx)
+        {
+            _context = ctx;
+        }
 
         public void InjectChange(Node node, bool newValue)
         {
@@ -21,11 +32,45 @@ namespace BPO_ex4.StationLogic
             }
         }
 
+        // Полный пересчет ВСЕХ переменных
+        /*public void ForceRecomputeAll()
+        {
+            if (_context == null) return;
+
+            // Теперь _context доступен
+            var allNodes = _context.GetAllNodes().ToList();
+            bool anyChanged = true;
+            int safetyCounter = 0;
+            int maxIterations = 10;
+
+            AppLogger.Log("=== FORCE RECOMPUTE ALL STARTED ===");
+
+            while (anyChanged && safetyCounter < maxIterations)
+            {
+                anyChanged = false;
+                safetyCounter++;
+
+                foreach (var node in allNodes)
+                {
+                    // Вызываем пересчет
+                    if (node.Recompute())
+                    {
+                        anyChanged = true;
+                        // Если значение изменилось, сразу кидаем зависимых в очередь и обрабатываем
+                        // Это сделает пересчет более "честным", распространяя волну сразу
+                        Propagate(node);
+                    }
+                }
+            }
+
+            ForceUpdateUI();
+            AppLogger.Log($"=== FORCE RECOMPUTE FINISHED (Iterations: {safetyCounter}) ===");
+        }*/
+
         public void OnDelayedUpdateReady(Node node)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                // Применяем изменение (лог напишется внутри ApplyPending)
                 if (node.ApplyPending())
                 {
                     Propagate(node);
@@ -41,9 +86,6 @@ namespace BPO_ex4.StationLogic
             while (_queue.Count > 0)
             {
                 var node = _queue.Dequeue();
-
-                // Recompute теперь сам пишет лог AUTO или START TIMER
-                // Если он вернул true, значит значение изменилось МГНОВЕННО, и надо идти дальше.
                 if (node.Recompute())
                 {
                     EnqueueDependents(node);

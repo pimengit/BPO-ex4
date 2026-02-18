@@ -9,6 +9,7 @@ namespace BPO_ex4.StationLogic
         Yellow,
         White, // Лунно-белый
         Blue,
+        Violet,
         Unknown
     }
 
@@ -25,6 +26,7 @@ namespace BPO_ex4.StationLogic
             if (text.Contains("желтый") || text.Contains("жёлтый")) return SignalColor.Yellow;
             if (text.Contains("белый") || text.Contains("лунно")) return SignalColor.White;
             if (text.Contains("синий")) return SignalColor.Blue;
+            if (text.Contains("пригласительный")) return SignalColor.Violet;
 
             return SignalColor.Unknown;
         }
@@ -39,6 +41,7 @@ namespace BPO_ex4.StationLogic
                 case SignalColor.Yellow: return Brushes.Yellow;
                 case SignalColor.White: return Brushes.WhiteSmoke;
                 case SignalColor.Blue: return Brushes.Blue;
+                case SignalColor.Violet: return Brushes.Violet;
                 default: return Brushes.Gray;
             }
         }

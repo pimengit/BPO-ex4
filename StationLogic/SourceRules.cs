@@ -1982,8 +1982,40 @@ namespace BPO_ex4.StationLogic
                     return $"SIGNAL_OUT_L[{num}:{ch}]";
                 }
 
-                if (ist == "0.10")
+                /*if (ist == "0.10")
                     return $"SIGNAL_AL[{num}]";
+
+                if (ist == "0.9")
+                    return $"OKSEL_L1_1[{num}]";
+
+                if (ist == "0.8")
+                    return $"OKSEL_L1_0[{num}]";
+
+                if (ist == "0.7")
+                    return $"OKSEL_L2_1[{num}]";
+
+                if (ist == "0.6")
+                    return $"OKSEL_L2_0[{num}]";
+
+                if (ist == "0.5")
+                    return $"OKSEL_L3_1[{num}]";
+
+                if (ist == "0.4")
+                    return $"OKSEL_L3_0[{num}]";
+
+                if (ist == "0.3")
+                    return $"OKSEL_L4_1[{num}]";
+
+                if (ist == "0.2")
+                    return $"OKSEL_L4_0[{num}]";
+
+                if (ist == "0.1")
+                    return $"OKSEL_L5_1[{num}]";
+
+                if (ist == "0.0")
+                    return $"OKSEL_L5_0[{num}]";
+
+                */
 
                 if (ist == "2.15")
                     return $"SIGNAL_PSS[{num}]";
@@ -2053,6 +2085,9 @@ namespace BPO_ex4.StationLogic
 
                 if (ist == "4.12")
                     return $"SIGNAL_APS[{num}]";
+
+                if (ist == "4.11")
+                    return $"SIGNAL_PSK[{num}]";
 
                 if (ist == "4.10")
                     return $"SIGNAL_PS[{num}]";
@@ -3250,8 +3285,11 @@ namespace BPO_ex4.StationLogic
                 if (ist == "4.14")
                     return $"KOD_OOD[{num}]";
 
+                //if (ist == "4.13")
+                //return $"KOD_tOD[{num}]";
+
                 if (ist == "4.13")
-                    return $"KOD_tOD[{num}]";
+                    return "CONST_0";
 
                 if (ist == "4.12")
                     return $"SIGNAL_SVOD2[{num}]";
