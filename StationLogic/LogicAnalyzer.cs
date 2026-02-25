@@ -39,6 +39,16 @@ namespace BPO_ex4.StationLogic
             }
         }
 
+        // Добавить в BPO_ex4.StationLogic.LogicAnalyzer
+        public static string GetRawFormula(string sheetName)
+        {
+            if (_fileCache != null && _fileCache.TryGetValue(sheetName, out string code))
+            {
+                return code; // Вернет строку типа "(V(2) && !V(3) && !OR(5)...)"
+            }
+            return "";
+        }
+
         public static List<TableRow> GetTruthTable(string sheetName)
         {
             var rows = new List<TableRow>();

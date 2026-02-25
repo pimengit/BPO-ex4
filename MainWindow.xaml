@@ -46,7 +46,7 @@
 
                     <Button Grid.Row="1" Grid.Column="0" Content="Лог" Width="50" Click="BtnOpenLog_Click"/>
                     <Button Grid.Row="1" Grid.Column="1" Content="Станция" Click="BtnOpenScheme_Click"/>
-                    <Button Grid.Row="1" Grid.Column="2" Content="Пересчитать" Click="BtnRecompute_Click" 
+                    <Button Grid.Row="1" Grid.Column="2" Content="JSON Дамп" Click="BtnRecompute_Click" 
                 Background="#444" Foreground="White" FontWeight="Bold"/>
                 </Grid>
             </Border>

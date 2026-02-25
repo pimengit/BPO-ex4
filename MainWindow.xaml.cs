@@ -212,11 +212,32 @@ namespace BPO_ex4
         }
 
         private void BtnRecompute_Click(object sender, RoutedEventArgs e)
-        {/*
-            if (_engine != null)
+        {
+            if (_ctx == null)
             {
-                _engine.ForceRecomputeAll();
-            }*/
+                MessageBox.Show("Сначала загрузите станцию!");
+                return;
+            }
+
+            try
+            {
+                string fileName = "Station_CAD_Dump.json";
+                string fullPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
+
+                // Вызываем наш генератор
+                BPO_ex4.StationLogic.CadDumpGenerator.GenerateJsonDump(_ctx, fullPath);
+
+                // Открываем папку с файлом или сам файл
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = fullPath,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка экспорта: {ex.Message}");
+            }
         }
 
         private void BtnOpenScheme_Click(object sender, RoutedEventArgs e)
