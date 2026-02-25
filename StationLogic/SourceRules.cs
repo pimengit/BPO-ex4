@@ -1982,10 +1982,10 @@ namespace BPO_ex4.StationLogic
                     return $"SIGNAL_OUT_L[{num}:{ch}]";
                 }
 
-                /*if (ist == "0.10")
+                if (ist == "0.10")
                     return $"SIGNAL_AL[{num}]";
 
-                if (ist == "0.9")
+                /*if (ist == "0.9")
                     return $"OKSEL_L1_1[{num}]";
 
                 if (ist == "0.8")
