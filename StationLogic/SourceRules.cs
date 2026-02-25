@@ -1447,7 +1447,7 @@ namespace BPO_ex4.StationLogic
                     return $"AVTODO_ACH[{num}]";
 
                 if (ist == "7.1")
-                    return $"ROUTE_vS[{num}]";
+                    return $"STAGE_VS[{num}]";
 
                 throw new Exception($"AVTODO: unknown ist={ist}");
             }
