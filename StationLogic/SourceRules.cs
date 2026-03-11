@@ -358,8 +358,7 @@ namespace BPO_ex4.StationLogic
                 if (ist == "2.3")
                     return $"ROUTE_Pz_M[{num}]";
 
-                if (ist == "2.2")
-                    return $"ROUTESECT_OPz[{num}]";
+                if (ist == "2.2") return "START";
 
                 if (ist == "2.1")
                     return $"SWITCH_PK[{num}]";

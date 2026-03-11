@@ -22,19 +22,27 @@ namespace BPO_ex4.Visuals
                                        .Elements("section")
                                        .Elements("object");
 
+                // 2. ЗР
                 var zrElements = doc.Descendants("sig_group")
                                     .Elements("object");
+
+                
 
                 // 3. СТРЕЛКИ
                 var switchElements = doc.Descendants("switch").Elements("object");
                 // Если в XML просто <object ... type="switch"> то искать надо иначе, 
                 // но судя по tracks->section, у тебя структура по типам папок.
 
+                // 4. ГАРС
                 var garsElements = doc.Descendants("gars_indicators")
                       .Elements("object");
 
-
+                // 5. Светофоры
                 var lightElements = doc.Descendants("x_light")
+                       .Elements("object");
+
+                // 6. АРС/АБ
+                var VSElements = doc.Descendants("traffic_mode")
                        .Elements("object");
 
                 foreach (var el in lightElements)
@@ -102,7 +110,7 @@ namespace BPO_ex4.Visuals
                 {
                     double x = double.Parse(z.Attribute("x")?.Value ?? "0", culture);
                     double y = double.Parse(z.Attribute("y")?.Value ?? "0", culture);
-                    double dw = 30;
+                    double dw = 40;
                     string name = z.Attribute("name")?.Value ?? "???";
 
                     var zrVm = new ZrViewModel(x, y, dw, name);
@@ -111,6 +119,20 @@ namespace BPO_ex4.Visuals
                     zrVm.BindToLogicZr(ctx, engine);
 
                     collection.Add(zrVm);
+                }
+                foreach (var z in VSElements)
+                {
+                    double x = double.Parse(z.Attribute("x")?.Value ?? "0", culture);
+                    double y = double.Parse(z.Attribute("y")?.Value ?? "0", culture);
+                    double dw = 40;
+                    string name = z.Attribute("name")?.Value ?? "???";
+
+                    var VSVm = new VSViewModel(x, y, dw, name);
+
+                    // !!! Передаем движок в метод привязки !!!
+                    VSVm.BindToLogic(ctx, engine);
+
+                    collection.Add(VSVm);
                 }
             }
             catch (System.Exception ex)

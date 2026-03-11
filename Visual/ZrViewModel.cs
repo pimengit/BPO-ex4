@@ -7,7 +7,7 @@ namespace BPO_ex4.Visuals
     {
         private List<Node> _zrNode = new List<Node>(); //Замыкающие реле//Искуственная разделка
         public double Width { get; set; }
-        public double Height { get; set; } = 8;
+        public double Height { get; set; } = 20;
 
         public Brush FillColor
         {
@@ -21,7 +21,7 @@ namespace BPO_ex4.Visuals
                 //f (_zrNode.Count == 0) return Brushes.Green;
                 bool allACtive = _zrNode.All(n => n.Value);
                 // 4. Иначе -> Серый (Свободно)
-                return allACtive ? Brushes.Orange : Brushes.Blue;
+                return allACtive ? Brushes.Orange : Brushes.Black;
             }
         }
 

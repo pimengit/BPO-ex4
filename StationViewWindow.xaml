@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vis="clr-namespace:BPO_ex4.Visuals"
         Title="Схема станции" Height="800" Width="1200"
-        Background="#1E1E1E">
+        Background="Gray">
 
     <Grid>
         <ScrollViewer Name="MapScrollViewer"
@@ -20,7 +20,7 @@
 
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Canvas Width="5000" Height="3000" Background="#101010"/>
+                        <Canvas Width="5000" Height="3000" Background="Gray"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
@@ -47,7 +47,7 @@
                                 </Rectangle.InputBindings>
                             </Rectangle>
 
-                            <TextBlock Text="{Binding Name}" Foreground="Gray" FontSize="10" 
+                            <TextBlock Text="{Binding Name}" Foreground="Black" FontSize="10" 
                                        HorizontalAlignment="Center" Margin="0,-15,0,0"
                                        IsHitTestVisible="False"/>
                         </Grid>
@@ -58,8 +58,8 @@
                             <TextBlock Text="{Binding Name}" Foreground="White" FontSize="10" 
                                        HorizontalAlignment="Center" Margin="0,-15,0,0"/>
 
-                            <Rectangle Width="4" Height="14" Fill="Gray" Margin="0,12,0,0"/>
-                            <Rectangle Width="10" Height="2" Fill="Gray" VerticalAlignment="Bottom" Margin="0,12,0,-2"/>
+                            <Rectangle Width="4" Height="14" Fill="Black" Margin="0,12,0,0"/>
+                            <Rectangle Width="10" Height="2" Fill="Black" VerticalAlignment="Bottom" Margin="0,12,0,-2"/>
 
                             <Ellipse Width="20" Height="20" 
                                      Fill="{Binding FillColor}"
@@ -105,7 +105,25 @@
                                     <MouseBinding Gesture="LeftClick" Command="{Binding ZrCommand}"/>
                                 </Rectangle.InputBindings>
                             </Rectangle>
-                            <TextBlock Text="{Binding Name}" Foreground="Gray" FontSize="10" 
+                            <TextBlock Text="{Binding Name}" Foreground="Black" FontSize="10" 
+                                       HorizontalAlignment="Center" Margin="0,-15,0,0"
+                                       IsHitTestVisible="False"/>
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type vis:VSViewModel}">
+                        <Grid>
+                            <Rectangle Width="{Binding Width}" Height="{Binding Height}" 
+                                       Fill="{Binding FillColor}"
+                                       Stroke="Black" StrokeThickness="1"
+                                       RadiusX="1" RadiusY="1"
+                                       ToolTip="{Binding Name}"
+                                       Cursor="Hand">
+                                <Rectangle.InputBindings>
+                                    <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}"/>
+                                </Rectangle.InputBindings>
+                            </Rectangle>
+                            <TextBlock Text="{Binding Name}" Foreground="Black" FontSize="10" 
                                        HorizontalAlignment="Center" Margin="0,-15,0,0"
                                        IsHitTestVisible="False"/>
                         </Grid>
@@ -136,7 +154,7 @@
         <Border x:Name="DraggablePanel"
                 VerticalAlignment="Top" HorizontalAlignment="Left" 
                 Background="#CCEEEEEE" 
-                BorderBrush="Gray" BorderThickness="1"
+                BorderBrush="Black" BorderThickness="1"
                 Margin="10,50,0,0" 
                 Padding="5" 
                 CornerRadius="3"
@@ -144,7 +162,11 @@
                 Cursor="SizeAll"
                 MouseLeftButtonDown="Panel_MouseDown"
                 MouseLeftButtonUp="Panel_MouseUp"
-                MouseMove="Panel_MouseMove">
+                MouseMove="Panel_MouseMove"
+                RenderTransformOrigin="0,0">
+            <Border.RenderTransform>
+                <TranslateTransform x:Name="PanelTranslate"/>
+            </Border.RenderTransform>
 
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ItemsControl ItemsSource="{Binding RouteButtons}">

@@ -8,7 +8,7 @@ namespace BPO_ex4.LogicSheets
         public SECT_LS125()
         {
             OnDelay  = TimeSpan.FromMilliseconds(50);
-            OffDelay = TimeSpan.FromMilliseconds(50);
+            OffDelay = TimeSpan.FromMilliseconds(150);
         }
 
         public override bool Compute()

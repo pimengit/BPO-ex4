@@ -11,6 +11,7 @@ namespace BPO_ex4.Visuals
         private Node _occupancyNode; // Новая переменная: Отвечает за ЦВЕТ (SECT_P)
         private Node _pzNode;        // Зеленая полоса (Маршрут)
         private Node _lzNode;        // Ложная занятость
+        private Node _lsNode;        // Ложная свободность
 
         public double Width { get; set; }
         public double Height { get; set; } = 8;
@@ -28,6 +29,7 @@ namespace BPO_ex4.Visuals
 
                 bool isOccupied = !_occupancyNode.Value; // 0 = Занято, 1 = Свободно
                 bool isLz = _lzNode != null && _lzNode.Value;
+                bool isLs = _lsNode != null && _lsNode.Value;
 
                 if (isOccupied)
                 {
@@ -38,11 +40,22 @@ namespace BPO_ex4.Visuals
                     return Brushes.Red;
                 }
 
+                if (!isOccupied)
+                {
+                    // Если занято и есть Ложная Свободность -> Синий
+                    if (isLs) return Brushes.Blue;
+
+                    // Иначе свободно -> Светло серый
+                    
+                }
+
                 // 3. Если МАРШРУТ (PZ == true) -> Зеленый
                 if (_pzNode != null && _pzNode.Value) return Brushes.Lime;
 
-                // 4. Иначе -> Серый (Свободно)
+
                 return Brushes.LightGray;
+
+
             }
         }
 
@@ -101,9 +114,11 @@ namespace BPO_ex4.Visuals
             // ---------------------------------------------------------
             _pzNode = ctx.GetAllNodes().FirstOrDefault(n => n.Id.StartsWith("SECT_Pz") && n.Description == Name);
             _lzNode = ctx.GetAllNodes().FirstOrDefault(n => n.Id.StartsWith("SECT_Lz") && n.Description == Name);
+            _lsNode = ctx.GetAllNodes().FirstOrDefault(n => n.Id.StartsWith("SECT_LS") && n.Description == Name);
 
             if (_pzNode != null) _pzNode.Changed += _ => OnLogicChanged();
             if (_lzNode != null) _lzNode.Changed += _ => OnLogicChanged();
+            if (_lsNode != null) _lsNode.Changed += _ => OnLogicChanged();
 
             // Первичное обновление
             OnLogicChanged();
