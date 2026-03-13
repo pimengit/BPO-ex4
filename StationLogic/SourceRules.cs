@@ -1682,7 +1682,7 @@ namespace BPO_ex4.StationLogic
                     return $"SIGNAL_1zHO[{num}]";
 
                 if (ist == "7.4")
-                    return $"SIGNAL_2zHO[{num}]";
+                    return $"SIGNAL_2ZhO[{num}]";
 
                 if (ist == "7.3")
                     return $"STAGE_SVP[{num}]";
@@ -2065,7 +2065,7 @@ namespace BPO_ex4.StationLogic
                     return $"SIGNAL_1zHO[{num}]";
 
                 if (ist == "3.4")
-                    return $"SIGNAL_2zHO[{num}]";
+                    return $"SIGNAL_2ZhO[{num}]";
 
                 if (ist == "3.3")
                     return $"METALL_KVR[{num}]";
@@ -3893,7 +3893,7 @@ namespace BPO_ex4.StationLogic
                     return $"SIGNAL_1zHO[{num}]";
 
                 if (ist == "6.8")
-                    return $"SIGNAL_2zHO[{num}]";
+                    return $"SIGNAL_2ZhO[{num}]";
 
                 if (ist == "6.7")
                     return $"SIGNAL_BO[{num}]";
