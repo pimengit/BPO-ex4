@@ -4,11 +4,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using BPO_ex4.StationLogic;
-using BPO_ex4.Excel;
+using BPO_ex4.Excel; // Возвращаем твой неймспейс для ReverseSourceRules
 
 namespace BPO_ex4
 {
-    // Класс для выпадающего списка
+    // Класс для выпадающего списка индексов
     public class InstanceItem
     {
         public int Index { get; set; }
@@ -23,12 +23,10 @@ namespace BPO_ex4
         private int _inputIndex;
         private List<Node> _allNodes;
 
-        // !!! ЭТИХ СВОЙСТВ НЕ ХВАТАЛО !!!
         public Node ResultSourceNode { get; private set; }
         public string TargetSheetName { get; private set; }
         public int TargetObjectIndex { get; private set; }
 
-        // Конструктор теперь принимает List<Node> allNodes
         public EditNodeWindow(Node target, int groupIdx, int inputIdx, List<Node> allNodes)
         {
             InitializeComponent();
@@ -41,15 +39,31 @@ namespace BPO_ex4
             TargetObjectIndex = GetIndex(target.Id);
 
             LoadData();
-            UpdateUi();
+            //UpdateUi();
         }
 
         private void LoadData()
         {
-            CmbCategory.ItemsSource = ReverseSourceRules.GetCategories();
+            // 1. Берем разрешенные переменные для текущей категории (целевого класса)
+            var allowedMetas = ReverseSourceRules.GetVariables(GetCategoryName(TargetSheetName));
+
+            var allowedTypes = new List<string>
+            {
+                "CONST_1",
+                "CONST_0"
+            };
+
+            // 2. Добавляем имена разрешенных типов из правил
+            if (allowedMetas != null)
+            {
+                allowedTypes.AddRange(allowedMetas.Select(m => m.TypeName));
+            }
+
+            // 3. Биндим к ComboBox
+            CmbVariable.ItemsSource = allowedTypes;
         }
 
-        private void UpdateUi()
+        /*private void UpdateUi()
         {
             LblTarget.Text = $"{_targetNode.Id} ({_targetNode.Description})";
             TxtGroupInfo.Text = _groupIndex.ToString();
@@ -64,33 +78,35 @@ namespace BPO_ex4
                 TxtTitle.Text = "Edit Existing Connection";
                 TxtModeInfo.Text = $"[Input #{_inputIndex + 1}]";
             }
-        }
-
-        private void CmbCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (CmbCategory.SelectedItem is string category)
-            {
-                CmbVariable.ItemsSource = ReverseSourceRules.GetVariables(category);
-                CmbVariable.SelectedIndex = -1;
-                CmbIndex.ItemsSource = null;
-            }
-        }
+        }*/
 
         private void CmbVariable_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CmbVariable.SelectedItem is SourceMeta meta)
+            if (CmbVariable.SelectedItem is string selectedType)
             {
-                var existingInstances = _allNodes
-                    .Where(n => GetTypeName(n.Id) == meta.TypeName)
-                    .Select(n => new InstanceItem
-                    {
-                        Index = GetIndex(n.Id),
-                        Description = n.Description
-                    })
-                    .OrderBy(x => x.Index)
-                    .ToList();
+                // Если константа - индекс не нужен, блокируем поле
+                if (selectedType == "CONST_1" || selectedType == "CONST_0")
+                {
+                    CmbIndex.ItemsSource = null;
+                    CmbIndex.Text = "";
+                    CmbIndex.IsEnabled = false;
+                }
+                else
+                {
+                    // Иначе разблокируем и ищем все существующие переменные этого типа на станции
+                    CmbIndex.IsEnabled = true;
+                    var existingInstances = _allNodes
+                        .Where(n => GetTypeName(n.Id) == selectedType)
+                        .Select(n => new InstanceItem
+                        {
+                            Index = GetIndex(n.Id),
+                            Description = n.Description
+                        })
+                        .OrderBy(x => x.Index)
+                        .ToList();
 
-                CmbIndex.ItemsSource = existingInstances;
+                    CmbIndex.ItemsSource = existingInstances;
+                }
             }
         }
 
@@ -98,20 +114,29 @@ namespace BPO_ex4
         {
             try
             {
-                if (CmbVariable.SelectedItem is not SourceMeta selectedMeta)
+                if (CmbVariable.SelectedItem is not string selectedType)
                 {
                     MessageBox.Show("Select variable type!");
                     return;
                 }
 
-                if (!int.TryParse(CmbIndex.Text, out int indexNum))
+                string newId;
+
+                if (selectedType == "CONST_1" || selectedType == "CONST_0")
                 {
-                    MessageBox.Show("Enter valid index!");
-                    return;
+                    newId = selectedType;
+                }
+                else
+                {
+                    if (!int.TryParse(CmbIndex.Text, out int indexNum))
+                    {
+                        MessageBox.Show("Enter valid index!");
+                        return;
+                    }
+                    newId = $"{selectedType}[{indexNum}]";
                 }
 
-                // Создаем результат (виртуальную ноду)
-                string newId = $"{selectedMeta.TypeName}[{indexNum}]";
+                // Создаем результат
                 ResultSourceNode = new Node { Id = newId, Value = false };
 
                 DialogResult = true;
@@ -123,6 +148,12 @@ namespace BPO_ex4
             }
         }
 
+
+        private string GetCategoryName(string id)
+        {
+            int idx = id.IndexOf('_');
+            return idx > 0 ? id.Substring(0, idx) : id;
+        }
         private string GetTypeName(string id)
         {
             int idx = id.IndexOf('[');

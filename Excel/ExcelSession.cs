@@ -20,16 +20,17 @@ namespace BPO_ex4.Excel
 
             if (_package != null) _package.Dispose();
 
-            // Открываем поток с правами на чтение и запись
-            var stream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-            _package = new ExcelPackage(stream);
+            // Передаем FileInfo. EPPlus прочитает файл в память и отпустит блокировку Windows.
+            // Теперь файл можно открывать даже в самом MS Excel параллельно с работой программы!
+            _package = new ExcelPackage(new FileInfo(path));
         }
 
         public void Save()
         {
-            if (_package != null)
+            if (_package != null && !string.IsNullOrEmpty(_filePath))
             {
-                _package.Save(); // Сохраняем изменения на диск
+                // Принудительно сохраняем package обратно в тот же файл на диске
+                _package.SaveAs(new FileInfo(_filePath));
             }
         }
 
@@ -130,7 +131,7 @@ namespace BPO_ex4.Excel
             throw new Exception($"Object index {objIndex} not found in sheet {ws.Name}");
         }
 
-        private void WriteNodeToCells(ExcelWorksheet ws, int row, int col, Node node)
+        /*private void WriteNodeToCells(ExcelWorksheet ws, int row, int col, Node node)
         {
             // Разбираем ID вида TYPE[INDEX] на имя и номер
             string name = node.Id;
@@ -147,6 +148,21 @@ namespace BPO_ex4.Excel
             // Пишем: Col = Имя, Col-1 = Номер
             ws.Cells[row, col].Value = name;
             ws.Cells[row, col - 1].Value = index;
+        }*/
+
+        private void WriteNodeToCells(ExcelWorksheet ws, int row, int col, Node node)
+        {
+            // Обращаемся к вашему мощному классу-резолверу
+            // Передаем ему имя листа (например "SECT_P") и саму ноду
+            var resolved = ReverseSourceRules.Resolve(ws.Name, node);
+
+            // Записываем результат:
+            // col - 1 : Левая ячейка (Код источника, например "3.2")
+            ws.Cells[row, col].Value = resolved.IstCode;
+
+            // col     : Правая ячейка (Номер источника, например "5"). 
+            // Если номера нет (как у констант), пишем пустую строку.
+            ws.Cells[row, col - 1].Value = resolved.Num?.ToString() ?? "";
         }
 
         // Надежный поиск колонок (такой же, как мы сделали ранее)

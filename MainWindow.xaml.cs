@@ -290,10 +290,20 @@ namespace BPO_ex4
             {
                 Mouse.OverrideCursor = Cursors.Wait;
                 _excelSession.Save();
-                MessageBox.Show("Saved!");
+                MessageBox.Show("Excel успешно сохранен!");
             }
-            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
-            finally { Mouse.OverrideCursor = null; }
+            catch (IOException ioEx)
+            {
+                MessageBox.Show("Ошибка сохранения! Похоже, этот файл сейчас открыт в Microsoft Excel. Закройте файл в Excel и попробуйте снова.\n\n" + ioEx.Message, "Ошибка доступа", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка: " + ex.Message);
+            }
+            finally
+            {
+                Mouse.OverrideCursor = null;
+            }
         }
 
         private void BtnOpenLog_Click(object sender, RoutedEventArgs e) { new LogWindow().Show(); }
