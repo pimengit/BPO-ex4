@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Media;
 using BPO_ex4.StationLogic;
+using System.Windows.Threading;
 
 namespace BPO_ex4.Visuals
 {
@@ -13,6 +14,7 @@ namespace BPO_ex4.Visuals
         private Node _omoNode;
 
         private Node _psNode;
+        private DispatcherTimer _blinkTimer;
 
         private bool _isRightPressed = false;       // Флаг: кнопка сейчас нажата?
         private bool _longPressHandled = false;
@@ -26,11 +28,26 @@ namespace BPO_ex4.Visuals
         public double Width { get; set; } = 20;
         public double Height { get; set; } = 20;
 
-        private Brush _currentBrush = Brushes.DarkGray;
-        public Brush FillColor
+        private Brush _topColor = new SolidColorBrush(Color.FromArgb(255, 40, 40, 40));
+        public Brush TopColor
         {
-            get => _currentBrush;
-            set { _currentBrush = value; RaisePropertyChanged(nameof(FillColor)); }
+            get => _topColor;
+            set { _topColor = value; RaisePropertyChanged(nameof(TopColor)); }
+        }
+
+        private Brush _bottomColor = new SolidColorBrush(Color.FromArgb(255, 40, 40, 40));
+        public Brush BottomColor
+        {
+            get => _bottomColor;
+            set { _bottomColor = value; RaisePropertyChanged(nameof(BottomColor)); }
+        }
+
+        // Полностью квалифицированное имя, чтобы не добавлять новые using
+        private System.Windows.Visibility _bottomLensVisibility = System.Windows.Visibility.Collapsed;
+        public System.Windows.Visibility BottomLensVisibility
+        {
+            get => _bottomLensVisibility;
+            set { _bottomLensVisibility = value; RaisePropertyChanged(nameof(BottomLensVisibility)); }
         }
 
         public LightViewModel(double x, double y, int number, string name, string dir)
@@ -165,7 +182,7 @@ namespace BPO_ex4.Visuals
             {
                 case SignalColor.Blue: return "SIGNAL_SO";   // Синий
                 case SignalColor.Green: return "SIGNAL_zO";   // Зеленый
-                case SignalColor.Yellow: return "SIGNAL_1ZhO"; // Желтый
+                case SignalColor.Yellow: return "SIGNAL_2ZhO"; // Желтый
                 case SignalColor.Red: return "SIGNAL_KO";   // Красный
                 case SignalColor.White: return "SIGNAL_BO";   // Белый
                 case SignalColor.Violet: return "SIGNAL_PSO";   // Белый
@@ -197,15 +214,28 @@ namespace BPO_ex4.Visuals
             }
 
             // --- 2. ОТРИСОВКА ---
-            var activeLamp = _lamps.LastOrDefault(x => x.Node.Value);
+            // Собираем все горящие лампы в список
+            var activeLamps = _lamps.Where(x => x.Node.Value).ToList();
+            var offColor = new SolidColorBrush(Color.FromArgb(255, 40, 40, 40));
 
-            if (activeLamp.Node != null)
+            if (activeLamps.Count == 0)
             {
-                FillColor = activeLamp.Color.ToBrush();
+                // Ничего не горит: показываем один серый кружок
+                TopColor = offColor;
+                BottomLensVisibility = System.Windows.Visibility.Collapsed;
+            }
+            else if (activeLamps.Count == 1)
+            {
+                // Горит 1 огонь: красим верхний, нижний прячем
+                TopColor = activeLamps[0].Color.ToBrush();
+                BottomLensVisibility = System.Windows.Visibility.Collapsed;
             }
             else
             {
-                FillColor = new SolidColorBrush(Color.FromArgb(255, 40, 40, 40));
+                // Горят 2 (или больше): красим оба, показываем нижний
+                TopColor = activeLamps[0].Color.ToBrush();
+                BottomColor = activeLamps[1].Color.ToBrush();
+                BottomLensVisibility = System.Windows.Visibility.Visible;
             }
 
             RaisePropertyChanged(null);

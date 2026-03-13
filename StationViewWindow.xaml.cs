@@ -136,7 +136,7 @@ namespace BPO_ex4
         }
 
         // Обработка НАЖАТИЯ правой кнопки
-        private void Light_OnRightDown(object sender, MouseButtonEventArgs e)
+        /*private void Light_OnRightDown(object sender, MouseButtonEventArgs e)
         {
             if (sender is System.Windows.Shapes.Shape shape &&
                 shape.DataContext is LightViewModel vm)
@@ -166,9 +166,31 @@ namespace BPO_ex4
 
                 e.Handled = true;
             }
+        }*/
+
+        // В файле StationViewWindow.xaml.cs
+
+        private void Light_OnRightDown(object sender, MouseButtonEventArgs e)
+        {
+            // Находим ViewModel светофора через DataContext того элемента, на который нажали
+            if (sender is FrameworkElement fe && fe.DataContext is LightViewModel vm)
+            {
+                vm.OnRightMouseDown();
+                // Помечаем событие как обработанное, чтобы оно не ушло дальше
+                e.Handled = true;
+            }
         }
 
-        
+        private void Light_OnRightUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is FrameworkElement fe && fe.DataContext is LightViewModel vm)
+            {
+                vm.OnRightMouseUp();
+                e.Handled = true;
+            }
+        }
+
+
 
         private async void LoadScheme(Context ctx, string xmlpath)
         {

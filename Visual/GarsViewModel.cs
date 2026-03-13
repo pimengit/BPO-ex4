@@ -31,7 +31,8 @@ namespace BPO_ex4.Visuals
             set { _textRight = value; RaisePropertyChanged(nameof(TextRight)); }
         }
 
-        public Brush FillColor => Brushes.White; // Фон белый
+        public Brush FillColor
+            => Brushes.White; // Фон белый
 
         public GarsViewModel(double x, double y, double w, string name, int number)
         {

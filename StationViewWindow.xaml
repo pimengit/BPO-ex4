@@ -54,26 +54,64 @@
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type vis:LightViewModel}">
-                        <Grid>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                             <TextBlock Text="{Binding Name}" Foreground="White" FontSize="10" 
-                                       HorizontalAlignment="Center" Margin="0,-15,0,0"/>
+                   HorizontalAlignment="Center" Margin="0,-15,0,2"/>
 
-                            <Rectangle Width="4" Height="14" Fill="Black" Margin="0,12,0,0"/>
-                            <Rectangle Width="10" Height="2" Fill="Black" VerticalAlignment="Bottom" Margin="0,12,0,-2"/>
+                            <Grid Background="Transparent"
+              PreviewMouseRightButtonDown="Light_OnRightDown" 
+              PreviewMouseRightButtonUp="Light_OnRightUp">
 
-                            <Ellipse Width="20" Height="20" 
-                                     Fill="{Binding FillColor}"
-                                     Stroke="White" StrokeThickness="2"
-                                     ToolTip="{Binding Name}"
-                                     Cursor="Hand"
+                                <StackPanel VerticalAlignment="Bottom" Margin="0,15,0,0">
+                                    <Rectangle Width="4" Height="15" Fill="Black" HorizontalAlignment="Center"/>
+                                    <Rectangle Width="10" Height="2" Fill="Black" HorizontalAlignment="Center"/>
+                                </StackPanel>
 
-                                     PreviewMouseRightButtonDown="Light_OnRightDown"
-                                     PreviewMouseRightButtonUp="Light_OnRightUp">
-                                <Ellipse.InputBindings>
-                                    <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}"/>
-                                </Ellipse.InputBindings>
-                            </Ellipse>
-                        </Grid>
+                                <Border Background="Black" CornerRadius="9" Padding="2" 
+                    HorizontalAlignment="Center" VerticalAlignment="Top"
+                    ToolTip="{Binding Name}" Cursor="Hand">
+
+                                    <Border.InputBindings>
+                                        <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}"/>
+                                    </Border.InputBindings>
+
+                                    <StackPanel>
+                                        <Ellipse Width="16" Height="16" 
+                             Fill="{Binding TopColor}" 
+                             Stroke="White" StrokeThickness="1"/>
+
+                                        <Ellipse Width="16" Height="16" 
+                             Fill="{Binding BottomColor}" 
+                             Visibility="{Binding BottomLensVisibility}" 
+                             Stroke="White" StrokeThickness="1" Margin="0,2,0,0">
+                                            <Ellipse.Style>
+                                                <Style TargetType="Ellipse">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding BottomColor}" Value="{x:Static Brushes.Violet}">
+                                                            <DataTrigger.EnterActions>
+                                                                <BeginStoryboard x:Name="BlinkStoryboard">
+                                                                    <Storyboard>
+                                                                        <DoubleAnimation 
+                                                        Storyboard.TargetProperty="Opacity"
+                                                        From="1.0" To="0.0" 
+                                                        Duration="0:0:0.5" 
+                                                        AutoReverse="True" 
+                                                        RepeatBehavior="Forever"/>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </DataTrigger.EnterActions>
+                                                            <DataTrigger.ExitActions>
+                                                                <StopStoryboard BeginStoryboardName="BlinkStoryboard"/>
+                                                            </DataTrigger.ExitActions>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Ellipse.Style>
+                                        </Ellipse>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </StackPanel>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type vis:GarsViewModel}">
