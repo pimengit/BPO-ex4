@@ -109,7 +109,16 @@ namespace BPO_ex4
                     string opType = LogicAnalyzer.GetGroupType(sheetName, i);
                     if (string.IsNullOrEmpty(opType)) opType = (group.Count > 1) ? "AND" : "V";
 
-                    var wrappers = group.Select(n => new NodeWrapper { LogicNode = _ctx.Get(n.Id) }).ToList();
+                    var wrappers = new List<NodeWrapper>();
+                    for (int k = 0; k < group.Count; k++)
+                    {
+                        wrappers.Add(new NodeWrapper
+                        {
+                            LogicNode = _ctx.Get(group[k].Id),
+                            GroupIndex = i,   // Индекс столбца (из внешнего цикла for (int i = 1...))
+                            InputIndex = k    // Точный индекс самой переменной
+                        });
+                    }
 
                     headers.Add(new ColumnHeader
                     {
@@ -210,12 +219,25 @@ namespace BPO_ex4
 
         private void CtxEdit_Click(object sender, RoutedEventArgs e)
         {
-            if ((sender as MenuItem).Tag is Node clickedNode)
+            if (sender is MenuItem menuItem)
             {
-                var (groupIdx, inputIdx) = FindInputIndices(_currentNode, clickedNode);
-                if (groupIdx != -1) OpenEditWindow(groupIdx, inputIdx);
-                else MessageBox.Show("Could not find this input.");
+                // 1. Получаем само контекстное меню через стандартный Parent
+                if (menuItem.Parent is ContextMenu contextMenu)
+                {
+                    // 2. Находим элемент (кнопку), по которому кликнули правой кнопкой
+                    if (contextMenu.PlacementTarget is FrameworkElement targetElement)
+                    {
+                        // 3. Вытаскиваем NodeWrapper с точными координатами
+                        if (targetElement.DataContext is NodeWrapper wrapper)
+                        {
+                            OpenEditWindow(wrapper.GroupIndex, wrapper.InputIndex);
+                            return; // Успешно открыли окно
+                        }
+                    }
+                }
             }
+
+            MessageBox.Show("Не удалось определить координаты переменной.");
         }
 
         private void CtxAdd_Click(object sender, RoutedEventArgs e)

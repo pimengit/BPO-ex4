@@ -33,6 +33,9 @@ namespace BPO_ex4.ViewModels
     public class NodeWrapper
     {
         public StationLogic.Node LogicNode { get; set; }
+
+        public int GroupIndex { get; set; }
+        public int InputIndex { get; set; }
         public string Id => LogicNode.Id;
         public bool Value => LogicNode.Value;
         public string Description => LogicNode.Description;
