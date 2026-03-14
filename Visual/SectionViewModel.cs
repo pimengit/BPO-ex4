@@ -72,8 +72,9 @@ namespace BPO_ex4.Visuals
             // ШАГ 1: Ищем главную переменную отображения (SECT_P)
             // ---------------------------------------------------------
             // Она нужна для раскраски (Красный/Серый)
-            _occupancyNode = ctx.GetAllNodes()
-                                .FirstOrDefault(n => n.Id.StartsWith("SECT_P") && n.Description == Name);
+            
+                                            _occupancyNode = ctx.GetAllNodes()
+                                .FirstOrDefault(n => n.Id.StartsWith("SECT_P") && (n.Description == Name || n.Description.Remove(0, 1) == Name));
 
             if (_occupancyNode != null)
             {
@@ -92,7 +93,7 @@ namespace BPO_ex4.Visuals
                     if (group == null) continue;
 
                     // Пытаемся найти входные переменные в этой группе
-                    var inputNode = group.FirstOrDefault(n => n.Id.StartsWith("SECT_IN") || n.Id.StartsWith("RELAY_KRK"));
+                    var inputNode = group.FirstOrDefault(n => n.Id.StartsWith("SECT_IN") || n.Id.StartsWith("RELAY_KRK") || n.Id.StartsWith("SECT_EI1"));
 
                     if (inputNode != null)
                     {
