@@ -328,6 +328,134 @@ namespace BPO_ex4
                     .ToList();
             }
         }
+        // === МИНИ-ОКНО ДЛЯ ЗАПРОСА ОПИСАНИЯ ===
+        private string PromptForDescription(string defaultText = "")
+        {
+            Window prompt = new Window
+            {
+                Width = 350,
+                Height = 150,
+                Title = "Новый экземпляр",
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ResizeMode = ResizeMode.NoResize,
+                WindowStyle = WindowStyle.ToolWindow,
+                Padding = new Thickness(15)
+            };
+
+            StackPanel panel = new StackPanel();
+            panel.Children.Add(new TextBlock { Text = "Введите описание (например, 360ВС):", Margin = new Thickness(0, 0, 0, 10) });
+
+            TextBox textBox = new TextBox { Text = defaultText, Margin = new Thickness(0, 0, 0, 15) };
+            panel.Children.Add(textBox);
+
+            Button okButton = new Button { Content = "Создать", Width = 100, Height = 25, HorizontalAlignment = HorizontalAlignment.Right, IsDefault = true };
+            okButton.Click += (s, e) => prompt.DialogResult = true;
+            panel.Children.Add(okButton);
+
+            prompt.Content = panel;
+
+            // Сразу ставим фокус на поле ввода и выделяем текст
+            prompt.Loaded += (s, e) => { textBox.Focus(); textBox.SelectAll(); };
+
+            return prompt.ShowDialog() == true ? textBox.Text.Trim() : null;
+        }
+
+        // === ОБНОВЛЕННЫЙ ОБРАБОТЧИК КНОПКИ ===
+        private void BtnAddInstance_Click(object sender, RoutedEventArgs e)
+        {
+            if (LstTypes.SelectedItem is not string selectedType)
+            {
+                MessageBox.Show("Сначала выберите тип (категорию) в списке выше.");
+                return;
+            }
+
+            try
+            {
+                var existingNodes = _allNodesCache.Where(n => GetTypeName(n.Id) == selectedType).ToList();
+
+                int newIndex = 1;
+                if (existingNodes.Any())
+                {
+                    var indices = existingNodes.Select(n => GetSortIndex(n.Id)).Where(idx => idx != int.MaxValue);
+                    if (indices.Any()) newIndex = indices.Max() + 1;
+                }
+
+                string newDesc = PromptForDescription($"Экземпляр {newIndex}");
+                if (string.IsNullOrWhiteSpace(newDesc)) return;
+
+                string newId = $"{selectedType}[{newIndex}]";
+
+                // 1. ПИШЕМ В ПАМЯТЬ EXCEL (в _package)
+                _excelSession.AppendInstanceRow(selectedType, newIndex, newDesc);
+
+                // 2. СОЗДАЕМ НОВУЮ НОДУ
+                var newNode = new Node
+                {
+                    Id = newId,
+                    Description = newDesc,
+                    Value = false
+                };
+
+                // === 3. ВОТ ОНО: ФОРМИРУЕМ СТРУКТУРУ ЛОГИКИ ДЛЯ ТАБА ===
+                // Ищем любую ноду этого же типа, у которой уже есть распарсенная логика
+                var templateNode = existingNodes.FirstOrDefault(n => n.LogicSource?.Groups != null);
+
+                // ИСПРАВЛЕНИЕ 1: Берем просто из кэша (или используем _ctx.Get)
+                var const1Node = _allNodesCache.FirstOrDefault(n => n.Id == "CONST_1") ?? _ctx.Get("CONST_1");
+
+                if (templateNode != null && const1Node != null)
+                {
+                    newNode.LogicSource = (dynamic)Activator.CreateInstance(templateNode.LogicSource.GetType());
+
+                    // Получаем оригинальные группы
+                    var templateGroups = templateNode.LogicSource.Groups;
+
+                    // ИСПРАВЛЕНИЕ 2: Создаем МАССИВ списков нужной длины
+                    var newGroups = new List<Node>[templateGroups.Length];
+
+                    for (int i = 0; i < templateGroups.Length; i++)
+                    {
+                        var oldGroup = templateGroups[i];
+                        var newGroup = new List<Node>();
+
+                        if (oldGroup != null)
+                        {
+                            // Заполняем новую группу константами в том же количестве, что и у шаблона
+                            foreach (var item in oldGroup)
+                            {
+                                newGroup.Add(const1Node);
+                            }
+                        }
+
+                        // Присваиваем список в ячейку массива
+                        newGroups[i] = newGroup;
+                    }
+
+                    newNode.LogicSource.Groups = newGroups;
+                }
+
+                // 4. Добавляем в кэш
+                _allNodesCache.Add(newNode);
+
+                // ВАЖНО: Если Context тоже хранит ноды в каком-то своем словаре, добавь её туда
+                // Например: _ctx.AddNode(newNode); или _ctx.Set(newId, false);
+
+                // 5. Обновляем список UI
+                LstInstances.ItemsSource = _allNodesCache
+                    .Where(n => GetTypeName(n.Id) == selectedType)
+                    .OrderBy(n => GetSortIndex(n.Id))
+                    .ThenBy(n => n.Id)
+                    .ToList();
+
+                LstInstances.SelectedItem = newNode;
+                LstInstances.ScrollIntoView(newNode);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при добавлении: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
 
         private int GetSortIndex(string id)
         {
@@ -346,6 +474,8 @@ namespace BPO_ex4
             }
             return int.MaxValue; // Если числа нет, кидаем в конец списка
         }
+
+
 
         protected override void OnClosed(EventArgs e)
         {

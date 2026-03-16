@@ -164,7 +164,40 @@ namespace BPO_ex4.Excel
             // Если номера нет (как у констант), пишем пустую строку.
             ws.Cells[row, col - 1].Value = resolved.Num?.ToString() ?? "";
         }
+        // === МЕТОД ДОБАВЛЕНИЯ НОВОЙ СТРОКИ ===
+        public void AppendInstanceRow(string sheetName, int index, string description)
+        {
+            var ws = GetSheet(sheetName);
 
+            // Ищем первую свободную строку (начинаем с 5-й, т.к. сверху обычно шапка/маски)
+            int lastRow = 5;
+            while (ws.Cells[lastRow, 3].Value != null)
+            {
+                lastRow++;
+                if (lastRow > 50000) break; // Защита от бесконечного цикла
+            }
+
+            // Пишем в свободную строку
+            ws.Cells[lastRow, 2].Value = index;
+            ws.Cells[lastRow, 3].Value = description;
+
+            int col = 5;
+            while (!string.IsNullOrWhiteSpace(ws.Cells[1, col].Text))
+            {
+                if (ws.Cells[1, col].Value.ToString() == "1")
+                {
+                    // col - это правая ячейка (IstCode). Пишем туда код константы CONST_1
+                    ws.Cells[lastRow, col].Value = "3.1";
+
+                    // col - 1 - это левая ячейка (Num / Индекс). Для константы она пустая
+                    ws.Cells[lastRow, col - 1].Value = "";
+                }
+                col += 2; // Переходим к следующему логическому входу
+                
+            }
+
+            
+        }
         // Надежный поиск колонок (такой же, как мы сделали ранее)
         private List<int> GetGroupColumns(ExcelWorksheet ws, int targetGroupIndex)
         {

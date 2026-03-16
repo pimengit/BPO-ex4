@@ -56,16 +56,34 @@
 
             <GridSplitter Grid.Row="3" HorizontalAlignment="Stretch"/>
 
-            <ListBox Name="LstInstances" Grid.Row="4" SelectionChanged="LstInstances_SelectionChanged" BorderBrush="Gray">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Id}" FontWeight="Bold" Margin="0,0,5,0"/>
-                            <TextBlock Text="{Binding Description}" Foreground="Gray" FontStyle="Italic" TextTrimming="CharacterEllipsis" MaxWidth="150"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <Grid Grid.Row="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="0,0,0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Экземпляры:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                    <Button x:Name="BtnAddInstance" Grid.Column="1" Content="➕ Добавить" 
+                Click="BtnAddInstance_Click" Height="22" Padding="5,0" 
+                Background="#E0F7FA" ToolTip="Создать новую переменную в этом листе"/>
+                </Grid>
+
+                <ListBox Name="LstInstances" Grid.Row="1" SelectionChanged="LstInstances_SelectionChanged" BorderBrush="Gray">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Id}" FontWeight="Bold" Margin="0,0,5,0"/>
+                                <TextBlock Text="{Binding Description}" Foreground="Gray" FontStyle="Italic" TextTrimming="CharacterEllipsis" MaxWidth="150"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
         </Grid>
 
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="#DDD"/>
