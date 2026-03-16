@@ -21,10 +21,10 @@
         <Border Padding="10" Background="#F8F8F8" BorderBrush="#CCC" BorderThickness="0,0,0,1">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Variable: " FontSize="14" Foreground="Gray"/>
-                    <TextBlock Name="TxtNodeTitle" Text="NONE" FontSize="18" FontWeight="Bold"/>
-                    <TextBlock Name="TxtNodeValue" Text="FALSE" FontWeight="Bold" Foreground="Red" Margin="15,2,0,0"/>
-                    <Button Name="BtnBack" Content="&lt; Back" Margin="20,0,0,0" Padding="5,2" Click="BtnBack_Click" IsEnabled="False"/>
+                    <TextBlock Text="Переменная: " FontSize="14" Foreground="Gray"/>
+                    <TextBlock Name="TxtNodeTitle" Text="Пусто" FontSize="18" FontWeight="Bold"/>
+                    <TextBlock Name="TxtNodeValue" Text="ЛОЖЬ" FontWeight="Bold" Foreground="Red" Margin="15,2,0,0"/>
+                    <Button Name="BtnBack" Content="&lt; Назад" Margin="20,0,0,0" Padding="5,2" Click="BtnBack_Click" IsEnabled="False"/>
                 </StackPanel>
                 <TextBlock Name="TxtNodeDesc" Text="..." Foreground="#555" Margin="0,2"/>
             </StackPanel>
@@ -75,12 +75,10 @@
 
                                                     <Button.ContextMenu>
                                                         <ContextMenu>
-                                                            <MenuItem Header="Toggle Value (Изменить)" Click="CtxToggle_Click" Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                                            <MenuItem Header="Изменить состояние" Click="CtxToggle_Click" Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                                             <Separator/>
-                                                            <MenuItem Header="Edit Connection... (Редактировать)" Click="CtxEdit_Click" Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                                            <MenuItem Header="Редактировать" Click="CtxEdit_Click" Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
 
-                                                            <MenuItem Header="Add New to Group... (Добавить)" Click="CtxAdd_Click" 
-                                                                      Tag="{Binding PlacementTarget.CommandParameter, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                                         </ContextMenu>
                                                     </Button.ContextMenu>
 

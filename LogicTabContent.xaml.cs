@@ -182,7 +182,7 @@ namespace BPO_ex4
         {
             if (_currentNode == null) return;
             bool val = _currentNode.Value;
-            TxtNodeValue.Text = val ? "TRUE" : "FALSE";
+            TxtNodeValue.Text = val ? "ИСТИНА" : "ЛОЖЬ";
             TxtNodeValue.Foreground = val ? Brushes.LimeGreen : Brushes.Red;
         }
 
