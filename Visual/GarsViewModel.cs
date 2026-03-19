@@ -1,21 +1,28 @@
 using BPO_ex4.StationLogic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Media;
-using System.Xml;
 
 namespace BPO_ex4.Visuals
 {
     public class GarsViewModel : VisualObjectViewModel
     {
-        // Массивы для бит (по 3 штуки)
         private Node[] _frNodes = new Node[3];
         private Node[] _pfrNodes = new Node[3];
 
-        public double Width { get; set; }
-        public double Height { get; set; } = 30; // Высота под текст
+        // --- БЕРЕМ ГЕОМЕТРИЮ ИЗ РАСПАРСЕННЫХ ПРАВИЛ ---
+        public double RectW { get; set; } = 46; // Делаем пошире
+        public double RectH { get; set; } = 16; // Чуть выше
 
-        // Текст левого столбца
+        public double LineX { get; set; } = 23; // Разделитель ровно по центру (46 / 2)
+
+        public double Cap1X { get; set; } = 0;
+        public double Cap1W { get; set; } = 23; // Половина ширины для левого текста
+
+        public double Cap2X { get; set; } = 24; // Правый текст начинается после разделителя
+        public double Cap2W { get; set; } = 22; // И занимает оставшееся место
+
+        public int Number { get; set; }
+
         private string _textLeft = "-";
         public string TextLeft
         {
@@ -23,7 +30,6 @@ namespace BPO_ex4.Visuals
             set { _textLeft = value; RaisePropertyChanged(nameof(TextLeft)); }
         }
 
-        // Текст правого столбца
         private string _textRight = "-";
         public string TextRight
         {
@@ -32,44 +38,60 @@ namespace BPO_ex4.Visuals
         }
 
         public Brush FillColor
-            => Brushes.White; // Фон белый
+        {
+            get
+            {
+                // Нет связи - серый, есть связь - белый (CWH из XML)
+                if (_frNodes[0] == null && _frNodes[1] == null && _frNodes[2] == null)
+                    return Brushes.LightGray;
+                return Brushes.White;
+            }
+        }
 
         public GarsViewModel(double x, double y, double w, string name, int number)
         {
-            X = x; Y = y; Width = w; Name = name; ZIndex = 20; Number = number ;
+            X = x - 15;
+            Y = y + 5;
+            Name = name;
+            ZIndex = 20;
+            Number = number;
+
+            // Если в основном XML задан dw/width > 0, берем его. Иначе берем из правил.
+            //RectW = w > 0 ? w : GarsTemplateRules.RectW;
         }
 
         public override void BindToLogic(Context ctx, SimulationEngine engine)
         {
             _engine = engine;
 
-            // Ищем биты FR0, FR1, FR2
             for (int i = 0; i < 3; i++)
             {
-                string id = $"GEN_FR{i}[{Number}]"; // Имя переменной
-                // Ищем переменную, у которой Description совпадает с именем ГАРС
+                string id = $"GEN_FR{i}[{Number}]";
                 _frNodes[i] = ctx.GetAllNodes().FirstOrDefault(n => n.Id == id);
-                if (_frNodes[i] != null) _frNodes[i].Changed += _ => UpdateState();
+                if (_frNodes[i] != null) _frNodes[i].Changed += _ => OnLogicChanged();
             }
 
-            // Ищем биты PFR0, PFR1, PFR2
             for (int i = 0; i < 3; i++)
             {
                 string id = $"GEN_PFR{i}[{Number}]";
                 _pfrNodes[i] = ctx.GetAllNodes().FirstOrDefault(n => n.Id == id);
-                if (_pfrNodes[i] != null) _pfrNodes[i].Changed += _ => UpdateState();
+                if (_pfrNodes[i] != null) _pfrNodes[i].Changed += _ => OnLogicChanged();
             }
 
-            UpdateState();
+            OnLogicChanged();
         }
 
         private void UpdateState()
         {
-            // Считаем число 0..7
+            if (_frNodes[0] == null && _frNodes[1] == null && _frNodes[2] == null)
+            {
+                TextLeft = "?"; TextRight = "?";
+                return;
+            }
+
             int valFr = GetValue(_frNodes);
             int valPfr = GetValue(_pfrNodes);
 
-            // Обновляем текст
             TextLeft = Decode(valFr);
             TextRight = Decode(valPfr);
         }
@@ -77,32 +99,32 @@ namespace BPO_ex4.Visuals
         private int GetValue(Node[] nodes)
         {
             int res = 0;
-            // Бит 0 -> +1
             if (nodes[0] != null && nodes[0].Value) res += 1;
-            // Бит 1 -> +2
             if (nodes[1] != null && nodes[1].Value) res += 2;
-            // Бит 2 -> +4
             if (nodes[2] != null && nodes[2].Value) res += 4;
             return res;
         }
 
-        // === ТУТ ПРАВЬ ТЕКСТ КАК ХОЧЕШЬ ===
         private string Decode(int code)
         {
             switch (code)
             {
-                case 0: return "--";  // 000
-                case 1: return "САО";  // 001
-                case 2: return "РС";  // 010
-                case 3: return "0";  // 011
-                case 4: return "40";  // 100
-                case 5: return "60";   // 101
-                case 6: return "70"; // 110 (Пример)
-                case 7: return "80"; // 111 (Пример)
+                case 0: return "--";
+                case 1: return "САО";
+                case 2: return "РС";
+                case 3: return "0";
+                case 4: return "40";
+                case 5: return "60";
+                case 6: return "70";
+                case 7: return "80";
                 default: return "?";
             }
         }
 
-        protected override void OnLogicChanged() { UpdateState(); }
+        protected override void OnLogicChanged()
+        {
+            UpdateState();
+            RaisePropertyChanged(nameof(FillColor));
+        }
     }
 }

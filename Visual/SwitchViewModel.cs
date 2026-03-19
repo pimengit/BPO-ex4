@@ -1,42 +1,92 @@
-﻿using System;
+﻿using BPO_ex4.StationLogic;
+using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks; // Нужен для задержки (Task.Delay)
+using System.Threading.Tasks;
 using System.Windows.Media;
-using BPO_ex4.StationLogic;
 
 namespace BPO_ex4.Visuals
 {
     public class SwitchViewModel : VisualObjectViewModel
     {
-        // === КОНТРОЛЬ (Для цвета) ===
-        private Node _pkNode; // Плюс (SWITCH_PK)
-        private Node _mkNode; // Минус (SWITCH_MK)
-
-        // === УПРАВЛЕНИЕ (Для записи) ===
+        private Node _pkNode;
+        private Node _mkNode;
         private Node _inPlusNode;
         private Node _inMinusNode;
+        private Node _puNode;
+        private Node _muNode;
 
-        // === АВТОМАТИКА (Следим за ними) ===
-        private Node _puNode; // Команда Плюс (SWITCH_PU)
-        private Node _muNode; // Команда Минус (SWITCH_MU)
+        public double RectX { get; set; } = -120;
+        public double RectY { get; set; } = -7;
 
-        public double Width { get; set; } = 20;
-        public double Height { get; set; } = 20;
+        // Длинные полигоны (Рельсовая цепь)
+        public PointCollection PlusPoints { get; set; } = new PointCollection();
+        public PointCollection MinusPoints { get; set; } = new PointCollection();
 
-        public Brush FillColor
+        // Короткие корешки (Контроль стрелки)
+        public ObservableCollection<LineGeometry> ControlPlusLines { get; set; } = new ObservableCollection<LineGeometry>();
+        public ObservableCollection<LineGeometry> ControlMinusLines { get; set; } = new ObservableCollection<LineGeometry>();
+
+        private SectionViewModel _parentSection;
+        public SectionViewModel ParentSection
+        {
+            get => _parentSection;
+            set
+            {
+                _parentSection = value;
+                if (_parentSection != null)
+                {
+                    _parentSection.PropertyChanged += (s, e) =>
+                    {
+                        if (e.PropertyName == "FillColor")
+                        {
+                            RaisePropertyChanged(nameof(SectionFillColor));
+                        }
+                    };
+                }
+            }
+        }
+
+        // 1. ЦВЕТ ВСЕЙ СТРЕЛКИ (Цвет путевой секции)
+        public Brush SectionFillColor
         {
             get
             {
-                if (_pkNode == null || _mkNode == null) return Brushes.Gray;
+                if (ParentSection == null) return Brushes.LightGray;
+                var c = ParentSection.FillColor;
+                // Свободная секция - серая, занятая - красная/желтая
+                return c == Brushes.Transparent ? Brushes.LightGray : c;
+            }
+        }
 
-                bool pk = _pkNode.Value;
-                bool mk = _mkNode.Value;
+        // 2. ЦВЕТ ПЛЮС-КОРЕШКА (Зеленый или Красный)
+        public Brush ControlPlusBrush
+        {
+            get
+            {
+                if (_pkNode == null || _mkNode == null) return Brushes.Lime; // Заглушка
+                bool pk = _pkNode.Value, mk = _mkNode.Value;
 
-                if (pk && !mk) return Brushes.Lime;      // Плюс
-                if (!pk && mk) return Brushes.Yellow;    // Минус
-                if (!pk && !mk) return Brushes.Red;      // Нет контроля
-                return Brushes.Violet;                   // Взрез
+                if (pk && !mk) return Brushes.Lime;         // Стоит в плюсе
+                if (!pk && mk) return Brushes.Transparent;  // Переведена в минус (прячем)
+
+                return Brushes.Red; // Нет контроля (0 0)
+            }
+        }
+
+        // 3. ЦВЕТ МИНУС-КОРЕШКА (Желтый или Красный)
+        public Brush ControlMinusBrush
+        {
+            get
+            {
+                if (_pkNode == null || _mkNode == null) return Brushes.Transparent;
+                bool pk = _pkNode.Value, mk = _mkNode.Value;
+
+                if (!pk && mk) return Brushes.Yellow;       // Стоит в минусе
+                if (pk && !mk) return Brushes.Transparent;  // Переведена в плюс (прячем)
+
+                return Brushes.Red; // Нет контроля (0 0)
             }
         }
 
@@ -44,29 +94,34 @@ namespace BPO_ex4.Visuals
         {
             X = x; Y = y; Name = name; ZIndex = 10;
         }
+        private bool IsExactMatch(string description, string name)
+        {
+            if (string.IsNullOrWhiteSpace(description) || string.IsNullOrWhiteSpace(name)) return false;
 
+            // Отрезаем невидимые пробелы из имени (если в XML было "6 ")
+            string safeName = Regex.Escape(name.Trim());
+
+            // Ищем точное совпадение отдельным словом
+            string pattern = $@"(?<![\wа-яА-ЯёЁ]){safeName}(?![\wа-яА-ЯёЁ])";
+            return Regex.IsMatch(description, pattern, RegexOptions.IgnoreCase);
+        }
         public override void BindToLogic(Context ctx, SimulationEngine engine)
         {
             _engine = engine;
 
-            // 1. Ищем КОНТРОЛЬ (PK, MK)
-            _pkNode = ctx.GetAllNodes().FirstOrDefault(n => n.Id.StartsWith("SWITCH_PK") && n.Description.Contains(Name));
-            _mkNode = ctx.GetAllNodes().FirstOrDefault(n => n.Id.StartsWith("SWITCH_MK") && n.Description.Contains(Name));
+            _pkNode = ctx.GetAllNodes().FirstOrDefault(n => n.Id.StartsWith("SWITCH_PK") && IsExactMatch(n.Description, Name));
+            _mkNode = ctx.GetAllNodes().FirstOrDefault(n => n.Id.StartsWith("SWITCH_MK") && IsExactMatch(n.Description, Name));
 
             if (_pkNode != null) _pkNode.Changed += (n) => OnLogicChanged();
             if (_mkNode != null) _mkNode.Changed += (n) => OnLogicChanged();
 
-            // 2. Ищем АВТОМАТИКУ (PU, MU)
-            _puNode = ctx.GetAllNodes().FirstOrDefault(n => Regex.IsMatch(n.Id, @"_PU\[\d\]$") && n.Description.Contains(Name));
-            _muNode = ctx.GetAllNodes().FirstOrDefault(n => Regex.IsMatch(n.Id, @"_MU\[\d\]$") && n.Description.Contains(Name));
+            _puNode = ctx.GetAllNodes().FirstOrDefault(n => Regex.IsMatch(n.Id, @"_PU\[\d+\]$") && IsExactMatch(n.Description, Name));
+            _muNode = ctx.GetAllNodes().FirstOrDefault(n => Regex.IsMatch(n.Id, @"_MU\[\d+\]$") && IsExactMatch(n.Description, Name));
 
-            // Подписываемся на команды
             if (_puNode != null) _puNode.Changed += OnAutoCommandChanged;
             if (_muNode != null) _muNode.Changed += OnAutoCommandChanged;
 
-            // 3. Ищем УПРАВЛЕНИЕ (IN) внутри родителя SWITCH
-            var parentSwitch = ctx.GetAllNodes()
-                                  .FirstOrDefault(n => n.Id.StartsWith("SWITCH_PD") &&  n.Description.Contains(Name));
+            var parentSwitch = ctx.GetAllNodes().FirstOrDefault(n => n.Id.StartsWith("SWITCH_PD") && IsExactMatch(n.Description, Name));
 
             if (parentSwitch != null && parentSwitch.LogicSource?.Groups != null)
             {
@@ -87,60 +142,42 @@ namespace BPO_ex4.Visuals
             OnLogicChanged();
         }
 
-        // === ОБРАБОТЧИК АВТОМАТИКИ ===
         private void OnAutoCommandChanged(Node commandNode)
         {
-            // Реагируем только если команда пришла (стала true)
             if (commandNode.Value == true)
             {
                 bool isPlusCommand = (commandNode == _puNode);
-                // Запускаем асинхронный процесс перевода
                 RunSwitchSequence(isPlusCommand);
             }
         }
 
-        // Асинхронный метод перевода с задержкой
         private async void RunSwitchSequence(bool toPlus)
         {
             if (_engine == null || _inPlusNode == null || _inMinusNode == null) return;
 
-            // Логируем
-            string targetName = toPlus ? "ПЛЮС" : "МИНУС";
-            AppLogger.Log($"AUTO SWITCH {Name}: Старт перевода в {targetName}");
-
-            // ШАГ 1: Сброс контроля (0 0)
+            AppLogger.Log($"AUTO SWITCH {Name}: Старт перевода в {(toPlus ? "ПЛЮС" : "МИНУС")}");
             _engine.InjectChange(_inPlusNode, false);
             _engine.InjectChange(_inMinusNode, false);
 
-            // ШАГ 2: Ждем 1 секунду (1000 мс)
-            // Task.Delay не блокирует интерфейс, программа продолжает работать
             await Task.Delay(1000);
 
-            // ШАГ 3: Устанавливаем целевое состояние
             if (toPlus)
             {
-                // Ставим 1 0
                 _engine.InjectChange(_inPlusNode, true);
                 _engine.InjectChange(_inMinusNode, false);
             }
             else
             {
-                // Ставим 0 1
                 _engine.InjectChange(_inPlusNode, false);
                 _engine.InjectChange(_inMinusNode, true);
             }
-
             AppLogger.Log($"AUTO SWITCH {Name}: Перевод завершен");
         }
 
-        // Ручное управление (ПКМ)
         protected override void OnRightClick()
         {
             if (_engine == null || _inPlusNode == null || _inMinusNode == null) return;
-
             bool isPlus = (_pkNode != null && _pkNode.Value);
-
-            // Ручной перевод делаем мгновенно (или тоже можно через Sequence, если хочешь)
             if (isPlus)
             {
                 _engine.InjectChange(_inPlusNode, false);
@@ -153,18 +190,18 @@ namespace BPO_ex4.Visuals
             }
         }
 
-        // Ручное управление (ЛКМ)
         protected override void OnLeftClick()
         {
             if (_engine == null) return;
-            // Обрыв
             if (_inPlusNode != null) _engine.InjectChange(_inPlusNode, false);
             if (_inMinusNode != null) _engine.InjectChange(_inMinusNode, false);
         }
 
         protected override void OnLogicChanged()
         {
-            RaisePropertyChanged(null);
+            RaisePropertyChanged(nameof(ControlPlusBrush));
+            RaisePropertyChanged(nameof(ControlMinusBrush));
+            RaisePropertyChanged(nameof(SectionFillColor));
         }
     }
 }

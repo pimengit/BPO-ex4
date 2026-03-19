@@ -4,7 +4,9 @@
         xmlns:vis="clr-namespace:BPO_ex4.Visuals"
         Title="Схема станции" Height="800" Width="1200"
         Background="Gray">
-
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
     <Grid>
         <ScrollViewer Name="MapScrollViewer"
                       HorizontalScrollBarVisibility="Auto" 
@@ -35,22 +37,31 @@
                 <ItemsControl.Resources>
 
                     <DataTemplate DataType="{x:Type vis:SectionViewModel}">
-                        <Grid>
-                            <Rectangle Width="{Binding Width}" Height="{Binding Height}" 
-                                       Fill="{Binding FillColor}"
-                                       Stroke="Black" StrokeThickness="1"
-                                       RadiusX="1" RadiusY="1"
-                                       ToolTip="{Binding Name}"
-                                       Cursor="Hand">
-                                <Rectangle.InputBindings>
-                                    <MouseBinding Gesture="LeftClick" Command="{Binding ClickCommand}"/>
-                                </Rectangle.InputBindings>
-                            </Rectangle>
+                        <Canvas ToolTip="{Binding Name}" Cursor="Hand" ClipToBounds="False">
+                            <Canvas.InputBindings>
+                                <MouseBinding Gesture="LeftClick" Command="{Binding ClickCommand}"/>
+                            </Canvas.InputBindings>
 
-                            <TextBlock Text="{Binding Name}" Foreground="Black" FontSize="10" 
-                                       HorizontalAlignment="Center" Margin="0,-15,0,0"
-                                       IsHitTestVisible="False"/>
-                        </Grid>
+                            <Rectangle Canvas.Left="0" Canvas.Top="0"
+                   Width="{Binding Width}" Height="{Binding Height}" 
+                   Fill="{Binding FillColor}"
+                   Visibility="{Binding RectVisibility}"
+                   Stroke="Black" StrokeThickness="1"
+                   RadiusX="1" RadiusY="1" />
+
+                            <Canvas Canvas.Left="0" Canvas.Top="0" ClipToBounds="False" 
+                Visibility="{Binding IsSwitchSection, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Polygon Points="{Binding LockPoints}"
+                     Fill="Transparent"
+                     Stroke="{Binding FillColor}" 
+                     StrokeThickness="2" />
+                            </Canvas>
+
+                            <TextBlock Canvas.Left="0" Canvas.Top="18" 
+                   Width="{Binding Width}" TextAlignment="Center"
+                   Text="{Binding Name}" Foreground="Black" FontWeight="Bold" FontSize="11" 
+                   IsHitTestVisible="False"/>
+                        </Canvas>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type vis:LightViewModel}">
@@ -115,20 +126,34 @@
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type vis:GarsViewModel}">
-                        <Border Width="{Binding Width}" Height="{Binding Height}" 
-                                Background="White" BorderBrush="Black" BorderThickness="1" 
-                                ToolTip="{Binding Name}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="{Binding TextLeft}" Foreground="Black" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"/>
-                                <Rectangle Grid.Column="1" Width="1" Fill="Black" Margin="0,2"/>
-                                <TextBlock Grid.Column="2" Text="{Binding TextRight}" Foreground="Black" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"/>
-                            </Grid>
-                        </Border>
+                        <Canvas ClipToBounds="False" ToolTip="{Binding Name}">
+
+                            <Rectangle Canvas.Left="0" Canvas.Top="0" 
+                   Width="{Binding RectW}" Height="{Binding RectH}" 
+                   Fill="{Binding FillColor}" Stroke="Black" StrokeThickness="1" />
+
+                            <Line X1="{Binding LineX}" Y1="0" 
+              X2="{Binding LineX}" Y2="{Binding RectH}" 
+              Stroke="Black" StrokeThickness="1"/>
+
+                            <TextBlock Canvas.Left="{Binding Cap1X}" Canvas.Top="0" 
+                   Width="{Binding Cap1W}" Height="{Binding RectH}"
+                   Text="{Binding TextLeft}" Foreground="Black" 
+                   FontSize="10" FontWeight="Bold" 
+                   TextAlignment="Center" VerticalAlignment="Center" 
+                   Padding="0,1,0,0"/>
+
+                            <TextBlock Canvas.Left="{Binding Cap2X}" Canvas.Top="0" 
+                   Width="{Binding Cap2W}" Height="{Binding RectH}"
+                   Text="{Binding TextRight}" Foreground="Black" 
+                   FontSize="10" FontWeight="Bold" 
+                   TextAlignment="Center" VerticalAlignment="Center"
+                   Padding="0,1,0,0"/>
+
+                            <TextBlock Text="{Binding Name}" Foreground="Black" FontSize="10" FontWeight="Bold"
+                   Canvas.Top="-15" Canvas.Left="-10" Width="50" TextAlignment="Center"
+                   IsHitTestVisible="False"/>
+                        </Canvas>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type vis:ZrViewModel}">
@@ -169,21 +194,69 @@
 
                     <DataTemplate DataType="{x:Type vis:SwitchViewModel}">
                         <Grid>
-                            <Ellipse Width="20" Height="20" 
-                                     Fill="{Binding FillColor}"
-                                     Stroke="White" StrokeThickness="2"
-                                     ToolTip="{Binding Name}"
-                                     Cursor="Hand">
-                                <Ellipse.InputBindings>
-                                    <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}"/>
-                                    <MouseBinding Gesture="RightClick" Command="{Binding RightClickCommand}"/>
-                                </Ellipse.InputBindings>
-                            </Ellipse>
-                            <TextBlock Text="{Binding Name}" Foreground="Black" FontWeight="Bold" FontSize="10" 
-                                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                                       IsHitTestVisible="False"/>
+                            <Canvas ClipToBounds="False">
+
+                                <Polygon Points="{Binding PlusPoints}" Fill="{Binding SectionFillColor}" Stroke="Black" StrokeThickness="1" Cursor="Hand" Panel.ZIndex="1">
+                                    <Polygon.InputBindings>
+                                        <MouseBinding Gesture="LeftClick" Command="{Binding ParentSection.ClickCommand}"/>
+                                    </Polygon.InputBindings>
+                                </Polygon>
+
+                                <Polygon Points="{Binding MinusPoints}" Fill="{Binding SectionFillColor}" Stroke="Black" StrokeThickness="1" Cursor="Hand" Panel.ZIndex="1">
+                                    <Polygon.InputBindings>
+                                        <MouseBinding Gesture="LeftClick" Command="{Binding ParentSection.ClickCommand}"/>
+                                    </Polygon.InputBindings>
+                                </Polygon>
+
+                                <ItemsControl ItemsSource="{Binding ControlPlusLines}" Panel.ZIndex="10" Cursor="Hand">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <Canvas/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Line X1="{Binding StartPoint.X}" Y1="{Binding StartPoint.Y}" X2="{Binding EndPoint.X}" Y2="{Binding EndPoint.Y}"
+                              Stroke="{Binding DataContext.ControlPlusBrush, RelativeSource={RelativeSource AncestorType=ItemsControl}}" StrokeThickness="14">
+                                                <Line.InputBindings>
+                                                    <MouseBinding Gesture="LeftClick" Command="{Binding DataContext.LeftClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"/>
+                                                    <MouseBinding Gesture="RightClick" Command="{Binding DataContext.RightClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"/>
+                                                </Line.InputBindings>
+                                            </Line>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <ItemsControl ItemsSource="{Binding ControlMinusLines}" Panel.ZIndex="10" Cursor="Hand">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <Canvas/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Line X1="{Binding StartPoint.X}" Y1="{Binding StartPoint.Y}" X2="{Binding EndPoint.X}" Y2="{Binding EndPoint.Y}"
+                              Stroke="{Binding DataContext.ControlMinusBrush, RelativeSource={RelativeSource AncestorType=ItemsControl}}" StrokeThickness="14">
+                                                <Line.InputBindings>
+                                                    <MouseBinding Gesture="LeftClick" Command="{Binding DataContext.LeftClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"/>
+                                                    <MouseBinding Gesture="RightClick" Command="{Binding DataContext.RightClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"/>
+                                                </Line.InputBindings>
+                                            </Line>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <TextBlock Canvas.Left="{Binding RectX}" Canvas.Top="{Binding RectY}" 
+                       Width="30" Height="30" 
+                       Text="{Binding Name}" Foreground="Black" FontWeight="Bold" FontSize="12"
+                       TextAlignment="Center" VerticalAlignment="Center" 
+                       IsHitTestVisible="False" Panel.ZIndex="11"/>
+
+                            </Canvas>
                         </Grid>
                     </DataTemplate>
+
+
 
                 </ItemsControl.Resources>
             </ItemsControl>

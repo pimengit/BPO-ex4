@@ -243,15 +243,31 @@ namespace BPO_ex4
         private void BtnOpenScheme_Click(object sender, RoutedEventArgs e)
         {
             if (_ctx == null) return;
+
             var dlg = new OpenFileDialog { Filter = "XML Files|*.xml" };
+
+            // Если пользователь выбрал файл и нажал ОК
             if (dlg.ShowDialog() == true)
             {
                 _loadedXMLPath = dlg.FileName;
 
+                // === ИЩЕМ И ЗАГРУЖАЕМ ПРАВИЛА ГАРС ===
+                // 1. Получаем путь к папке, где лежит выбранный основной XML
+                string directory = System.IO.Path.GetDirectoryName(_loadedXMLPath);
+
+                if (directory != null)
+                {
+                    // 2. Склеиваем путь к папке с именем файла правил
+                    string garsRulesPath = System.IO.Path.Combine(directory, "gars_indicator.xml");
+
+                    // 3. Загружаем правила (метод сам проверит, существует ли файл)
+                    BPO_ex4.Visuals.GarsTemplateRules.Load(garsRulesPath);
+                }
+
+                // Передаем _ctx И _engine (создаем окно ТОЛЬКО если файл был выбран)
+                var schemeWin = new StationViewWindow(_ctx, _engine, _loadedXMLPath);
+                schemeWin.Show();
             }
-            // Передаем _ctx И _engine
-            var schemeWin = new StationViewWindow(_ctx, _engine, _loadedXMLPath);
-            schemeWin.Show();
         }
 
 

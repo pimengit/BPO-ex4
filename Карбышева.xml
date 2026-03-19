@@ -1,0 +1,1896 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<body>
+	<arm_types_in_system dsp="1" shn="1"/>
+	<counters timers_count="0"/>
+
+	<!-- Доступ к базе данных сервера -->
+	<server_database_state_ind type="37" number="19"/>
+
+	<!-- Режим stand -->
+	<stand_mode_ind type="37" number="25"/>
+
+	<!-- Контейнеры объектов -->
+	<objects_boxes>
+		<box id="1" x="50" y="0" dx="150" dy="80" columns="4" h_l_border_size="30" h_r_border_size="10" header_divider="0" scene_id="3" v_border_size="30">
+			<polygon z="-10" border="CTR" width="2"/>
+		</box>
+		<box id="2" x="750" y="0" dx="150" dy="80" columns="4" h_l_border_size="30" h_r_border_size="10" header_divider="0" scene_id="3" v_border_size="30">
+			<polygon z="-10" border="CTR" width="2"/>
+		</box>
+		<box id="3" x="70" y="390" dx="150" dy="80" columns="4" h_l_border_size="30" h_r_border_size="10" header_divider="0" scene_id="3" v_border_size="30">
+			<polygon z="-10" border="CTR" width="2"/>
+		</box>
+	</objects_boxes>
+
+	<!-- Экземпляры типа Амперметр -->
+	<ampermeter x="2084" y="1100" col_width="35" font_size="16" phase_vert="1" row_height="22" vheader_width="40"/>
+
+	<!-- Экземпляры типа Состояние АРМ -->
+	<arm>
+		<object number="1" name="ДСЦП (О)" x="100" y="100"/>
+		<object number="2" name="ДСЦП (Р)" x="100" y="100"/>
+		<object number="3" name="ШН (О)" x="100" y="100"/>
+		<object number="4" name="ШН (Р)" x="100" y="100"/>
+	</arm>
+
+	<!-- ДЦ-МУ -->
+	<dc_control>
+		<object number="1" name="ДУ/МУ" x="1600" y="655" cl_number="1"/>
+	</dc_control>
+
+	<!-- Объект Ответственные действия -->
+	<responsible_action number="100" name="Команды с кодом бдительности" x="1153" y="590" cl_number="1">
+		<element id="1" x="220" w="210"/>
+		<element id="2" w="210"/>
+	</responsible_action>
+
+	<!-- Экземпляры типа Макет -->
+	<switch_dummy>
+		<object number="1" name="1-6" x="775" y="748" sub_type="1116">
+			<element id="4" y="61"/>
+			<element id="5" x="80" y="61"/>
+			<element id="6" x="83" y="67"/>
+			<element id="7" x="80" y="30"/>
+		</object>
+	</switch_dummy>
+
+	<!-- Экземпляры типа Стрелка -->
+	<switch>
+		<object number="1" x="1867" y="497" name="1">
+				<plus id="1" x="0" y="0" width="2">
+					<point x="0" y="0"/>
+					<point x="-199" y="0"/>
+					<point x="-199" y="14"/>
+					<point x="0" y="14"/>
+				</plus>
+				<busy_in_plus id="17" x="0" y="0" z="3" width="5">
+					<line xbegin="-10" ybegin="7" xend="-190" yend="7"/>
+				</busy_in_plus>
+				<add_plus id="3" x="0" y="0" width="2">
+					<point x="-35" y="140"/>
+					<point x="0" y="140"/>
+					<point x="0" y="154"/>
+					<point x="-46" y="154"/>
+					<point x="-112" y="24"/>
+					<point x="-94" y="24"/>
+				</add_plus>
+				<busy_add_plus id="32" x="0" y="0" z="3" width="5">
+					<line xbegin="-10" ybegin="147" xend="-40" yend="147"/>
+					<line xbegin="-42" ybegin="145" xend="-99" yend="32"/>
+				</busy_add_plus>
+				<minus id="2" x="0" y="0" width="2">
+					<point x="-199" y="0"/>
+					<point x="-199" y="14"/>
+					<point x="-116" y="14"/>
+					<point x="-46" y="154"/>
+					<point x="0" y="154"/>
+					<point x="0" y="140"/>
+					<point x="-35" y="140"/>
+					<point x="-106" y="0"/>
+				</minus>
+				<busy_in_minus id="18" z="3" width="5">
+					<line xbegin="-10" ybegin="147" xend="-40" yend="147"/>
+					<line xbegin="-42" ybegin="145" xend="-111" yend="9"/>
+					<line xbegin="-190" ybegin="7" xend="-113" yend="7"/>
+				</busy_in_minus>
+				<add_minus id="4" width="2">
+					<point x="0" y="0"/>
+					<point x="-96" y="0"/>
+					<point x="-90" y="14"/>
+					<point x="0" y="14"/>
+				</add_minus>
+				<busy_add_minus id="33" z="3" width="5">
+					<line xbegin="-9" ybegin="7" xend="-80" yend="7"/>
+				</busy_add_minus>
+				<d_plus id="15" duplicate_id="1" z="4"/>
+				<d_minus id="16" duplicate_id="2" z="4"/>
+				<calibration id="35" x="-132" y="30" z="-1" fontsize="16" capt="К"/>
+				<lock_firmware id="36" x="-124" y="43" z="-1" fontsize="16" capt="Б"/>
+				<reserve id="5" x="-165" y="10" z="-1" fontsize="16" capt="Р"/>
+				<caption id="6" x="-144" y="20" z="-1"  w="25" h="25" fontsize="16" capt="1"/>
+				<circle id="7" x="-144" y="20" w="25" h="25" rad="100"/>
+				<hex id="20" x="-87" y="20" z="1" w="10" h="10" rad="100" width="1"/>
+				<close_in_safety id="8" x="-90" y="-7" width="3">
+					<line xbegin="0" ybegin="-4" xend="-30" yend="-4"/>
+				</close_in_safety>
+				<closed_in_plus id="10" y="7" z="2" width="14">
+					<line xbegin="-80" ybegin="0" xend="-123" yend="0"/>
+				</closed_in_plus>
+				<closed_in_minus id="11" x="0" y="7" z="2" width="14">
+					<line xbegin="-110" ybegin="2" xend="-101" yend="20"/>
+					<line xbegin="-114" ybegin="0" xend="-123" yend="0"/>
+				</closed_in_minus>
+				<rect id="9" x="-120" y="-7" z="-1" w="30" h="30" rad="0" no_antialiasing="1"/>
+				<no_control id="12" x="-120" y="-7" z="-2" w="30" h="30" rad="0" no_antialiasing="1"/>
+				<y id="14" x="-120" y="-7" z="10" w="30" h="30" rad="0" width="2"/>
+				<bt_plus id="21" ax="2094" ay="1258" w="30" h="30" text="+1" fontsize="18"/> вкс
+				<bt_minus id="22" ax="2094" ay="1298" w="30" h="30" text="-1" fontsize="18"/>
+				<bt_res id="23" ax="1783" ay="1298" w="30" h="30" text="1" fontsize="18"/>
+				<bt_kv id="24" ax="1472" ay="1300" w="30" h="30" text="1" fontsize="18"/>
+				<bt_cap id="25" ax="1160" ay="1298" w="30" h="30" rad="100"/>
+				<bt_text id="26" ax="1160" ay="1298" z="1" w="30" h="30" fontsize="16" capt="1"/>
+				<bt_dummy id="31" ax="775" ay="695" z="1" w="30" h="30" text="1" fontsize="18"/>
+				<current_indicator x="93" y="-45">
+					<val z="11" w="36" h="18" fontsize="14" capt="zzz"/>
+					<rect z="10" w="36" h="18" rad="0" width="2"/>
+				</current_indicator>
+		</object>
+		<object number="2" x="1867" y="988" name="2">
+				<plus id="1" x="0" y="0" width="2">
+					<point x="0" y="0"/>
+					<point x="-199" y="0"/>
+					<point x="-199" y="14"/>
+					<point x="0" y="14"/>
+				</plus>
+				<busy_in_plus id="17" z="3" width="5">
+					<line xbegin="-10" ybegin="7" xend="-190" yend="7"/>
+				</busy_in_plus>
+				<add_plus id="3" x="0" y="0" width="2">
+					<point x="-35" y="-126"/>
+					<point x="0" y="-126"/>
+					<point x="0" y="-140"/>
+					<point x="-46" y="-140"/>
+					<point x="-111" y="-10"/>
+					<point x="-94" y="-10"/>
+				</add_plus>
+				<busy_add_plus id="32" x="0" y="0" z="3" width="5">
+					<line xbegin="-10" ybegin="-133" xend="-40" yend="-133"/>
+					<line xbegin="-42" ybegin="-131" xend="-99" yend="-18"/>
+				</busy_add_plus>
+				<minus id="2" x="0" y="0" width="2">
+					<point x="-35" y="-126"/>
+					<point x="0" y="-126"/>
+					<point x="0" y="-140"/>
+					<point x="-46" y="-140"/>
+					<point x="-116" y="0"/>
+					<point x="-199" y="0"/>
+					<point x="-199" y="14"/>
+					<point x="-107" y="14"/>
+				</minus>
+				<busy_in_minus id="18" x="0" y="7" z="3" width="5">
+					<line xbegin="-10" ybegin="-140" xend="-40" yend="-140"/>
+					<line xbegin="-42" ybegin="-138" xend="-111" yend="-2"/>
+					<line xbegin="-190" ybegin="0" xend="-113" yend="0"/>
+				</busy_in_minus>
+				<add_minus id="4" width="2">
+					<point x="0" y="0"/>
+					<point x="-90" y="0"/>
+					<point x="-96" y="14"/>
+					<point x="0" y="14"/>
+				</add_minus>
+				<busy_add_minus id="33" x="0" y="7" z="3" width="5">
+					<line xbegin="-10" ybegin="0" xend="-80" yend="0"/>
+				</busy_add_minus>
+				<d_plus id="15" duplicate_id="1" z="4"/>
+				<d_minus id="16" duplicate_id="2" z="4"/>
+				<calibration id="35" x="-132" y="-50" z="-1" fontsize="16" capt="К"/>
+				<lock_firmware id="36" x="-132" y="-65" z="-1" fontsize="16" capt="Б"/>
+				<reserve id="5" x="-132" y="-35" z="-1" fontsize="16" capt="Р"/>
+				<caption id="6" x="-144" y="-30" z="-1"  w="25" h="25" fontsize="16" capt="2"/>
+				<circle id="7" x="-144" y="-30" w="25" h="25" rad="100"/>
+				<hex id="20" x="-87" y="-16" z="1" w="10" h="10" rad="100" width="1"/>
+				<close_in_safety id="8" x="-90" y="-9" width="3">
+					<line xbegin="0" ybegin="34" xend="-30" yend="34"/>
+				</close_in_safety>
+				<closed_in_plus id="10" y="7" z="2" width="14">
+					<line xbegin="-80" ybegin="0" xend="-123" yend="0"/>
+				</closed_in_plus>
+				<closed_in_minus id="11" x="0" y="0" z="2" width="14">
+					<line xbegin="-110" ybegin="5" xend="-101" yend="-13"/>
+					<line xbegin="-114" ybegin="7" xend="-123" yend="7"/>
+				</closed_in_minus>
+				<rect id="9" x="-120" y="-9" z="-1" w="30" h="30" rad="0" no_antialiasing="1"/>
+				<no_control id="12" x="-120" y="-9" z="-2" w="30" h="30" rad="0" no_antialiasing="1"/>
+				<y id="14" x="-120" y="-9" z="10" w="30" h="30" rad="0" width="2"/>
+				<bt_plus id="21" ax="2134" ay="1258" w="30" h="30" text="+2" fontsize="18"/> вкс
+				<bt_minus id="22" ax="2134" ay="1298" w="30" h="30" text="-2" fontsize="18"/>
+				<bt_res id="23" ax="1823" ay="1298" w="30" h="30" text="2" fontsize="18"/>
+				<bt_kv id="24" ax="1512" ay="1300" w="30" h="30" text="2" fontsize="18"/>
+				<bt_cap id="25" ax="1200" ay="1298" w="30" h="30" rad="100"/>
+				<bt_text id="26" ax="1200" ay="1298" z="1" w="30" h="30" fontsize="16" capt="2"/>
+				<bt_dummy id="31" ax="815" ay="695" z="1" w="30" h="30" text="2" fontsize="18"/>
+				<current_indicator x="93" y="40">
+					<val z="11" w="36" h="18" fontsize="14" capt="zzz"/>
+					<rect z="10" w="36" h="18" rad="0" width="2"/>
+				</current_indicator>
+		</object>
+		<object number="3" x="1925" y="637" name="3">
+				<plus id="1" x="0" y="0" width="2">
+					<point x="-50" y="0"/>
+					<point x="100" y="0"/>
+					<point x="100" y="14"/>
+					<point x="-50" y="14"/>
+				</plus>
+				<busy_in_plus id="17" y="7" z="3" width="5">
+					<line xbegin="-40" ybegin="0" xend="90" yend="0"/>
+				</busy_in_plus>
+				<add_plus id="3" x="0" y="14" width="2">
+					<point x="45" y="10"/>
+					<point x="88" y="94"/>
+					<point x="99" y="94"/>
+					<point x="99" y="80"/>
+					<point x="63" y="10"/>
+				</add_plus>
+				<busy_add_plus id="32" x="100" y="0" z="3" width="5">
+					<line xbegin="-42" ybegin="32" xend="-7" yend="100"/>
+				</busy_add_plus>
+				<minus id="2" x="0" y="0" width="2">
+					<point x="-50" y="14"/>
+					<point x="40" y="14"/>
+					<point x="88" y="108"/>
+					<point x="99" y="108"/>
+					<point x="99" y="94"/>
+					<point x="50" y="0"/>
+					<point x="-50" y="0"/>
+				</minus>
+				<busy_in_minus id="18" x="0" y="7" z="3" width="5">
+					<line xbegin="45" ybegin="1" xend="93" yend="93"/>
+					<line xbegin="-40" ybegin="0" xend="43" yend="0"/>
+				</busy_in_minus>
+				<add_minus id="4" x="0" y="14" width="2">
+					<point x="67" y="0"/>
+					<point x="100" y="0"/>
+					<point x="100" y="-14"/>
+					<point x="61" y="-14"/>
+				</add_minus>
+				<busy_add_minus id="33" x="0" y="7" z="3" width="5">
+					<line xbegin="74" ybegin="0" xend="90" yend="0"/>
+				</busy_add_minus>
+				<d_plus id="15" duplicate_id="1" z="4"/>
+				<d_minus id="16" duplicate_id="2" z="4"/>
+				<close_in_safety id="8" x="36" y="-7" width="3">
+					<line xbegin="0" ybegin="-4" xend="30" yend="-4"/>
+				</close_in_safety>
+				<closed_in_plus id="10" z="2" width="14">
+					<line xbegin="33" ybegin="7" xend="76" yend="7"/>
+				</closed_in_plus>
+				<closed_in_minus id="11" x="26" z="2" width="14">
+					<line xbegin="7" ybegin="7" xend="17" yend="7"/>
+					<line xbegin="21" ybegin="10" xend="30" yend="28"/>
+				</closed_in_minus>
+				<edge id="37" x="97" y="95" z="3" w="4" h="12" rad="0" no_antialiasing="1"/> прикрывает минус
+				<calibration id="35" x="22" y="25" z="-1" fontsize="16" capt="К"/>
+				<lock_firmware id="36" x="29" y="38" z="-1" fontsize="16" capt="Б"/>
+				<reserve id="5" x="-12" y="10" z="-1" fontsize="16" capt="Р"/>
+				<hex id="20" x="68" y="20" z="1" w="10" h="10" rad="100" width="1"/>
+				<caption id="6" x="11" y="18" z="-1" w="25" h="25" fontsize="16" capt="3"/>
+				<circle id="7" x="11" y="18" w="25" h="25" rad="100"/>
+				<rect id="9" x="36" y="-7" z="-1" w="30" h="30" rad="0" no_antialiasing="1"/>
+				<no_control id="12" x="36" y="-7" z="-2" w="30" h="30" rad="0" no_antialiasing="1"/>
+				<y id="14" x="36" y="-7" z="10" w="30" h="30" rad="0" width="2"/>
+				<bt_plus id="21" ax="2174" ay="1258" w="30" h="30" text="+3" fontsize="18"/> вкс
+				<bt_minus id="22" ax="2174" ay="1298" w="30" h="30" text="-3" fontsize="18"/>
+				<bt_res id="23" ax="1863" ay="1298" w="30" h="30" text="3" fontsize="18"/>
+				<bt_kv id="24" ax="1552" ay="1300" w="30" h="30" text="3" fontsize="18"/>
+				<bt_cap id="25" ax="1240" ay="1298" w="30" h="30" rad="100"/>
+				<bt_text id="26" ax="1240" ay="1298" z="1" w="30" h="30" fontsize="16" capt="3"/>
+				<bt_dummy id="31" ax="855" ay="695" z="1" w="30" h="30" text="3" fontsize="18"/>
+				<current_indicator x="0" y="-45">
+					<val z="11" w="36" h="18" fontsize="14" capt="zzz"/>
+					<rect z="10" w="36" h="18" rad="0" width="2"/>
+				</current_indicator>
+		</object>
+		<object number="4" x="1925" y="848" name="4">
+				<plus id="1" width="2">
+					<point x="-50" y="0"/>
+					<point x="100" y="0"/>
+					<point x="100" y="14"/>
+					<point x="-50" y="14"/>
+				</plus>
+				<busy_in_plus id="17" y="0" z="3" width="5">
+					<line xbegin="-40" ybegin="7" xend="90" yend="7"/>
+				</busy_in_plus>
+				<add_plus id="3" width="2">
+						<point x="45" y="-10"/>
+						<point x="88" y="-94"/>
+						<point x="99" y="-94"/>
+						<point x="99" y="-80"/>
+						<point x="63" y="-10"/>
+				</add_plus>
+				<busy_add_plus id="32" z="3" width="5">
+					<line xbegin="58" ybegin="-18" xend="93" yend="-86"/>
+				</busy_add_plus>
+				<minus id="2" width="2">
+						<point x="-50" y="0"/>
+						<point x="40" y="0"/>
+						<point x="88" y="-94"/>
+						<point x="99" y="-94"/>
+						<point x="99" y="-80"/>
+						<point x="50" y="14"/>
+						<point x="-50" y="14"/>
+				</minus>
+				<busy_in_minus id="18" y="0" z="3" width="5">
+					<line xbegin="45" ybegin="6" xend="93" yend="-86"/>
+					<line xbegin="-40" ybegin="7" xend="43" yend="7"/>
+				</busy_in_minus>
+				<add_minus id="4" width="2">
+					<point x="67" y="0"/>
+					<point x="100" y="0"/>
+					<point x="100" y="14"/>
+					<point x="61" y="14"/>
+				</add_minus>
+				<busy_add_minus id="33" z="3" width="5">
+					<line xbegin="74" ybegin="7" xend="90" yend="7"/>
+				</busy_add_minus>
+				<d_plus id="15" duplicate_id="1" z="4"/>
+				<d_minus id="16" duplicate_id="2" z="4"/>
+				<close_in_safety id="8" width="3">
+					<line xbegin="36" ybegin="25" xend="66" yend="25"/>
+				</close_in_safety>
+				<closed_in_plus id="10" z="2" width="14">
+					<line xbegin="33" ybegin="7" xend="76" yend="7"/>
+				</closed_in_plus>
+				<closed_in_minus id="11" x="26" z="2" width="14">
+					<line xbegin="7" ybegin="7" xend="17" yend="7"/>
+					<line xbegin="21" ybegin="4" xend="30" yend="-14"/>
+				</closed_in_minus>
+				<edge id="37" x="97" y="-93" z="3" w="4" h="12" rad="0" no_antialiasing="1"/> прикрывает минус
+				<calibration id="35" x="27" y="-50" z="-1" fontsize="16" capt="К"/>
+				<lock_firmware id="36" x="33" y="-62" z="-1" fontsize="16" capt="Б"/>
+				<reserve id="5" x="22" y="-38" z="-1" fontsize="16" capt="Р"/>
+				<hex id="20" x="68" y="-16" z="1" w="10" h="10" rad="100" width="1"/>
+				<caption id="6" x="11" y="-30" z="-1" w="25" h="25" fontsize="16" capt="4"/>
+				<circle id="7" x="11" y="-30" w="25" h="25" rad="100"/>
+				<rect id="9" x="36" y="-9" z="-1" w="30" h="30" rad="0" no_antialiasing="1"/>
+				<no_control id="12" x="36" y="-9" z="-2" w="30" h="30" rad="0" no_antialiasing="1"/>
+				<y id="14" x="36" y="-9" z="10" w="30" h="30" rad="0" width="2"/>
+				<bt_plus id="21" ax="2214" ay="1258" w="30" h="30" text="+4" fontsize="18"/> вкс
+				<bt_minus id="22" ax="2214" ay="1298" w="30" h="30" text="-4" fontsize="18"/>
+				<bt_res id="23" ax="1903" ay="1298" w="30" h="30" text="4" fontsize="18"/>
+				<bt_kv id="24" ax="1592" ay="1300" w="30" h="30" text="4" fontsize="18"/>
+				<bt_cap id="25" ax="1280" ay="1298" w="30" h="30" rad="100"/>
+				<bt_text id="26" ax="1280" ay="1298" z="1" w="30" h="30" fontsize="16" capt="4"/>
+				<bt_dummy id="31" ax="895" ay="695" z="1" w="30" h="30" text="4" fontsize="18"/>
+				<current_indicator x="0" y="40">
+					<val z="11" w="36" h="18" fontsize="14" capt="zzz"/>
+					<rect z="10" w="36" h="18" rad="0" width="2"/>
+				</current_indicator>
+		</object>
+		<object number="5" x="2024" y="637" name="5">
+				<plus id="1" x="0" y="0" width="2">
+					<point x="1" y="0"/>
+					<point x="150" y="0"/>
+					<point x="150" y="14"/>
+					<point x="1" y="14"/>
+				</plus>
+				<busy_in_plus id="17" y="0" z="3" width="5">
+					<line xbegin="10" ybegin="7" xend="140" yend="7"/>
+				</busy_in_plus>
+				<add_plus id="3" x="0" y="0" width="2">
+					<point x="55" y="24"/>
+					<point x="12" y="108"/>
+					<point x="1" y="108"/>
+					<point x="1" y="94"/>
+					<point x="37" y="24"/>
+				</add_plus>
+				<busy_add_plus id="32" x="0" y="0" z="3" width="5">
+					<line xbegin="42" ybegin="32" xend="7" yend="100"/>
+				</busy_add_plus>
+				<minus id="2" x="0" y="0" width="2">
+					<point x="150" y="14"/>
+					<point x="60" y="14"/>
+					<point x="12" y="108"/>
+					<point x="1" y="108"/>
+					<point x="1" y="94"/>
+					<point x="50" y="0"/>
+					<point x="150" y="0"/>
+				</minus>
+				<busy_in_minus id="18" x="0" y="7" z="3" width="5">
+					<line xbegin="55" ybegin="1" xend="7" yend="93"/>
+					<line xbegin="140" ybegin="0" xend="57" yend="0"/>
+				</busy_in_minus>
+				<add_minus id="4" x="0" y="0" width="2">
+					<point x="1" y="14"/>
+					<point x="33" y="14"/>
+					<point x="39" y="0"/>
+					<point x="1" y="0"/>
+				</add_minus>
+				<busy_add_minus id="33" x="0" y="0" z="3" width="5">
+					<line xbegin="10" ybegin="7" xend="26" yend="7"/>
+				</busy_add_minus>
+				<d_plus id="15" duplicate_id="1" z="4"/>
+				<d_minus id="16" duplicate_id="2" z="4"/>
+				<edge id="19" x="-1" y="1" z="3" w="4" h="12" rad="0" no_antialiasing="1"/>
+				<calibration id="35" x="37" y="25" z="-1" fontsize="16" capt="К"/>
+				<lock_firmware id="36" x="32" y="38" z="-1" fontsize="16" capt="Б"/>
+				<reserve id="5" x="74" y="10" z="-1" fontsize="16" capt="Р"/>
+				<caption id="6" x="64" y="18" z="-1" w="25" h="25" fontsize="16" capt="5"/>
+				<circle id="7" x="64" y="18" w="25" h="25" rad="100"/>
+				<hex id="20" x="22" y="20" z="1" w="10" h="10" rad="100" width="1"/>
+				<close_in_safety id="8" x="34" y="-7" width="3">
+					<line xbegin="0" ybegin="-4" xend="30" yend="-4"/>
+				</close_in_safety>
+				<closed_in_plus id="10" x="-9" y="0" z="2" width="14">
+					<line xbegin="76" ybegin="7" xend="33" yend="7"/>
+				</closed_in_plus>
+				<closed_in_minus id="11" x="37" y="0" z="2" width="14">
+					<line xbegin="30" ybegin="7" xend="20" yend="7"/>
+					<line xbegin="16" ybegin="10" xend="7" yend="28"/>
+				</closed_in_minus>
+				<rect id="9" x="34" y="-7" z="-1" w="30" h="30" rad="0" no_antialiasing="1"/>
+				<no_control id="12" x="34" y="-7" z="-2" w="30" h="30" rad="0" no_antialiasing="1"/>
+				<y id="14" x="34" y="-7" z="10" w="30" h="30" rad="0" width="2"/>
+				<bt_plus id="21" ax="2254" ay="1258" w="30" h="30" text="+5" fontsize="18"/>
+				<bt_minus id="22" ax="2254" ay="1298" w="30" h="30" text="-5" fontsize="18"/>
+				<bt_res id="23" ax="1943" ay="1298" w="30" h="30" text="5" fontsize="18"/>
+				<bt_kv id="24" ax="1632" ay="1300" w="30" h="30" text="5" fontsize="18"/>
+				<bt_cap id="25" ax="1320" ay="1298" w="30" h="30" rad="100"/>
+				<bt_text id="26" ax="1320" ay="1298" z="1" w="30" h="30" fontsize="16" capt="5"/>
+				<bt_dummy id="31" ax="935" ay="695" z="1" w="30" h="30" text="5" fontsize="18"/>
+				<current_indicator x="94" y="-45">
+					<val z="11" w="36" h="18" fontsize="14" capt="zzz"/>
+					<rect z="10" w="36" h="18" rad="0" width="2"/>
+				</current_indicator>
+		</object>
+		<object number="6" x="2024" y="848" name="6">
+				<plus id="1" x="0" y="0" width="2">
+					<point x="1" y="0"/>
+					<point x="150" y="0"/>
+					<point x="150" y="14"/> 
+					<point x="1" y="14"/>
+				</plus>
+				<busy_in_plus id="17" y="0" z="3" width="5">
+					<line xbegin="10" ybegin="7" xend="140" yend="7"/>
+				</busy_in_plus>
+				<add_plus id="3" x="0" y="0" width="2">
+					<point x="55" y="-10"/>
+					<point x="12" y="-94"/>
+					<point x="1" y="-94"/>
+					<point x="1" y="-80"/>
+					<point x="37" y="-10"/>
+				</add_plus>
+				<busy_add_plus id="32" x="0" y="0" z="3" width="5">
+					<line xbegin="42" ybegin="-18" xend="7" yend="-86"/>
+				</busy_add_plus>
+				<minus id="2" x="0" y="0" width="2">
+					<point x="150" y="0"/>
+					<point x="60" y="0"/>
+					<point x="12" y="-94"/>
+					<point x="1" y="-94"/>
+					<point x="1" y="-80"/>
+					<point x="50" y="14"/>
+					<point x="150" y="14"/>
+				</minus>
+				<busy_in_minus id="18" x="0" y="0" z="3" width="5">
+					<line xbegin="55" ybegin="6" xend="7" yend="-86"/>
+					<line xbegin="140" ybegin="7" xend="57" yend="7"/>
+				</busy_in_minus>
+				<add_minus id="4" x="0" y="0" width="2">
+					<point x="1" y="0"/>
+					<point x="33" y="0"/>
+					<point x="39" y="14"/>
+					<point x="1" y="14"/>
+				</add_minus>
+				<busy_add_minus id="33" x="0" y="0" z="3" width="5">
+					<line xbegin="10" ybegin="7" xend="26" yend="7"/>
+				</busy_add_minus>
+				<d_plus id="15" duplicate_id="1" z="4"/>
+				<d_minus id="16" duplicate_id="2" z="4"/>
+				<edge id="19" x="-1" y="1" z="3" w="4" h="12" rad="0" no_antialiasing="1"/> прикрывает плюс
+				<calibration id="35" x="32" y="-50" z="-1" fontsize="16" capt="К"/>
+				<lock_firmware id="36" x="26" y="-62" z="-1" fontsize="16" capt="Б"/>
+				<reserve id="5" x="41" y="-38" z="-1" fontsize="16" capt="Р"/>
+				<caption id="6" x="64" y="-30" z="-1"  w="25" h="25" fontsize="16" capt="6"/>
+				<circle id="7" x="64" y="-30" w="25" h="25" rad="100"/>
+				<hex id="20" x="22" y="-16" z="1" w="10" h="10" rad="100" width="1"/>
+				<close_in_safety id="8" x="34" y="-9" width="3">
+					<line xbegin="0" ybegin="34" xend="30" yend="34"/>
+				</close_in_safety>
+				<closed_in_plus id="10" x="-9" y="0" z="2" width="14">
+					<line xbegin="76" ybegin="7" xend="33" yend="7"/>
+				</closed_in_plus>
+				<closed_in_minus id="11" x="37" y="0" z="2" width="14">
+					<line xbegin="30" ybegin="7" xend="20" yend="7"/>
+					<line xbegin="16" ybegin="4" xend="7" yend="-14"/>
+				</closed_in_minus>
+				<rect id="9" x="34" y="-9" z="-1" w="30" h="30" rad="0" no_antialiasing="1"/>
+				<no_control id="12" x="34" y="-9" z="-2" w="30" h="30" rad="0" no_antialiasing="1"/>
+				<y id="14" x="34" y="-9" z="10" w="30" h="30" rad="0" width="2"/>
+				<bt_plus id="21" ax="2294" ay="1258" w="30" h="30" text="+6" fontsize="18"/> вкс
+				<bt_minus id="22" ax="2294" ay="1298" w="30" h="30" text="-6" fontsize="18"/>
+				<bt_res id="23" ax="1983" ay="1298" w="30" h="30" text="6" fontsize="18"/>
+				<bt_kv id="24" ax="1672" ay="1300" w="30" h="30" text="6" fontsize="18"/>
+				<bt_cap id="25" ax="1360" ay="1298" w="30" h="30" rad="100"/>
+				<bt_text id="26" ax="1360" ay="1298" z="1" w="30" h="30" fontsize="16" capt="6"/>
+				<bt_dummy id="31" ax="975" ay="695" z="1" w="30" h="30" text="6" fontsize="18"/>
+				<current_indicator x="94" y="40">
+					<val z="11" w="36" h="18" fontsize="14" capt="zzz"/>
+					<rect z="10" w="36" h="18" rad="0" width="2"/>
+				</current_indicator>
+		</object>
+		<!-- Зависимые от состояния друг друга стрелки (second зависит от first) -->
+		<twin_switch first_number="5" second_number="3"/>
+		<twin_switch first_number="3" second_number="5"/>
+		<twin_switch first_number="4" second_number="6"/>
+		<twin_switch first_number="6" second_number="4"/>
+	</switch>
+
+	<!-- Пути -->
+	<tracks>
+		<!-- Экземпляры типа Секция -->
+		<section>
+			<object number="1" name="360" x="50" y="988" dw="95" enable_close_ms="0"/>
+			<object number="2" name="362" x="197" y="988" dw="95" enable_close_ms="0"/>
+			<object number="3" name="364" x="344" y="988" dw="95" enable_close_ms="0"/>
+			<object number="4" name="366" x="491" y="988" dw="95" enable_close_ms="0"/>
+			<object number="5" name="368" x="638" y="988" dw="95" enable_close_ms="1"/>
+			<object number="6" name="370" x="785" y="988" dw="95" enable_close_ms="1"/>
+			<object number="7" name="372" x="932" y="988" dw="95" enable_close_ms="1"/>
+			<object number="8" name="374" x="1079" y="988" dw="95" enable_close_ms="1"/>
+			<object number="9" name="376" x="1226" y="988" dw="95" enable_close_ms="1"/>
+			<object number="10" name="378" x="1373" y="988" dw="95" enable_close_ms="1"/>
+			<object number="11" name="380" x="1520" y="988" dw="95" enable_close_ms="1"/>
+			<object number="12" name="212" x="1668" y="988" enable_blocking="1" sw_section="1" hide_pn_cmd="1">
+				<caption id="2" x="30" y="14" capt="212" fontsize="16"/>
+				<pn id="3" x="27" y="-21" capt="ПН" fontsize="12"/>
+				<lock id="4" z="5" width="2">
+					<point x="0" y="14"/>
+					<point x="199" y="14"/>
+					<point x="199" y="0"/>
+					<point x="100" y="0"/>
+					<point x="164" y="-126"/>
+					<point x="199" y="-126"/>
+					<point x="199" y="-140"/>
+					<point x="153" y="-140"/>
+					<point x="83" y="0"/>
+					<point x="0" y="0"/>
+				</lock>
+				<switch number="2"/>
+			</object>
+			<object number="13" name="214" x="1874" y="988" dw="95" enable_blocking="0"/>
+			<object number="14" name="6" x="1874" y="848" sw_section="1" enable_pn="1" enable_blocking="1">
+				<caption id="2" x="77" y="14" w="147" fontsize="16" capt="6"/>
+				<pn id="3" x="0" y="-20" w="147" fontsize="12" capt="ВН"/>
+				<lock id="4" z="5" width="2">
+					<point x="1" y="0"/>
+					<point x="91" y="0"/>
+					<point x="139" y="-94"/>
+					<point x="150" y="-94"/>
+					<point x="150" y="-80"/>
+					<point x="101" y="14"/>
+					<point x="1" y="14"/>
+					<point x="1" y="0"/>
+					<point x="300" y="0"/>
+					<point x="300" y="14"/>
+					<point x="200" y="14"/>
+					<point x="150" y="-80"/>
+					<point x="150" y="-94"/>
+					<point x="162" y="-94"/>
+					<point x="210" y="0"/>
+					<point x="300" y="0"/>
+					<point x="300" y="14"/>
+					<point x="1" y="14"/>
+				</lock>
+				<busy_line id="6" x="0" y="0" z="3" width="5">
+					<line xbegin="10" ybegin="7" xend="290" yend="7"/>
+					<line xbegin="157" ybegin="-86" xend="205" yend="6"/>
+					<line xbegin="145" ybegin="-87" xend="97" yend="5"/>
+				</busy_line>
+				<switch number="4"/>
+				<switch number="6"/>
+			</object>
+			<object number="15" name="4" x="2181" y="848" dw="62" enable_blocking="1"/>
+			<object number="16" name="4а" x="2295" y="848" dw="62" enable_blocking="1"/>
+			<object number="17" name="4б" x="2409" y="848" dw="62" enable_blocking="1"/>
+			<object number="18" name="3б" x="2409" y="637" dw="62" enable_blocking="1"/>
+			<object number="19" name="3а" x="2295" y="637" dw="62" enable_blocking="1"/>
+			<object number="33" name="3" x="2181" y="637" dw="62" enable_blocking="1"/>
+			<object number="32" name="5" x="1874" y="637" sw_section="1" enable_pn="1" enable_blocking="1">
+				<caption id="2" x="77" y="14" w="147" fontsize="16" capt="5"/>
+				<pn id="3" x="0" y="31" w="147" fontsize="12" capt="ВН"/>
+				<lock id="4" z="5" width="2">
+					<point x="1" y="14"/>
+					<point x="91" y="14"/>
+					<point x="139" y="108"/>
+					<point x="150" y="108"/>
+					<point x="150" y="94"/>
+					<point x="101" y="0"/>
+					<point x="1" y="0"/>
+					<point x="1" y="14"/>
+					<point x="300" y="14"/>
+					<point x="300" y="0"/>
+					<point x="200" y="0"/>
+					<point x="150" y="94"/>
+					<point x="150" y="108"/>
+					<point x="162" y="108"/>
+					<point x="210" y="14"/>
+					<point x="300" y="14"/>
+					<point x="300" y="0"/>
+					<point x="1" y="0"/>
+				</lock>
+				<busy_line id="6" x="0" y="0" z="3" width="5">
+					<line xbegin="10" ybegin="7" xend="290" yend="7"/>
+					<line xbegin="156" ybegin="101" xend="204" yend="9"/>
+					<line xbegin="145" ybegin="101" xend="97" yend="9"/>
+				</busy_line>
+				<switch number="3"/>
+				<switch number="5"/>
+			</object>
+			<object number="31" name="271" x="1668" y="497" enable_blocking="1" sw_section="1" hide_pn_cmd="1">
+				<caption id="2" x="130" y="14" capt="271" fontsize="16"/>
+				<pn id="3" x="15" y="-21" capt="ПН" fontsize="12"/>
+				<lock id="4" z="5" width="2">
+					<point x="0" y="0"/>
+					<point x="199" y="0"/>
+					<point x="199" y="14"/>
+					<point x="100" y="14"/>
+					<point x="164" y="140"/>
+					<point x="199" y="140"/>
+					<point x="199" y="154"/>
+					<point x="153" y="154"/>
+					<point x="83" y="14"/>
+					<point x="0" y="14"/>
+				</lock>
+				<switch number="1"/>
+			</object>
+			<object number="30" name="273" x="1520" y="497" dw="95" enable_blocking="1"/>
+			<object number="29" name="275" x="1373" y="497" dw="95" enable_close_ms="1"/>
+			<object number="28" name="277" x="1226" y="497" dw="95" enable_close_ms="1"/>
+			<object number="27" name="279" x="1079" y="497" dw="95" enable_close_ms="1"/>
+			<object number="26" name="311" x="932" y="497" dw="95" enable_close_ms="0"/>
+			<object number="25" name="313" x="785" y="497" dw="95" enable_close_ms="0"/>
+			<object number="24" name="315" x="638" y="497" dw="95" enable_close_ms="0"/>
+			<object number="23" name="317" x="491" y="497" dw="95" enable_close_ms="0"/>
+			<object number="22" name="319" x="344" y="497" dw="95" enable_close_ms="0"/>
+			<object number="21" name="321" x="197" y="497" dw="95" enable_close_ms="0"/>
+			<object number="20" name="323" x="50" y="497" dw="95" enable_close_ms="0"/>
+			<object number="1" name="312-320" x="50" y="1100" dw="30"/>
+			<object number="2" name="322" x="136" y="1100" dw="30"/>
+			<object number="3" name="324" x="222" y="1100" dw="30"/>
+			<object number="4" name="359" x="652" y="350" dw="30"/>
+			<object number="5" name="361" x="566" y="350" dw="30"/>
+			<object number="6" name="363" x="480" y="350" dw="30"/>
+			<object number="7" name="365" x="394" y="350" dw="30"/>
+			<object number="8" name="367" x="308" y="350" dw="30"/>
+			<object number="9" name="369" x="222" y="350" dw="30"/>
+			<object number="10" name="371" x="136" y="350" dw="30"/>
+			<object number="11" name="373-379" x="50" y="350" dw="30"/>
+		</section>
+	</tracks>
+	<lights>
+		<!-- Экземпляры типа Светофор -->
+		<x_light>
+			<!-- Дополнительные подтипы станции -->
+			<sub_types>
+				<sub_type id="1012" str="Кнопка отключения сигнала абсолютной остановки светофоров БК-34/ОП"/>
+			</sub_types>
+			<object number="1" name="БК-22" x="1673" y="1065" base_visible="0" capt_dx="-26" dir="even" pointID="4" rules_id="6">
+				<element id="5" x="83" y="5"/>
+				<element id="12" x="83" y="-9"/>
+				<av_button ax="495" ay="1307" w="90" h="20" no_antialiasing="1" sub_type="1011" text="22АВ" width="1"/>
+			</object>
+			<object number="2" name="БК-4" x="2110" y="774" base_visible="0" capt_dx="25" dir="odd" pointID="3" rules_id="4">
+				<element id="5" x="-13" y="-8"/>
+				<av_button ax="737" ay="1307" w="90" h="20" no_antialiasing="1" sub_type="1011" text="4АВ" width="1"/>
+			</object>
+			<object number="3" name="БК-3" x="2110" y="563" base_visible="0" capt_dx="25" dir="odd" pointID="2" rules_id="4">
+				<element id="5" x="-13" y="-8"/>
+				<av_button ax="616" ay="1307" w="90" h="20" no_antialiasing="1" sub_type="1011" text="3АВ" width="1"/>
+			</object>
+			<object number="4" name="Д" x="1673" y="423" base_visible="0" capt_dx="-25" dir="even" pointID="1" rules_id="4">
+				<element id="5" x="83" y="5"/>
+				<element id="12" x="83" y="-9"/>
+				<av_button ax="859" ay="1307" w="90" h="20" no_antialiasing="1" sub_type="1011" text="ДАВ" width="1"/>
+			</object>
+			<object number="5" name="БК-34" x="635" y="1065" capt_dx="-10" dir="even" pointID="5" rules_id="5">
+				<element id="5" x="57" y="5"/>
+				<av_button ax="374" ay="1307" w="90" h="20" no_antialiasing="1" sub_type="1012" text="34/ОПАВ" width="1"/>
+			</object>
+			<object number="6" name="ДОП" x="1836" y="919" capt_dx="5" dir="odd" dw="13" rules_id="2"/>
+			<object number="7" name="ОП" x="600" y="1025" dir="odd" dw="13" rules_id="2"/>
+			<object number="8" name="31" x="1040" y="423" dir="odd" rules_id="2"/>
+			<object number="9" name="БК-23" x="1815" y="423" base_visible="1" capt_dx="25" dir="odd" hide="1" rules_id="4">
+				<element id="5" x="-13" y="-8"/>
+				<av_button ax="616" ay="1307" w="90" h="20" no_antialiasing="1" sub_type="1011" text="23АВ" width="1"/>
+			</object>
+			<object number="10" name="БК-22." x="1709" y="1065" base_visible="0" dir="odd" hide="1" rules_id="16">
+				<element id="5" x="11" y="5"/>
+				<element id="7" x="30" y="18"/>
+			</object>
+		</x_light>
+		<!-- Экземпляры типа Светофор увязки -->
+		<okd_light>
+			
+		</okd_light>
+		<!-- Экземпляры типа Звонок -->
+		<x_ring>
+			<object number="1" name="Зв.1" x="1783" y="463" lamp_number="0"/>
+			<object number="2" name="Зв.3" x="2226" y="600" lamp_number="1"/>
+			<object number="3" name="Зв.3а" x="2340" y="600" lamp_number="2"/>
+			<object number="4" name="Зв.2" x="1783" y="1008" lamp_number="0"/>
+			<object number="5" name="Зв.4" x="2226" y="811" lamp_number="1"/>
+			<object number="6" name="Зв.4а" x="2340" y="811" lamp_number="2"/>
+		</x_ring>
+		<!-- Экземпляры типа Управление звонками -->
+		<ring_control>
+			<object number="1" name="Зв.1,3,3а,2,4,4а" x="1151" y="1180" shadow="1"/>
+		</ring_control>
+	</lights>
+
+	<!-- Объекты метро -->
+	<metro>
+		<timers>
+			<timer number="1" x="1077" y="655" bit_size="4" byte_size="1" time_limit="5999" color_green="CLGN" color_red="CLLRD">
+				<caption z="13" w="60" capt="00:00" color="CLGN" fontsize="18"/>
+				<rect z="12" w="60" h="25" border_color="CGY" fill_color="CGY" width="1"/>
+				<bit_combination>
+					<bit number="3" state="0"/>
+				</bit_combination>
+			</timer>
+			<timer number="2" x="1603" y="819" bit_size="4" byte_size="1" time_limit="5999" color_green="CLGN" color_red="CLLRD">
+				<caption z="13" w="60" capt="00:00" color="CLGN" fontsize="18"/>
+				<rect z="12" w="60" h="25" border_color="CGY" fill_color="CGY" width="1"/>
+				<bit_combination>
+					<bit number="3" state="0"/>
+				</bit_combination>
+			</timer>
+		</timers>
+		<!-- Экземпляры типа Секция увязки -->
+		<approx_away_sections>
+			<object number="1" name="312-320" x="50" y="1100" dw="30"/>
+			<object number="2" name="322" x="136" y="1100" dw="30"/>
+			<object number="3" name="324" x="222" y="1100" dw="30"/>
+			<object number="4" name="359" x="652" y="350" dw="30"/>
+			<object number="5" name="361" x="566" y="350" dw="30"/>
+			<object number="6" name="363" x="480" y="350" dw="30"/>
+			<object number="7" name="365" x="394" y="350" dw="30"/>
+			<object number="8" name="367" x="308" y="350" dw="30"/>
+			<object number="9" name="369" x="222" y="350" dw="30"/>
+			<object number="10" name="371" x="136" y="350" dw="30"/>
+			<object number="11" name="373-379" x="50" y="350" dw="30"/>
+		</approx_away_sections>
+		<!-- Экземпляры типа Скорость движения по секции -->
+		<speed_limits config_param="0">
+			<object number="1" name="360" x="88" y="958"/>
+			<object number="2" name="362" x="235" y="958"/>
+			<object number="3" name="364" x="382" y="958"/>
+			<object number="4" name="366" x="529" y="958"/>
+			<object number="5" name="368" x="676" y="958"/>
+			<object number="6" name="370" x="823" y="958"/>
+			<object number="7" name="372" x="970" y="958" excl_cmd="1"/>
+			<object number="8" name="374" x="1117" y="958" excl_cmd="1,2"/>
+			<object number="9" name="376" x="1264" y="958" excl_cmd="1,2"/>
+			<object number="10" name="378" x="1411" y="958" excl_cmd="1,2,3"/>
+			<object number="11" name="380" x="1558" y="958" excl_cmd="1,2,3"/>
+			<object number="12" name="311" x="970" y="464" excl_cmd="1"/>
+			<object number="13" name="313" x="823" y="464"/>
+			<object number="14" name="315" x="676" y="464"/>
+			<object number="15" name="317" x="529" y="464"/>
+			<object number="16" name="319" x="382" y="464"/>
+			<object number="17" name="321" x="235" y="464"/>
+			<object number="18" name="323" x="88" y="464"/>
+		</speed_limits>
+		<!-- Экземпляры типа Генератор кодов АРС -->
+		<gars_indicators config_param="0">
+			<!-- <object number="1" name="269ПГА" x="1831" y="463"/> -->
+			<object number="2" name="273ПГА" x="1624" y="463"/>
+			<object number="3" name="275/77ПГА" x="1352" y="463"/>
+			<object number="4" name="279ПГА" x="1080" y="463"/>
+			<object number="5" name="313/15ПГА" x="764" y="463"/>
+			<object number="6" name="317/19ПГА" x="470" y="463"/>
+			<object number="7" name="321/23ПГА" x="176" y="463"/>
+			<object number="8" name="5ГА" x="2005" y="603"/>
+			<object number="9" name="3/3аПГА" x="2274" y="603"/>
+			<object number="10" name="3бПГА" x="2480" y="603"/>
+			<object number="11" name="273/75РГА" x="1499" y="463"/>
+			<object number="12" name="277/79РГА" x="1205" y="463"/>
+			<object number="13" name="311/13РГА" x="911" y="463"/>
+			<object number="14" name="315/17РГА" x="617" y="463"/>
+			<object number="15" name="319/21РГА" x="323" y="463"/>
+			<object number="16" name="323РГА" x="51" y="463"/>
+			<object number="17" name="271Р1ГА" x="1668" y="463"/>
+			<object number="18" name="271Р2ГА" x="1831" y="603"/>
+			<object number="19" name="3РГА" x="2182" y="603"/>
+			<object number="20" name="3а/3бРГА" x="2388" y="603"/>
+			<object number="21" name="360/62ПГА" x="176" y="954"/>
+			<object number="22" name="364/66ПГА" x="470" y="954"/>
+			<object number="23" name="368/70ПГА" x="764" y="954"/>
+			<object number="24" name="372ПГА" x="1036" y="954"/>
+			<object number="25" name="374ПГА" x="1080" y="954"/>
+			<object number="26" name="376/78ПГА" x="1352" y="954"/>
+			<object number="27" name="380ПГА" x="1624" y="954"/>
+			<object number="28" name="212ПГА" x="1668" y="954"/>
+			<object number="29" name="6ГА" x="2006" y="814"/>
+			<object number="30" name="4/4аПГА" x="2274" y="814"/>
+			<object number="31" name="4бПГА" x="2480" y="814"/>
+			<object number="32" name="362/64РГА" x="323" y="954"/>
+			<object number="33" name="366РГА" x="595" y="954"/>
+			<object number="34" name="368РГА" x="639" y="954"/>
+			<object number="35" name="370/72РГА" x="911" y="954"/>
+			<object number="36" name="374/76РГА" x="1205" y="954"/>
+			<object number="37" name="378/80РГА" x="1499" y="954"/>
+			<!-- <object number="38" name="212Р1ГА" x="###" y="###"/> -->
+			<object number="39" name="212Р2ГА" x="1831" y="814"/>
+			<!-- <object number="40" name="214/216РГА" x="###" y="###"/> -->
+			<object number="41" name="4РГА" x="2182" y="814"/>
+			<object number="42" name="4а/4бРГА" x="2388" y="814"/>
+			
+		</gars_indicators>
+		<!-- Экземпляры типа Генератор ТРЦ -->
+		<trc_indicators>
+			<object number="1" name="321/23ГП" x="182" y="517"/>
+			<object number="2" name="317/19ГП" x="476" y="517"/>
+			<object number="3" name="313/15ГП" x="770" y="517"/>
+			<object number="4" name="311ГП" x="1048" y="517"/>
+			<object number="5" name="279ГП" x="1080" y="517"/>
+			<object number="6" name="275/77ГП" x="1358" y="517"/>
+			<object number="7" name="273ГП" x="1636" y="517"/>
+			<object number="8" name="271ГП" x="1843" y="517"/>
+			<object number="9" name="3/3аГП" x="2280" y="657"/>
+			<object number="10" name="3бГП" x="2492" y="657"/>
+			<object number="11" name="360/62ГП" x="182" y="1009"/>
+			<object number="12" name="364/66ГП" x="476" y="1009"/>
+			<object number="13" name="368/70ГП" x="770" y="1009"/>
+			<object number="14" name="372ГП" x="1048" y="1009"/>
+			<object number="15" name="374ГП" x="1080" y="1009"/>
+			<object number="16" name="376/78ГП" x="1358" y="1009"/>
+			<object number="17" name="380ГП" x="1636" y="1009"/>
+			<object number="18" name="212ГП" x="1668" y="1009"/>
+			<object number="19" name="214ГП" x="1875" y="1009"/>
+			<object number="20" name="4/4аГП" x="2280" y="868"/>
+			<object number="21" name="4бГП" x="2492" y="868"/>
+		</trc_indicators>
+		<!-- Экземпляры типа Объединение РЦ -->
+		<buttons>
+			<object number="1" name="275/77 ПГА" x="1347" y="534"/>
+			<object number="2" name="313/15 ПГА" x="759" y="534"/>
+			<object number="3" name="317/19 ПГА" x="465" y="534"/>
+			<object number="4" name="321/23 ПГА" x="171" y="534"/>
+			<object number="5" name="3/3а ПГА" x="2269" y="674"/>
+			<object number="6" name="273/75 РГА" x="1494" y="534"/>
+			<object number="7" name="277/79 РГА" x="1200" y="534"/>
+			<object number="8" name="311/13 РГА" x="906" y="534"/>
+			<object number="9" name="315/17 РГА" x="612" y="534"/>
+			<object number="10" name="319/21 РГА" x="318" y="534"/>
+			<object number="11" name="3а/3б РГА" x="2383" y="674"/>
+			<object number="12" name="360/62 ПГА" x="171" y="1026"/>
+			<object number="13" name="364/66 ПГА" x="465" y="1026"/>
+			<object number="14" name="368/70 ПГА" x="759" y="1026"/>
+			<object number="15" name="376/78 ПГА" x="1347" y="1026"/>
+			<object number="16" name="4/4а ПГА" x="2269" y="885"/>
+			<object number="17" name="362/64 РГА" x="318" y="1026"/>
+			<object number="18" name="370/72 РГА" x="906" y="1026"/>
+			<object number="19" name="374/76 РГА" x="1200" y="1026"/>
+			<object number="20" name="378/80 РГА" x="1494" y="1026"/>
+			<object number="21" name="4а/4б РГА" x="2383" y="885"/>
+		</buttons>
+		<!-- Экземпляры типа Изолированный стык -->
+		<iso_joints>
+			<object number="1" name="279/311" x="260" y="105"/>
+			<object number="4" name="380/212" x="360" y="105"/>
+		</iso_joints>
+		<!-- Экземпляры типа Блок-участок -->
+		<traffic_mode>
+			<object number="1" name="502" x="1643" y="1180" dw="20"/>
+			<object number="2" name="42" x="1743" y="1180" dw="20"/>
+			<object number="3" name="32" x="1843" y="1180" dw="20"/>
+			<object number="4" name="22Д" x="1943" y="1180" dw="20"/>
+			<object number="5" name="21" x="1743" y="335" dw="20"/>
+			<object number="6" name="31" x="1843" y="335" dw="20"/>
+			<object number="7" name="41" x="1943" y="335" dw="20"/>
+		</traffic_mode>
+		<!-- Экземпляры типа Номер маршрута -->
+		<train_numbers>
+			<object number="1" name="" x="77" y="462" ab_track_ts="1" dx_no_dsp="-1" dy_no_dsp="20"/>
+			<object number="2" name="" x="154" y="462" ab_track_ts="2" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="3" name="" x="240" y="462" ab_track_ts="3" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="4" name="" x="326" y="462" ab_track_ts="4" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="5" name="" x="412" y="462" ab_track_ts="5" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="6" name="" x="498" y="462" ab_track_ts="6" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="7" name="" x="584" y="462" ab_track_ts="7" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="8" name="" x="669" y="462" ab_track_ts="8" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="9" name="" x="755" y="462" ab_track_ts="9" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="10" name="" x="841" y="462" ab_track_ts="10" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="11" name="" x="942" y="462" ab_track_ts="11" dx_no_dsp="-3" dy_no_dsp="20"/>
+			<object number="12" name="" x="1203" y="462" ab_track_ts="12" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="13" name="" x="1336" y="462" ab_track_ts="13" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="14" name="" x="1441" y="462" ab_track_ts="14" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="15" name="" x="1551" y="462" ab_track_ts="15" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="16" name="" x="1652" y="462" ab_track_ts="16" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="17" name="" x="1882" y="462" ab_track_ts="17" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="18" name="" x="2064" y="462" ab_track_ts="18" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="19" name="" x="2240" y="462" ab_track_ts="19" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="20" name="" x="2415" y="462" ab_track_ts="20" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="21" name="" x="68" y="954" ab_track_ts="21" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="22" name="" x="154" y="954" ab_track_ts="22" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="23" name="" x="240" y="954" ab_track_ts="23" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="24" name="" x="326" y="954" ab_track_ts="24" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="25" name="" x="412" y="954" ab_track_ts="25" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="26" name="" x="498" y="954" ab_track_ts="26" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="27" name="" x="584" y="954" ab_track_ts="27" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="28" name="" x="669" y="954" ab_track_ts="28" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="29" name="" x="755" y="954" ab_track_ts="29" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="30" name="" x="828" y="954" ab_track_ts="30" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="31" name="" x="1050" y="954" ab_track_ts="31" dx_no_dsp="-12" dy_no_dsp="20"/>
+			<object number="32" name="" x="1200" y="954" ab_track_ts="32" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="33" name="" x="1336" y="954" ab_track_ts="33" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="34" name="" x="1441" y="954" ab_track_ts="34" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="35" name="" x="1551" y="954" ab_track_ts="35" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="36" name="" x="1652" y="954" ab_track_ts="36" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="37" name="" x="1882" y="954" ab_track_ts="37" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="38" name="" x="2061" y="954" ab_track_ts="38" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="39" name="" x="2239" y="954" ab_track_ts="39" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="40" name="" x="2415" y="954" ab_track_ts="40" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="41" name="" x="145" y="627" ab_track_ts="41" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="42" name="" x="258" y="627" ab_track_ts="42" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="43" name="" x="373" y="627" ab_track_ts="43" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="44" name="" x="490" y="627" ab_track_ts="44" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="45" name="" x="645" y="627" ab_track_ts="45" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="46" name="" x="2153" y="627" ab_track_ts="46" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="47" name="" x="2235" y="627" ab_track_ts="47" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="48" name="" x="2342" y="627" ab_track_ts="48" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="49" name="" x="2451" y="627" ab_track_ts="49" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="50" name="" x="775" y="627" ab_track_ts="50" dx_no_dsp="71" dy_no_dsp="20"/>
+			<object number="51" name="" x="2000" y="627" ab_track_ts="51" dx_no_dsp="-63" dy_no_dsp="20"/>
+			<object number="52" name="" x="145" y="793" ab_track_ts="52" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="53" name="" x="258" y="793" ab_track_ts="53" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="54" name="" x="373" y="793" ab_track_ts="54" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="55" name="" x="490" y="793" ab_track_ts="55" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="56" name="" x="645" y="793" ab_track_ts="56" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="57" name="" x="2153" y="793" ab_track_ts="57" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="58" name="" x="2235" y="793" ab_track_ts="58" dx_no_dsp="0" dy_no_dsp="20"/>
+			<object number="61" name="" x="775" y="858" ab_track_ts="61" dx_no_dsp="71" dy_no_dsp="-17"/>
+			<object number="62" name="" x="2000" y="858" ab_track_ts="62" dx_no_dsp="-63" dy_no_dsp="-16"/>
+		</train_numbers>
+		<!-- Экземпляры типа Часть маршрута -->
+		<sig_group>
+			<object number="1" name="1сЗ" x="2084" y="310" dw="10" text="БК-3-Д 1/2ч&#13;&#10;БК-4-Д 1/2ч">
+				<element id="3" y="68" fontsize="12"/>
+			</object>
+			<object number="2" name="1З" x="2185" y="310" dw="10" text="БК-3-Д 1ч&#13;&#10;БК-4-Д 1ч">
+				<element id="3" y="68" fontsize="12"/>
+			</object>
+			<object number="3" name="ДЗ" x="2286" y="310" dw="10" text="Д-БК-3&#13;&#10;Д-БК-4">
+				<element id="3" y="68" fontsize="12"/>
+			</object>
+			<object number="4" name="2а/1З" x="374" y="1155" dw="10" text="БК-34-2аАс-IIП 1ч&#13;&#10;БК-34-IIП 1ч">
+				<element id="3" y="68" fontsize="10"/>
+			</object>
+			<object number="5" name="2а/2З" x="475" y="1155" dw="10" text="БК-34-2аАс-IIП 2ч&#13;&#10;БК-34-IIП 2ч">
+				<element id="3" y="68" fontsize="10"/>
+			</object>
+			<object number="6" name="2а/3З" x="576" y="1155" dw="10" text="БК-34-2аАс-IIП 3ч&#13;&#10;БК-34-IIП 3ч" timer="1">
+				<element id="3" y="68" fontsize="10"/>
+			</object>
+			<object number="7" name="2З" x="677" y="1155" dw="10" text="БК-22-БК-3 1ч&#13;&#10;БК-22-БК-4 1ч" timer="1">
+				<element id="3" y="68" fontsize="10"/>
+			</object>
+			<object number="8" name="2сЗ" x="778" y="1155" dw="10" text="БК-22-БК-3 1/2ч&#13;&#10;БК-22-БК-4 1/2ч">
+				<element id="3" y="68" fontsize="10"/>
+			</object>
+			<object number="9" name="2бЗ" x="879" y="1155" dw="10" text="БК-3-БК-22&#13;&#10;БК-4-БК-22">
+				<element id="3" y="68" fontsize="10"/>
+			</object>
+		</sig_group>
+		<!-- Экземпляры типа Маршрутный указатель -->
+		<route_pointer>
+			<object number="1" name="БК-3" x="2158" y="564" cl_number="2" config_lamps="1,2,-,-" dir="odd">
+				<element id="5" x="0" y="-22"/>
+			</object>
+			<object number="2" name="БК-22" x="1664" y="1066" cl_number="6" config_lamps="2,3,4,-,-" dir="even"/>
+			<object number="3" name="Д" x="1664" y="424" cl_number="7" config_lamps="3,4,-,-,-" dir="even"/>
+			<object number="4" name="БК-4" x="2158" y="775" cl_number="8" config_lamps="1,2,-,-" dir="odd">
+				<element id="5" x="0" y="-22"/>
+			</object>
+		</route_pointer>
+		<!-- Экземпляры типа Автоматический режим -->
+		<auto_mode>
+			<object number="1" name="2аАС" x="562" y="1105" cl_number="1" conf="1"/>
+			<object number="2" name="4АД" x="1726" y="790" cl_number="4"/>
+			<object number="3" name="3АД" x="1726" y="685" cl_number="5"/>
+			<object number="4" name="АРК" x="1726" y="720" cl_number="10"/>
+			<object number="5" name="АРП" x="1726" y="755" cl_number="11"/>
+		</auto_mode>
+
+		<!-- Переменные ТС -->
+		<ts>
+			<geometry>
+				<caption id="1" x="20" y="0" w="380" h="30" fontsize="18"/>
+				<caption id="2" x="400" y="0" w="100" h="30" fontsize="18"/>
+				<caption id="3" x="500" y="0" w="100" h="30" fontsize="18"/>
+				<caption id="4" x="600" y="0" w="100" h="30" fontsize="18"/>
+				<caption id="5" x="700" y="0" w="100" h="30" fontsize="18"/>
+				<caption id="6" x="800" y="0" w="100" h="30" fontsize="18"/>
+				<caption id="7" x="900" y="0" w="100" h="30" fontsize="18"/>
+				<caption id="8" x="1000" y="0" w="100" h="30" fontsize="18"/>
+				<caption id="9" x="1100" y="0" w="100" h="30" fontsize="18"/>
+				<caption id="10" x="1200" y="0" w="100" h="30" fontsize="18"/>
+				<caption id="11" x="1300" y="0" w="100" h="30" fontsize="18"/>
+				<caption id="12" x="1400" y="0" w="100" h="30" fontsize="18"/>
+				<caption id="13" x="1500" y="0" w="100" h="30" fontsize="18"/>
+				<caption id="14" x="1600" y="0" w="100" h="30" fontsize="18"/>
+				<caption id="15" x="1700" y="0" w="100" h="30" fontsize="18"/>
+				<caption id="16" x="1800" y="0" w="100" h="30" fontsize="18"/>
+			</geometry>
+			<objects>
+				<object number="1" name="Стр. 1, тип ТС 1" rules_id="1" scene_id="2"/>
+				<object number="2" name="Стр. 3, тип ТС 1" rules_id="1" scene_id="2"/>
+				<object number="3" name="Стр. 5, тип ТС 1" rules_id="1" scene_id="2"/>
+				<object number="4" name="Стр. 2, тип ТС 1" rules_id="1" scene_id="2"/>
+				<object number="5" name="Стр. 4, тип ТС 1" rules_id="1" scene_id="2"/>
+				<object number="6" name="Стр. 6, тип ТС 1" rules_id="1" scene_id="2"/>
+				<object number="1" name="Авт. м-т 2аАС, тип ТС 2" rules_id="2" scene_id="2"/>
+				<object number="5" name="Авт. м-т 3АД, тип ТС 2" rules_id="2" scene_id="2"/>
+				<object number="4" name="Авт. м-т 4АД, тип ТС 2" rules_id="2" scene_id="2"/>
+				<object number="10" name="Авт. м-т АРК, тип ТС 2" rules_id="2" scene_id="2"/>
+				<object number="11" name="Авт. м-т АРП, тип ТС 2" rules_id="2" scene_id="2"/>
+				<object number="1" name="СГ 1З, тип ТС 3" rules_id="3" scene_id="2"/>
+				<object number="2" name="СГ 1сЗ, тип ТС 3" rules_id="3" scene_id="2"/>
+				<object number="3" name="СГ ДЗ, тип ТС 3" rules_id="3" scene_id="2"/>
+				<object number="4" name="СГ 2а/1З, тип ТС 3" rules_id="3" scene_id="2"/>
+				<object number="5" name="СГ 2а/2З, тип ТС 3" rules_id="3" scene_id="2"/>
+				<object number="6" name="СГ 2а/3З, тип ТС 3" rules_id="3" scene_id="2"/>
+				<object number="7" name="СГ 2З, тип ТС 3" rules_id="3" scene_id="2"/>
+				<object number="8" name="СГ 2сЗ, тип ТС 3" rules_id="3" scene_id="2"/>
+				<object number="9" name="СГ 2бЗ, тип ТС 3" rules_id="3" scene_id="2"/>
+				<object number="1" name="Маршрут №1 1 часть, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="2" name="Маршрут №1 2 часть, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="3" name="Маршрут №2 1 часть, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="4" name="Маршрут №2 2 часть, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="5" name="Маршрут №3, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="6" name="Маршрут №4, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="7" name="Маршрут №6 1 часть, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="8" name="Маршрут №6 2 часть, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="9" name="Маршрут №6 3 часть, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="10" name="Маршрут №7 1 часть, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="11" name="Маршрут №7 2 часть, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="12" name="Маршрут №8 1 часть, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="13" name="Маршрут №8 2 часть, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="14" name="Маршрут №9, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="15" name="Маршрут №10, тип ТС 6" rules_id="6" scene_id="2"/>
+				<object number="1" name="Зв.№1, тип ТС 7" rules_id="7" scene_id="2"/>
+				<object number="2" name="Зв.№3, тип ТС 7" rules_id="7" scene_id="2"/>
+				<object number="3" name="Зв.№3а, тип ТС 7" rules_id="7" scene_id="2"/>
+				<object number="4" name="Зв.№2, тип ТС 7" rules_id="7" scene_id="2"/>
+				<object number="5" name="Зв.№4, тип ТС 7" rules_id="7" scene_id="2"/>
+				<object number="6" name="Зв.№4а, тип ТС 7" rules_id="7" scene_id="2"/>
+				<object number="2" name="31, тип ТС 8" rules_id="8" scene_id="2"/>
+				<object number="3" name="Д, тип ТС 8" rules_id="8" scene_id="2"/>
+				<object number="4" name="БК-3, тип ТС 8" rules_id="8" scene_id="2"/>
+				<object number="5" name="БК-22, тип ТС 8" rules_id="8" scene_id="2"/>
+				<object number="6" name="БК-4, тип ТС 8" rules_id="8" scene_id="2"/>
+				<object number="7" name="ОП, тип ТС 8" rules_id="8" scene_id="2"/>
+				<object number="8" name="БК-34, тип ТС 8" rules_id="8" scene_id="2"/>
+				<object number="9" name="ДОП, тип ТС 8" rules_id="8" scene_id="2"/>
+				<object number="1" name="34КН, тип ТС 9" rules_id="9" scene_id="2"/>
+				<object number="2" name="IIпКН, тип ТС 9" rules_id="9" scene_id="2"/>
+				<object number="3" name="22нКН, тип ТС 9" rules_id="9" scene_id="2"/>
+				<object number="4" name="22чКН, тип ТС 9" rules_id="9" scene_id="2"/>
+				<object number="6" name="4-2КН, тип ТС 9" rules_id="9" scene_id="2"/>
+				<object number="7" name="3-2КН, тип ТС 9" rules_id="9" scene_id="2"/>
+				<object number="8" name="Д-3/4нКН, тип ТС 9" rules_id="9" scene_id="2"/>
+				<object number="9" name="ДчКН, тип ТС 9" rules_id="9" scene_id="2"/>
+				<object number="10" name="3-1КН, тип ТС 9" rules_id="9" scene_id="2"/>
+				<object number="11" name="4-1КН, тип ТС 9" rules_id="9" scene_id="2"/>
+				<object number="1" name="279/311, тип ТС 10" rules_id="10" scene_id="2"/>
+				<object number="2" name="380/212, тип ТС 10" rules_id="10" scene_id="2"/>
+				<object number="1" name="502ВС, тип ТС 11" rules_id="11" scene_id="2"/>
+				<object number="2" name="42ВС, тип ТС 11" rules_id="11" scene_id="2"/>
+				<object number="3" name="32ВС, тип ТС 11" rules_id="11" scene_id="2"/>
+				<object number="4" name="22дВС, тип ТС 11" rules_id="11" scene_id="2"/>
+				<object number="5" name="21ВС, тип ТС 11" rules_id="11" scene_id="2"/>
+				<object number="6" name="31ВС, тип ТС 11" rules_id="11" scene_id="2"/>
+				<object number="7" name="41ВС, тип ТС 11" rules_id="11" scene_id="2"/>
+				<object number="1" name="1-6КУК, тип ТС 13" rules_id="13" scene_id="2"/>
+				<object number="8" name="368ЧУ, тип ТС 14" rules_id="14" scene_id="2"/>
+				<object number="9" name="370ЧУ, тип ТС 14" rules_id="14" scene_id="2"/>
+				<object number="10" name="372ЧУ, тип ТС 14" rules_id="14" scene_id="2"/>
+				<object number="11" name="374ЧУ, тип ТС 14" rules_id="14" scene_id="2"/>
+				<object number="12" name="376ЧУ, тип ТС 14" rules_id="14" scene_id="2"/>
+				<object number="13" name="378ЧУ, тип ТС 14" rules_id="14" scene_id="2"/>
+				<object number="14" name="380ЧУ, тип ТС 14" rules_id="14" scene_id="2"/>
+				<object number="4" name="360, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="5" name="362, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="6" name="364, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="7" name="366, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="8" name="368, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="9" name="370, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="10" name="372, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="11" name="374, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="12" name="376, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="13" name="378, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="14" name="380, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="15" name="212, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="16" name="214, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="18" name="6, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="19" name="4, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="20" name="4а, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="21" name="4б, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="22" name="3б, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="23" name="3а, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="24" name="3, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="25" name="5, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="26" name="271, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="27" name="273, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="28" name="275, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="29" name="277, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="30" name="279, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="31" name="311, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="32" name="313, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="33" name="315, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="34" name="317, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="35" name="319, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="36" name="321, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="37" name="323, тип ТС 16" rules_id="16" scene_id="2"/>
+				<object number="2" name="273ПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="3" name="275/77ПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="4" name="279ПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="5" name="313/15ПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="6" name="317/19ПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="7" name="321/23ПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="8" name="5ГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="9" name="3/3аПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="10" name="3бПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="11" name="273/75РГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="12" name="277/79РГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="13" name="311/13РГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="14" name="315/17РГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="15" name="319/21РГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="16" name="323РГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="17" name="271Р1ГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="18" name="271Р2ГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="19" name="3РГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="20" name="3а/3бРГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="21" name="360/62ПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="22" name="364/66ПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="23" name="368/70ПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="24" name="372ПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="25" name="374ПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="26" name="376/78ПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="27" name="380ПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="28" name="212ПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="29" name="6ГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="30" name="4/4аПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="31" name="4бПГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="32" name="362/64РГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="33" name="366РГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="34" name="368РГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="35" name="370/72РГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="36" name="374/76РГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="37" name="378/80РГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="39" name="212Р2ГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="41" name="4РГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="42" name="4а/4бРГА, тип ТС 17" rules_id="17" scene_id="2"/>
+				<object number="1" name="Макет, тип ТС 18" rules_id="18" scene_id="2"/>
+				<object number="1" name="Оповестительная сигнализация, тип ТС 19" rules_id="19" scene_id="2"/>
+				<object number="1" name="ДЦ, тип ТС 20" rules_id="20" scene_id="2"/>
+				<object number="1" name="Маршрут №1, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="2" name="Маршрут №2, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="3" name="Маршрут №3, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="4" name="Маршрут №4, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="5" name="Резерв, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="6" name="Маршрут №6 1 часть, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="7" name="Маршрут №7, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="8" name="Маршрут №8, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="9" name="Маршрут №9, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="10" name="Маршрут №10, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="11" name="Резерв, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="12" name="Резерв, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="13" name="Резерв, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="14" name="Резерв, тип ТС 24" rules_id="25" scene_id="2"/>
+				<object number="15" name="Резерв, тип ТС 24" rules_id="25" scene_id="2"/>
+				<object number="16" name="Маршрут №6 2 часть, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="17" name="Маршрут №6 3 часть, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="18" name="Отправление на перегон по сигналу 31, тип ТС 24" rules_id="24" scene_id="2"/>
+				<object number="4" name="360, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="5" name="362, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="6" name="364, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="7" name="366, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="8" name="368, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="9" name="370, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="10" name="372, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="11" name="374, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="12" name="376, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="13" name="378, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="14" name="380, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="15" name="212, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="16" name="214, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="18" name="6, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="19" name="4, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="20" name="4а, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="21" name="4б, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="22" name="3б, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="23" name="3а, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="24" name="3, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="25" name="5, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="26" name="271, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="27" name="273, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="28" name="275, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="29" name="277, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="30" name="279, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="31" name="311, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="32" name="313, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="33" name="315, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="34" name="317, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="35" name="319, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="36" name="321, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="37" name="323, тип ТС 25" rules_id="25" scene_id="2"/>
+				<object number="4" name="360, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="5" name="362, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="6" name="364, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="7" name="366, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="8" name="368, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="9" name="370, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="10" name="372, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="11" name="374, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="12" name="376, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="13" name="378, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="14" name="380, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="15" name="212, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="16" name="214, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="18" name="6, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="19" name="4, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="20" name="4а, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="21" name="4б, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="22" name="3б, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="23" name="3а, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="24" name="3, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="25" name="5, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="26" name="271, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="27" name="273, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="28" name="275, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="29" name="277, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="30" name="279, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="31" name="311, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="32" name="313, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="33" name="315, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="34" name="317, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="35" name="319, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="36" name="321, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="37" name="323, тип ТС 26" rules_id="26" scene_id="2"/>
+				<object number="4" name="360, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="5" name="362, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="6" name="364, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="7" name="366, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="8" name="368, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="9" name="370, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="10" name="372, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="11" name="374, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="12" name="376, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="13" name="378, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="14" name="380, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="15" name="212, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="16" name="214, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="18" name="6, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="19" name="4, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="20" name="4а, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="21" name="4б, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="22" name="3б, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="23" name="3а, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="24" name="3, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="25" name="5, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="26" name="271, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="27" name="273, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="28" name="275, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="29" name="277, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="30" name="279, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="31" name="311, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="32" name="313, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="33" name="315, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="34" name="317, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="35" name="319, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="36" name="321, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="37" name="323, тип ТС 27" rules_id="27" scene_id="2"/>
+				<object number="1" name="Перевод в плюсовое положение 1ПУ" rules_id="30" scene_id="2"/>
+				<object number="2" name="Перевод в минусовое положение 1МУ" rules_id="30" scene_id="2"/>
+				<object number="3" name="Команда переключения стрелки на резервный ОК 1РК" rules_id="30" scene_id="2"/>
+				<object number="4" name="Команда переключения стрелки на основной ОК 1ОРК" rules_id="30" scene_id="2"/>
+				<object number="5" name="Отключение двигателя стрелки 1КВ" rules_id="30" scene_id="2"/>
+				<object number="6" name="Отмена отключения двигателя стрелки 1ОКВ" rules_id="30" scene_id="2"/>
+				<object number="7" name="Снять колпачок стрелка 1ОКЛП" rules_id="30" scene_id="2"/>
+				<object number="8" name="Установить колпачок на стрелку 1КЛП" rules_id="30" scene_id="2"/>
+				<object number="9" name="Перевод в плюсовое положение 2ПУ" rules_id="30" scene_id="2"/>
+				<object number="10" name="Перевод в минусовое положение 2МУ" rules_id="30" scene_id="2"/>
+				<object number="11" name="Команда переключения стрелки на резервный ОК 2РК" rules_id="30" scene_id="2"/>
+				<object number="12" name="Команда переключения стрелки на основной ОК 2ОРК" rules_id="30" scene_id="2"/>
+				<object number="13" name="Отключение двигателя стрелки 2КВ" rules_id="30" scene_id="2"/>
+				<object number="14" name="Отмена отключения двигателя стрелки 2ОКВ" rules_id="30" scene_id="2"/>
+				<object number="15" name="Снять колпачок стрелка 2ОКЛП" rules_id="30" scene_id="2"/>
+				<object number="16" name="Установить колпачок на стрелку 2КЛП" rules_id="30" scene_id="2"/>
+				<object number="17" name="Перевод в плюсовое положение 3ПУ" rules_id="30" scene_id="2"/>
+				<object number="18" name="Перевод в минусовое положение 3МУ" rules_id="30" scene_id="2"/>
+				<object number="19" name="Команда переключения стрелки на резервный ОК 3РК" rules_id="30" scene_id="2"/>
+				<object number="20" name="Команда переключения стрелки на основной ОК 3ОРК" rules_id="30" scene_id="2"/>
+				<object number="21" name="Отключение двигателя стрелки 3КВ" rules_id="30" scene_id="2"/>
+				<object number="22" name="Отмена отключения двигателя стрелки 3ОКВ" rules_id="30" scene_id="2"/>
+				<object number="23" name="Снять колпачок стрелка 3ОКЛП" rules_id="30" scene_id="2"/>
+				<object number="24" name="Установить колпачок на стрелку 3КЛП" rules_id="30" scene_id="2"/>
+				<object number="25" name="Перевод в плюсовое положение 4ПУ" rules_id="30" scene_id="2"/>
+				<object number="26" name="Перевод в минусовое положение 4МУ" rules_id="30" scene_id="2"/>
+				<object number="27" name="Команда переключения стрелки на резервный ОК 4РК" rules_id="30" scene_id="2"/>
+				<object number="28" name="Команда переключения стрелки на основной ОК 4ОРК" rules_id="30" scene_id="2"/>
+				<object number="29" name="Отключение двигателя стрелки 4КВ" rules_id="30" scene_id="2"/>
+				<object number="30" name="Отмена отключения двигателя стрелки 4ОКВ" rules_id="30" scene_id="2"/>
+				<object number="31" name="Снять колпачок стрелка 4ОКЛП" rules_id="30" scene_id="2"/>
+				<object number="32" name="Установить колпачок на стрелку 4КЛП" rules_id="30" scene_id="2"/>
+				<object number="33" name="Перевод в плюсовое положение 5ПУ" rules_id="30" scene_id="2"/>
+				<object number="34" name="Перевод в минусовое положение 5МУ" rules_id="30" scene_id="2"/>
+				<object number="35" name="Команда переключения стрелки на резервный ОК 5РК" rules_id="30" scene_id="2"/>
+				<object number="36" name="Команда переключения стрелки на основной ОК 5ОРК" rules_id="30" scene_id="2"/>
+				<object number="37" name="Отключение двигателя стрелки 5КВ" rules_id="30" scene_id="2"/>
+				<object number="38" name="Отмена отключения двигателя стрелки 5ОКВ" rules_id="30" scene_id="2"/>
+				<object number="39" name="Снять колпачок стрелка 5ОКЛП" rules_id="30" scene_id="2"/>
+				<object number="40" name="Установить колпачок на стрелку 5КЛП" rules_id="30" scene_id="2"/>
+				<object number="41" name="Перевод в плюсовое положение 6ПУ" rules_id="30" scene_id="2"/>
+				<object number="42" name="Перевод в минусовое положение 6МУ" rules_id="30" scene_id="2"/>
+				<object number="43" name="Команда переключения стрелки на резервный ОК 6РК" rules_id="30" scene_id="2"/>
+				<object number="44" name="Команда переключения стрелки на основной ОК 6ОРК" rules_id="30" scene_id="2"/>
+				<object number="45" name="Отключение двигателя стрелки 6КВ" rules_id="30" scene_id="2"/>
+				<object number="46" name="Отмена отключения двигателя стрелки 6ОКВ" rules_id="30" scene_id="2"/>
+				<object number="47" name="Снять колпачок стрелка 6ОКЛП" rules_id="30" scene_id="2"/>
+				<object number="48" name="Установить колпачок на стрелку 6КЛП" rules_id="30" scene_id="2"/>
+				<object number="49" name="Выдача курбеля из аппарата блокировки…. 1-6ККУ" rules_id="30" scene_id="2"/>
+				<object number="50" name="34К" rules_id="30" scene_id="2"/>
+				<object number="51" name="2пК" rules_id="30" scene_id="2"/>
+				<object number="52" name="22К" rules_id="30" scene_id="2"/>
+				<object number="53" name="4К" rules_id="30" scene_id="2"/>
+				<object number="54" name="3К" rules_id="30" scene_id="2"/>
+				<object number="55" name="ДК" rules_id="30" scene_id="2"/>
+				<object number="56" name="Автодействие 2аАСК" rules_id="30" scene_id="2"/>
+				<object number="57" name="Автооборот 3АДК" rules_id="30" scene_id="2"/>
+				<object number="58" name="Автооборот 4АДК" rules_id="30" scene_id="2"/>
+				<object number="59" name="Авторазмен комбинированный АРК" rules_id="30" scene_id="2"/>
+				<object number="60" name="Авторазмен простой АРП" rules_id="30" scene_id="2"/>
+				<object number="61" name="Искусственная разделка маршрута_1ЗРК" rules_id="30" scene_id="2"/>
+				<object number="62" name="Искусственная разделка маршрута_1сЗРК" rules_id="30" scene_id="2"/>
+				<object number="63" name="Искусственная разделка маршрута_ДЗРК" rules_id="30" scene_id="2"/>
+				<object number="64" name="Искусственная разделка маршрута_2а/1ЗРК" rules_id="30" scene_id="2"/>
+				<object number="65" name="Искусственная разделка маршрута_2а/2ЗРК" rules_id="30" scene_id="2"/>
+				<object number="66" name="Искусственная разделка маршрута_2а/3ЗРК" rules_id="30" scene_id="2"/>
+				<object number="67" name="Искусственная разделка маршрута_2ЗРК" rules_id="30" scene_id="2"/>
+				<object number="68" name="Искусственная разделка маршрута_2сЗРК" rules_id="30" scene_id="2"/>
+				<object number="69" name="Искусственная разделка маршрута_2бЗРК" rules_id="30" scene_id="2"/>
+				<object number="70" name="Общая искусственная разделка  _ОРИ" rules_id="30" scene_id="2"/>
+				<object number="71" name="Включение звонковой сигнализации_ВзСК" rules_id="30" scene_id="2"/>
+				<object number="72" name="Выключение стрелки звонковой сигнализации_ОВзСК" rules_id="30" scene_id="2"/>
+				<object number="73" name="Контроль линии звонка _ЗВЛ" rules_id="30" scene_id="2"/>
+				<object number="74" name="Общее включение ПС _ЦПС" rules_id="30" scene_id="2"/>
+				<object number="75" name="Окончательная команда включения ПС_ЦДПС" rules_id="30" scene_id="2"/>
+				<object number="76" name="Окончательная команда включения ПС_ЦБК-3ПС" rules_id="30" scene_id="2"/>
+				<object number="77" name="Окончательная команда включения ПС_ЦБК-22ПС" rules_id="30" scene_id="2"/>
+				<object number="78" name="Окончательная команда включения ПС_ЦБК-4ПС" rules_id="30" scene_id="2"/>
+				<object number="79" name="Окончательная команда включения ПС_ЦБК-34ПС" rules_id="30" scene_id="2"/>
+				<object number="80" name="Включение АРС_502ВС" rules_id="30" scene_id="2"/>
+				<object number="81" name="Включение АБ_502ВС" rules_id="30" scene_id="2"/>
+				<object number="82" name="Включение АРС_42ВС" rules_id="30" scene_id="2"/>
+				<object number="83" name="Включение АБ_42ВС" rules_id="30" scene_id="2"/>
+				<object number="84" name="Включение АРС_32ВС" rules_id="30" scene_id="2"/>
+				<object number="85" name="Включение АБ_32ВС" rules_id="30" scene_id="2"/>
+				<object number="86" name="Включение АРС_22дВС" rules_id="30" scene_id="2"/>
+				<object number="87" name="Включение АБ_22дВС" rules_id="30" scene_id="2"/>
+				<object number="88" name="Включение АРС_21ВС" rules_id="30" scene_id="2"/>
+				<object number="89" name="Включение АБ_21ВС" rules_id="30" scene_id="2"/>
+				<object number="90" name="Выключение сигнала абсолютной остановки ДАВ" rules_id="30" scene_id="2"/>
+				<object number="91" name="Выключение сигнала абсолютной остановки 3АВ" rules_id="30" scene_id="2"/>
+				<object number="92" name="Выключение сигнала абсолютной остановки 22АВ" rules_id="30" scene_id="2"/>
+				<object number="93" name="Выключение сигнала абсолютной остановки 4АВ" rules_id="30" scene_id="2"/>
+				<object number="94" name="Выключение сигнала абсолютной остановки 34АВ" rules_id="30" scene_id="2"/>
+				<object number="95" name="Общая Курбель, АВ, ВН ЦАВ" rules_id="30" scene_id="2"/>
+				<object number="96" name="Включить признак направления Ц364ВН" rules_id="30" scene_id="2"/>
+				<object number="97" name="Отмена ответственного действия" rules_id="30" scene_id="2"/>
+			</objects>
+		</ts>
+	</metro>
+
+	<!-- Индикаторы объектов на ОКД -->
+
+	<!-- Экземпляры типа Технические средства. -->
+	<okd_inputs_indicator>
+		<object number="51" name="УРП" x="1005" y="1307" rules_id="41">
+			<input number="6"/>
+			<input number="7"/>
+		</object>
+		<object number="54" name="ОА" x="1148" y="65" rules_id="45">
+			<input number="0"/>
+			<input number="1"/>
+		</object>
+		<object number="55" name="1Ф" x="923" y="65" rules_id="46">
+			<input number="2"/>
+			<input number="3"/>
+			<input number="4"/>
+			<input number="5"/>
+		</object>
+		<object number="56" name="2Ф" x="964" y="65" rules_id="47">
+			<input number="6"/>
+			<input number="7"/>
+			<input number="8"/>
+			<input number="9"/>
+		</object>
+		<object number="57" name="НК/АК" x="1005" y="65" rules_id="58">
+			<input number="10"/>
+			<input number="11"/>
+			<input number="12"/>
+			<input number="13"/>
+		</object>
+		<object number="58" name="СЗИ" x="1102" y="65" rules_id="49">
+			<input number="12"/>
+			<input number="13"/>
+		</object>
+		<object number="59" name="ВС" x="1061" y="65" rules_id="50">
+			<input number="14"/>
+			<input number="15"/>
+		</object>
+	</okd_inputs_indicator>
+
+	<!-- Автоблокировка перегона (объекты увязки) -->
+	<auto_blocking>
+		<!-- Экземпляры типа Контакт реле -->
+		<two_inputs_relays>
+			<object number="1" name="5К1" z="10" box_id="1" rear_input_number="1" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="2" name="5К2" box_id="1" front_input_number="2" rear_input_number="3" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="3" name="5К3" box_id="1" front_input_number="4" rear_input_number="5" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="4" name="5К4" box_id="1" front_input_number="6" rear_input_number="7" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="5" name="6К1" box_id="1" front_input_number="8" rear_input_number="9" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="6" name="6К2" box_id="1" front_input_number="10" rear_input_number="11" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="7" name="6К3" box_id="1" front_input_number="12" rear_input_number="13" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="8" name="6К4" box_id="1" front_input_number="14" rear_input_number="15" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="9" name="1-6КУК" box_id="1" rear_input_number="1" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="10" name="1-6ККУК" box_id="1" front_input_number="2" rear_input_number="3" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="11" name="УРП" box_id="1" front_input_number="4" rear_input_number="5" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="12" name="5П" box_id="1" front_input_number="6" rear_input_number="7" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="13" name="6П" box_id="1" front_input_number="8" rear_input_number="9" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="14" name="К4" box_id="1" front_input_number="10" rear_input_number="11" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="15" name="К5" box_id="1" front_input_number="12" rear_input_number="13" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="16" name="АВ" box_id="2" rear_input_number="1" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="17" name="К11" box_id="2" front_input_number="2" rear_input_number="3" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="18" name="КМ1" box_id="2" front_input_number="4" rear_input_number="5" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="19" name="К12" box_id="2" front_input_number="6" rear_input_number="7" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="20" name="КМ2" box_id="2" front_input_number="8" rear_input_number="9" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="21" name="К1" box_id="2" front_input_number="10" rear_input_number="11" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="22" name="К2" box_id="2" front_input_number="12" rear_input_number="13" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+			<object number="23" name="ДУ/МУ" box_id="2" front_input_number="14" rear_input_number="15" scene_id="3">
+				<element id="7" y="50" w="80"/>
+			</object>
+		</two_inputs_relays>
+		<!-- Экземпляры типа Обмотка реле -->
+		<okd_outs>
+			<object number="1" name="5К1" box_id="3" scene_id="3"/>
+			<object number="2" name="5К2" box_id="3" out_number="1" scene_id="3"/>
+			<object number="3" name="5К3" box_id="3" out_number="2" scene_id="3"/>
+			<object number="4" name="5К4" box_id="3" out_number="3" scene_id="3"/>
+			<object number="5" name="6К1" box_id="3" out_number="4" scene_id="3"/>
+			<object number="6" name="6К2" box_id="3" out_number="5" scene_id="3"/>
+			<object number="7" name="6К3" box_id="3" out_number="6" scene_id="3"/>
+			<object number="8" name="6К4" box_id="3" out_number="7" scene_id="3"/>
+			<object number="9" name="1-6ККУК" box_id="3" scene_id="3"/>
+		</okd_outs>
+	</auto_blocking>
+
+	<!-- Индикаторы обычные -->
+
+	<!-- Экземпляры типа Технические средства. -->
+	<custom_indicator>
+		<object number="1" name="ЦВМ-М" x="1393" y="65" full_data_archivation="1" norm_type="always" rules_id="1"/>
+		<object number="2" name="ОК с ЦИ " x="1457" y="65" check_hub_ul="1" full_data_archivation="1" norm_type="only_cl" rules_id="2"/>
+		<object number="3" name="ОК ТРЦ " x="1574" y="65" norm_type="mqtt" rules_id="3"/>
+		<object number="4" name="Аппаратура стоек" x="1644" y="65" norm_type="mqtt" rules_id="4"/>
+		<object number="5" name="ОКД " x="1528" y="65" check_hub_ul="1" full_data_archivation="1" norm_type="only_cl" rules_id="5"/>
+		<object number="7" name="ДЦ канал 1 " x="1000" y="113" norm_type="dc" rules_id="6"/>
+		<object number="8" name="ДЦ канал 2 " x="1094" y="113" norm_type="dc" rules_id="7"/>
+		<object number="9" name="КЦ СТР " x="1831" y="738" norm_type="mqtt" rules_id="8" visible_modes="2,3,10,20"/>
+		<object number="10" name="Аппаратура СТМ " x="1393" y="113" norm_type="mqtt" rules_id="9"/>
+		<object number="11" name="Сервер СТМ " x="1509" y="113" norm_type="always" rules_id="10"/>
+		<object number="12" name="ПО ЦВМ-М " x="1228" y="210" full_data_archivation="1" norm_type="only_cl" rules_id="11"/>
+		<object number="14" name="ВЗУ-ЭЦС-Е" x="1725" y="65" norm_type="mqtt" rules_id="12"/>
+		<object number="15" name="Аппаратура АРМ" x="1817" y="65" norm_type="mqtt" rules_id="13"/>
+		<object number="16" name="Сервер МПЦ-СМ 1 " x="1980" y="65" norm_type="always" rules_id="14"/>
+		<object number="17" name="Сервер МПЦ-СМ 2 " x="2038" y="65" norm_type="always" rules_id="15"/>
+		<object number="19" name="Доступ к базе данных сервера" x="510" y="65" norm_type="always" rules_id="16" show_in_journal="0"/>
+		<object number="20" name="Сетевая аппаратура" x="1898" y="65" norm_type="mqtt" rules_id="17"/>
+		<object number="25" name="Режим stand" x="559" y="190" norm_type="always" rules_id="44" show_in_journal="0"/>
+		<object number="26" name="МПЦ-СМ ДЫМ" x="2096" y="65" norm_type="mqtt" rules_id="54"/>
+		<object number="27" name="МСПУ ДЫМ" x="857" y="65" norm_type="mqtt" rules_id="55"/>
+		<object number="30" name="Станция увязки 1" x="1393" y="161" capt="Карамышевская" norm_type="only_cl" rules_id="56"/>
+		<!-- <object number="31" name="Станция увязки 2" x="1544" y="161" capt="Звенигородская" norm_type="only_cl" rules_id="56"/> -->
+	</custom_indicator>
+
+	<!-- Индикаторы групповые -->
+
+	<!-- Экземпляры типа Технические средства. -->
+	<group_indicator>
+		<object number="100" name="МПЦ-СМ" x="1293" y="65" finger_cursor="1" mqtt_name="MPC" norm_type="always" rules_id="23" shadow="1"/>
+		<object number="101" name="Объединение РЦ" x="70" y="60" always_visible="1" check_hub_ul="1" norm_type="only_cl" rules_id="24"/>
+		<object number="102" name="Ограничение скорости" x="70" y="105" always_visible="1" norm_type="only_cl" rules_id="25"/>
+		<object number="103" name="Индикатор контроля схода стыков" x="210" y="105" check_hub_ul="1" finger_cursor="1" norm_type="only_cl" rules_id="26" shadow="1"/>
+		<object number="104" name="СТМ" x="1293" y="112" finger_cursor="1" norm_type="always" rules_id="27" shadow="1"/>
+		<object number="105" name="МСПУ" x="1203" y="65" finger_cursor="1" mqtt_name="MSPU" norm_type="always" rules_id="28" shadow="1"/>
+		<object number="106" name="ДЦ" x="1203" y="112" agg_type="redundant" finger_cursor="1" norm_type="always" rules_id="29" shadow="1"/>
+		<object number="107" name="Цифровая увязка" x="1293" y="159" mqtt_name="CU" norm_type="always" finger_cursor="1" show_in_journal="0" rules_id="57" shadow="1"/>
+	</group_indicator>
+
+	<!-- Индикаторы режима -->
+
+	<!-- Экземпляры типа Технические средства. -->
+	<mode_indicator>
+		<object number="111" name="Режим функционирования" x="210" y="60" finger_cursor="1" norm_type="only_cl" rules_id="32" shadow="1">
+			<text capt_id="2" visible_off="Основной&#13;&#10;режим" visible_on="Вспомогательный&#13;&#10;режим"/>
+		</object>
+	</mode_indicator>
+
+	<!-- Экземпляры типа Кнопка-индикатор -->
+	<button>
+		<object number="1" name="Курбель 1-6" x="1010" y="1180" bits="2" cl_number="1" cl_type="5" sub_type="1391">
+			<element id="1" fontsize="12"/>
+		</object>
+	</button>
+
+	<!-- Прочие объекты -->
+	<others>
+		<!-- Неактивные полигоны мнемосхемы -->
+		<!-- Экземпляры типа Неактивный элемент сцены -->
+		<no_active_polygon>
+			<object number="1" x="1193" y="41" activity="0" border="CLG">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="190" y="0"/>
+					<point x="190" y="160"/>
+					<point x="0" y="160"/>
+				</polygon>
+			</object>
+			<object number="2" x="852" y="60" activity="0" border="CLG">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="336" y="0"/>
+					<point x="336" y="45"/>
+					<point x="0" y="45"/>
+				</polygon>
+			</object>
+			<object number="3" x="1388" y="60" activity="0" border="CLG">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="779" y="0"/>
+					<point x="779" y="45"/>
+					<point x="0" y="45"/>
+				</polygon>
+			</object>
+			<object number="4" x="1388" y="108" activity="0" border="CLG">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="227" y="0"/>
+					<point x="227" y="45"/>
+					<point x="0" y="45"/>
+				</polygon>
+			</object>
+			<object number="5" x="995" y="108" activity="0" border="CLG">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="193" y="0"/>
+					<point x="193" y="45"/>
+					<point x="0" y="45"/>
+				</polygon>
+			</object>
+			<object number="6" x="1388" y="156" activity="0" border="CLG">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="306" y="0"/>
+					<point x="306" y="45"/>
+					<point x="0" y="45"/>
+				</polygon>
+			</object>
+			<object number="7" x="1870" y="488" activity="0" border="CLG" fill="CBK">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="5" y="0"/>
+					<point x="5" y="30"/>
+					<point x="0" y="30"/>
+				</polygon>
+			</object>
+			<object number="8" x="2520" y="629" activity="0" border="CLG" fill="CBK">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="5" y="0"/>
+					<point x="5" y="30"/>
+					<point x="0" y="30"/>
+				</polygon>
+			</object>
+			<object number="9" x="2520" y="840" activity="0" border="CLG" fill="CBK">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="5" y="0"/>
+					<point x="5" y="30"/>
+					<point x="0" y="30"/>
+				</polygon>
+			</object>
+			<object number="10" x="2018" y="980" activity="0" border="CLG" fill="CBK">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="5" y="0"/>
+					<point x="5" y="30"/>
+					<point x="0" y="30"/>
+				</polygon>
+			</object>
+			<object number="11" x="1462" y="1269" activity="0" border="CBK">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="250" y="0"/>
+					<point x="250" y="70"/>
+					<point x="0" y="70"/>
+				</polygon>
+			</object>
+			<object number="12" x="1773" y="1269" activity="0" border="CBK">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="250" y="0"/>
+					<point x="250" y="70"/>
+					<point x="0" y="70"/>
+				</polygon>
+			</object>
+			<object number="13" x="2084" y="1229" activity="0" border="CBK">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="250" y="0"/>
+					<point x="250" y="110"/>
+					<point x="0" y="110"/>
+				</polygon>
+			</object>
+			<object number="14" x="1151" y="1269" activity="0" border="CBK">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="250" y="0"/>
+					<point x="250" y="70"/>
+					<point x="0" y="70"/>
+				</polygon>
+			</object>
+			<object number="15" x="1075" y="653" activity="0" border="CBK" fill="CWH">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="590" y="0"/>
+					<point x="590" y="193"/>
+					<point x="0" y="193"/>
+				</polygon>
+			</object>
+			<object number="16" x="50" y="736" activity="0" border="CBK" fill="CLG">
+				<polygon z="-10" width="2">
+					<point x="215" y="0"/>
+					<point x="35" y="0"/>
+					<point x="35" y="-20"/>
+					<point x="0" y="15"/>
+					<point x="35" y="50"/>
+					<point x="35" y="30"/>
+					<point x="215" y="30"/>
+				</polygon>
+			</object>
+			<object number="17" x="765" y="653" activity="0" border="CBK">
+				<polygon z="-10">
+					<point x="0" y="0"/>
+					<point x="250" y="0"/>
+					<point x="250" y="193"/>
+					<point x="0" y="193"/>
+				</polygon>
+			</object>
+			<object number="18" x="50" y="40" activity="0" border="CDG" scene_id="3">
+				<polygon z="-10" width="2">
+					<point x="0" y="0"/>
+					<point x="600" y="0"/>
+					<point x="600" y="380"/>
+					<point x="0" y="380"/>
+				</polygon>
+			</object>
+			<object number="19" x="50" y="420" activity="0" border="CDG" scene_id="3">
+				<polygon z="-10" width="2">
+					<point x="0" y="0"/>
+					<point x="600" y="0"/>
+					<point x="600" y="270"/>
+					<point x="0" y="270"/>
+				</polygon>
+			</object>
+			<object number="20" x="750" y="40" activity="0" border="CDG" scene_id="3">
+				<polygon z="-10" width="2">
+					<point x="0" y="0"/>
+					<point x="600" y="0"/>
+					<point x="600" y="380"/>
+					<point x="0" y="380"/>
+				</polygon>
+			</object>
+		</no_active_polygon>
+		<!-- Неактивные надписи мнемосхемы -->
+		<!-- Экземпляры типа Неактивный элемент сцены -->
+		<no_active_label>
+			<object number="101" x="595" y="1040" activity="0" fill="CBK">
+				<caption z="1" w="150" h="30" bold="0" capt="БК-34" fontsize="15"/>
+			</object>
+			<object number="102" x="1643" y="1040" activity="0" fill="CBK">
+				<caption z="1" w="150" h="30" bold="0" capt="БК-22" fontsize="15"/>
+			</object>
+			<object number="103" x="1620" y="397" activity="0" fill="CBK">
+				<caption z="1" w="150" h="30" bold="0" capt="Д" fontsize="15"/>
+			</object>
+			<object number="104" x="2060" y="538" activity="0" fill="CBK">
+				<caption z="1" w="150" h="30" bold="0" capt="БК-3" fontsize="15"/>
+			</object>
+			<object number="105" x="2060" y="749" activity="0" fill="CBK">
+				<caption z="1" w="150" h="30" bold="0" capt="БК-4" fontsize="15"/>
+			</object>
+			<object number="106" x="1191" y="40" activity="0" fill="CLG">
+				<caption z="-1" w="190" h="20" bold="0" capt="Состояние техн. средств" fontsize="15"/>
+			</object>
+			<object number="107" x="82" y="735" activity="0" fill="CBK">
+				<caption z="1" w="180" h="30" capt="Ст. Карамышевская" fontsize="18"/>
+			</object>
+			<object number="108" x="1462" y="1269" activity="0" fill="CBK">
+				<caption z="-1" w="250" h="30" capt="КВ" fontsize="18"/>
+			</object>
+			<object number="109" x="1773" y="1269" activity="0" fill="CBK">
+				<caption z="-1" w="250" h="30" capt="Резерв стрелок" fontsize="18"/>
+			</object>
+			<object number="110" x="2084" y="1228" activity="0" fill="CBK">
+				<caption z="-1" w="250" h="30" capt="ВКС" fontsize="18"/>
+			</object>
+			<object number="111" x="1151" y="1269" activity="0" fill="CBK">
+				<caption z="-1" w="250" h="30" capt="Колпачки на стрелку" fontsize="18"/>
+			</object>
+			<object number="112" x="765" y="650" activity="0" fill="CBK">
+				<caption z="-1" w="250" h="30" capt="Макет стрелки" fontsize="18"/>
+			</object>
+			<object number="113" x="1190" y="733" activity="0" fill="CBK">
+				<caption z="1" w="360" h="30" capt="Станция Бульвар Карбышева" fontsize="24"/>
+			</object>
+			<object number="114" x="245" y="20" fill="CBK" scene_id="3">
+				<caption z="-1" w="200" h="40" bold="0" capt="Стойка 134&#13;&#10;Входы:" fontsize="18"/>
+			</object>
+			<object number="115" x="245" y="410" fill="CBK" scene_id="3">
+				<caption z="-1" w="200" h="40" bold="0" capt="Выходы:" fontsize="18"/>
+			</object>
+			<object number="116" x="945" y="18" fill="CBK" scene_id="3">
+				<caption z="-1" w="200" h="40" bold="0" capt="Стойка 144&#13;&#10;Входы:" fontsize="18"/>
+			</object>
+			<object number="117" x="1250" y="560" activity="0" fill="CBK" >
+				<caption z="-1" w="250" h="30" bold="0" capt="I главный станционный путь"/>
+			</object>
+			<object number="118" x="1250" y="890" activity="0" fill="CBK">
+				<caption z="-1" w="250" h="30" bold="0" capt="II главный станционный путь"/>
+			</object>
+			<object number="119" x="2225" y="702" activity="0" fill="CBK">
+				<caption z="-1" w="250" h="30" bold="0" capt="3 станционный путь"/>
+			</object>
+			<object number="120" x="2225" y="913" activity="0" fill="CBK">
+				<caption z="-1" w="250" h="30" bold="0" capt="4 станционный путь"/>
+			</object>
+		</no_active_label>
+		<!-- Неактивные линии мнемосхемы -->
+		<!-- Экземпляры типа Неактивный элемент сцены -->
+		<no_active_lines>
+			<object number="201" x="1072" y="493" activity="0" fill="CLG">
+				<polyline width="2">
+					<line xbegin="0" xend="8" ybegin="0" yend="0"/>
+					<line xbegin="4" xend="4" ybegin="0" yend="21"/>
+					<line xbegin="0" xend="8" ybegin="21" yend="21"/>
+				</polyline>
+			</object>
+			<object number="202" x="1660" y="493" activity="0" fill="CLG">
+				<polyline width="2">
+					<line xbegin="0" xend="8" ybegin="0" yend="0"/>
+					<line xbegin="4" xend="4" ybegin="0" yend="21"/>
+					<line xbegin="0" xend="8" ybegin="21" yend="21"/>
+				</polyline>
+			</object>
+			<object number="203" x="631" y="985" activity="0" fill="CLG">
+				<polyline width="2">
+					<line xbegin="0" xend="8" ybegin="0" yend="0"/>
+					<line xbegin="4" xend="4" ybegin="0" yend="21"/>
+					<line xbegin="0" xend="8" ybegin="21" yend="21"/>
+				</polyline>
+			</object>
+			<object number="204" x="1072" y="985" activity="0" fill="CLG">
+				<polyline width="2">
+					<line xbegin="0" xend="8" ybegin="0" yend="0"/>
+					<line xbegin="4" xend="4" ybegin="0" yend="21"/>
+					<line xbegin="0" xend="8" ybegin="21" yend="21"/>
+				</polyline>
+			</object>
+			<object number="205" x="1660" y="985" activity="0" fill="CLG">
+				<polyline width="2">
+					<line xbegin="0" xend="8" ybegin="0" yend="0"/>
+					<line xbegin="4" xend="4" ybegin="0" yend="21"/>
+					<line xbegin="0" xend="8" ybegin="21" yend="21"/>
+				</polyline>
+			</object>
+			<object number="206" x="1867" y="985" activity="0" fill="CLG">
+				<polyline width="2">
+					<line xbegin="0" xend="8" ybegin="0" yend="0"/>
+					<line xbegin="4" xend="4" ybegin="0" yend="21"/>
+					<line xbegin="0" xend="8" ybegin="21" yend="21"/>
+				</polyline>
+			</object>
+			<object number="207" x="1867" y="844" activity="0" fill="CLG">
+				<polyline width="2">
+					<line xbegin="0" xend="8" ybegin="0" yend="0"/>
+					<line xbegin="4" xend="4" ybegin="0" yend="21"/>
+					<line xbegin="0" xend="8" ybegin="21" yend="21"/>
+				</polyline>
+			</object>
+			<object number="208" x="2174" y="844" activity="0" fill="CLG">
+				<polyline width="2">
+					<line xbegin="0" xend="8" ybegin="0" yend="0"/>
+					<line xbegin="4" xend="4" ybegin="0" yend="21"/>
+					<line xbegin="0" xend="8" ybegin="21" yend="21"/>
+				</polyline>
+			</object>
+			<object number="209" x="2174" y="633" activity="0" fill="CLG">
+				<polyline width="2">
+					<line xbegin="0" xend="8" ybegin="0" yend="0"/>
+					<line xbegin="4" xend="4" ybegin="0" yend="21"/>
+					<line xbegin="0" xend="8" ybegin="21" yend="21"/>
+				</polyline>
+			</object>
+			<object number="210" x="1867" y="633" activity="0" fill="CLG">
+				<polyline width="2">
+					<line xbegin="0" xend="8" ybegin="0" yend="0"/>
+					<line xbegin="4" xend="4" ybegin="0" yend="21"/>
+					<line xbegin="0" xend="8" ybegin="21" yend="21"/>
+				</polyline>
+			</object>
+			<object number="211" x="2039" y="746" activity="0" fill="CLG">
+				<polyline width="2">
+					<line xbegin="0" xend="0" ybegin="0" yend="8"/>
+					<line xbegin="0" xend="-29" ybegin="4" yend="4"/>
+					<line xbegin="-29" xend="-29" ybegin="0" yend="8"/>
+				</polyline>
+			</object>
+		</no_active_lines>
+	</others>
+</body>
