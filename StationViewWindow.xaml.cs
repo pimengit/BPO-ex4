@@ -71,6 +71,15 @@ namespace BPO_ex4
             }
         }
 
+        private void StationCanvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            // Получаем координаты мыши относительно холста со станцией
+            var pos = e.GetPosition((System.Windows.IInputElement)sender);
+
+            // Передаем координаты в наш магнитный маршрутизатор!
+            BPO_ex4.Visuals.RoutePointViewModel.UpdatePreviewByMouse(pos.X, pos.Y);
+        }
+
         private void Panel_MouseDown(object sender, MouseButtonEventArgs e)
         {
             // Захватываем мышь, чтобы не потерять фокус при быстром движении

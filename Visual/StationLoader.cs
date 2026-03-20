@@ -29,7 +29,9 @@ namespace BPO_ex4.Visuals
         public static ObservableCollection<VisualObjectViewModel> Load(string xmlPath, Context ctx, SimulationEngine engine)
         {
             var collection = new ObservableCollection<VisualObjectViewModel>();
-
+            string dirRo = System.IO.Path.GetDirectoryName(xmlPath);
+            string routeObjectsPath = System.IO.Path.Combine(dirRo, "routeobjects.xml");
+            string routesXmlPath = System.IO.Path.Combine(dirRo, "routes.xml");
             try
             {
                 var doc = XDocument.Load(xmlPath);
@@ -176,18 +178,62 @@ namespace BPO_ex4.Visuals
                     bool isSwSection = el.Attribute("sw_section")?.Value == "1";
                     var sectionVm = new SectionViewModel(x, y, dw, name, isSwSection);
 
+
+                    // Если это стрелочная секция, парсим её контур (lock)
                     // Если это стрелочная секция, парсим её контур (lock)
                     if (isSwSection)
                     {
+                        // === ВОССТАНОВЛЕНО: Парсим сам контур стрелки! Без него её не видно! ===
+                        var lockNode = el.Element("lock");
+                        if (lockNode != null)
+                        {
+                            foreach (var pt in lockNode.Elements("point"))
+                            {
+                                double px = double.Parse(pt.Attribute("x")?.Value ?? "0", culture);
+                                double py = double.Parse(pt.Attribute("y")?.Value ?? "0", culture);
+                                sectionVm.LockPoints.Add(new System.Windows.Point(px, py));
+                            }
+                        }
+
+                        // ПАРСИМ ТОЛСТЫЕ ЛИНИИ
+                        var busyNode = el.Element("busy_line");
+                        if (busyNode != null)
+                        {
+                            foreach (var line in busyNode.Elements("line"))
+                            {
+                                double xb = double.Parse(line.Attribute("xbegin")?.Value ?? "0", culture);
+                                double yb = double.Parse(line.Attribute("ybegin")?.Value ?? "0", culture);
+                                double xe = double.Parse(line.Attribute("xend")?.Value ?? "0", culture);
+                                double ye = double.Parse(line.Attribute("yend")?.Value ?? "0", culture);
+
+                                sectionVm.BusyLines.Add(new BusyLineVM(xb, yb, xe, ye));
+                            }
+                        }
+
+                        // ПРИВЯЗЫВАЕМ СТРЕЛКИ ДЛЯ ПРЕДСКАЗАНИЯ
                         foreach (var swNode in el.Elements("switch"))
                         {
                             string swNumber = swNode.Attribute("number")?.Value;
-                            // Находим созданную ранее стрелку с этим номером (или именем)
                             var childSwitch = collection.OfType<SwitchViewModel>().FirstOrDefault(s => s.Name == swNumber);
+
                             if (childSwitch != null)
                             {
-                                // Говорим стрелке, кто её родительская секция
                                 childSwitch.ParentSection = sectionVm;
+
+                                // === ИСПРАВЛЕНИЕ №1: ЗАСТАВЛЯЕМ СТРЕЛКУ КРАСНЕТЬ ===
+                                // Когда секция меняет цвет, дергаем стрелку, чтобы она тоже обновилась!
+                                sectionVm.PropertyChanged += (sender, args) =>
+                                {
+                                    if (args.PropertyName == "FillColor")
+                                    {
+                                        childSwitch.UpdateColor(); // <--- ИСПРАВЛЕНО ЗДЕСЬ!
+                                    }
+                                };
+                            }
+
+                            if (!string.IsNullOrEmpty(swNumber))
+                            {
+                                sectionVm.ChildSwitchNames.Add(swNumber);
                             }
                         }
                     }
@@ -225,10 +271,105 @@ namespace BPO_ex4.Visuals
 
                     collection.Add(VSVm);
                 }
+
+                if (System.IO.File.Exists(routeObjectsPath))
+                {
+                    try
+                    {
+                        var routeDoc = XDocument.Load(routeObjectsPath);
+                        var cultureR = CultureInfo.InvariantCulture;
+
+                        // Ищем ИМЕННО теги <route_point>, как они записаны в твоем файле!
+                        var pointElements = routeDoc.Descendants("route_point").ToList();
+
+                        if (pointElements.Count == 0)
+                        {
+                            System.Windows.MessageBox.Show("Теги <route_point> не найдены!");
+                        }
+
+                        foreach (var el in pointElements)
+                        {
+                            double x = double.Parse(el.Attribute("x")?.Value ?? "0", culture);
+                            double y = double.Parse(el.Attribute("y")?.Value ?? "0", culture);
+                            string name = el.Attribute("name")?.Value ?? "???";
+
+                            int number = 0;
+                            int.TryParse(el.Attribute("id")?.Value, out number);
+
+                            string type = el.Attribute("type")?.Value ?? "light";
+                            bool isEnd = el.Attribute("as_end")?.Value == "true";
+
+                            var ptVm = new RoutePointViewModel(x, y, name, number, type, isEnd);
+
+                            // 1. Маршруты отсюда - это НАЧАЛЬНЫЕ маршруты для этой кнопки
+                            foreach (var rNode in el.Elements("route"))
+                            {
+                                if (int.TryParse(rNode.Attribute("number")?.Value, out int rNum))
+                                {
+                                    ptVm.StartRoutes.Add(rNum);
+                                }
+                            }
+
+                            // ВНИМАНИЕ: BindToLogic отсюда убрали!
+                            collection.Add(ptVm);
+                        }
+                    }
+                    catch (System.Exception ex)
+                    {
+                        System.Windows.MessageBox.Show("Ошибка парсинга routeobjects.xml: " + ex.Message);
+                    }
+                }
+
+                if (System.IO.File.Exists(routesXmlPath))
+                {
+                    var routesDoc = XDocument.Load(routesXmlPath);
+                    foreach (var routeNode in routesDoc.Descendants("route"))
+                    {
+                        if (int.TryParse(routeNode.Attribute("number")?.Value, out int routeNum))
+                        {
+                            // === ДОБАВЛЕНО: Парсим путевые участки (type="21") ===
+                            var sections = routeNode.Elements("object")
+                                .Where(o => o.Attribute("type")?.Value == "21")
+                                .Select(o => o.Attribute("name")?.Value)
+                                .Where(n => !string.IsNullOrEmpty(n))
+                                .ToList();
+
+                            // Сохраняем секции в статический словарь
+                            RoutePointViewModel.RouteSections[routeNum] = sections;
+
+                            var switchStates = new Dictionary<string, bool>();
+                            foreach (var obj in routeNode.Elements("object").Where(o => o.Attribute("type")?.Value == "10"))
+                            {
+                                string swName = obj.Attribute("name")?.Value;
+                                var instr = obj.Element("instr");
+                                if (swName != null && instr != null)
+                                {
+                                    // xor_mask="1" означает минусовое положение
+                                    bool isMinus = instr.Attribute("xor_mask")?.Value == "1";
+                                    switchStates[swName] = isMinus;
+                                }
+                            }
+                            RoutePointViewModel.RouteSwitchStates[routeNum] = switchStates;
+
+                            // (Старый код поиска конца маршрута)
+                            var pointNode = routeNode.Element("point");
+                            if (pointNode != null && int.TryParse(pointNode.Attribute("id")?.Value, out int pointId))
+                            {
+                                var ptVm = collection.OfType<RoutePointViewModel>().FirstOrDefault(p => p.Number == pointId);
+                                if (ptVm != null) ptVm.EndRoutes.Add(routeNum);
+                            }
+                        }
+                    }
+                }
             }
             catch (System.Exception ex)
             {
                 System.Windows.MessageBox.Show("Ошибка загрузки XML: " + ex.Message);
+            }
+
+            foreach (var ptVm in collection.OfType<RoutePointViewModel>())
+            {
+                ptVm.BindToLogic(ctx, engine);
             }
 
             return collection;

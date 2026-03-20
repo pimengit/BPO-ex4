@@ -14,7 +14,8 @@
                       PanningMode="Both"
                       PreviewMouseWheel="MapScrollViewer_PreviewMouseWheel">
 
-            <ItemsControl Name="MainCanvasControl">
+            <ItemsControl Name="MainCanvasControl" ItemsSource="{Binding VisualObjects}" MouseMove="StationCanvas_MouseMove">
+
 
                 <ItemsControl.LayoutTransform>
                     <ScaleTransform x:Name="MapScale" ScaleX="1" ScaleY="1"/>
@@ -37,30 +38,45 @@
                 <ItemsControl.Resources>
 
                     <DataTemplate DataType="{x:Type vis:SectionViewModel}">
-                        <Canvas ToolTip="{Binding Name}" Cursor="Hand" ClipToBounds="False">
-                            <Canvas.InputBindings>
-                                <MouseBinding Gesture="LeftClick" Command="{Binding ClickCommand}"/>
-                            </Canvas.InputBindings>
+                        <Canvas ToolTip="{Binding Name}" ClipToBounds="False" Background="Transparent">
 
                             <Rectangle Canvas.Left="0" Canvas.Top="0"
-                   Width="{Binding Width}" Height="{Binding Height}" 
-                   Fill="{Binding FillColor}"
-                   Visibility="{Binding RectVisibility}"
-                   Stroke="Black" StrokeThickness="1"
-                   RadiusX="1" RadiusY="1" />
+                       Width="{Binding Width}" Height="{Binding Height}" 
+                       Fill="{Binding FillColor}"
+                       Visibility="{Binding RectVisibility}"
+                       Stroke="Black" StrokeThickness="1"
+                       RadiusX="1" RadiusY="1" Cursor="Hand">
+                                <Rectangle.InputBindings>
+                                    <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}"/>
+                                </Rectangle.InputBindings>
+                            </Rectangle>
 
                             <Canvas Canvas.Left="0" Canvas.Top="0" ClipToBounds="False" 
-                Visibility="{Binding IsSwitchSection, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <Polygon Points="{Binding LockPoints}"
-                     Fill="Transparent"
-                     Stroke="{Binding FillColor}" 
-                     StrokeThickness="2" />
+                    Visibility="{Binding IsSwitchSection, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    IsHitTestVisible="False">
+
+                                <ItemsControl ItemsSource="{Binding BusyLines}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <Canvas/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Line X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}"
+                                  Stroke="{Binding LineBrush}" StrokeThickness="11"
+                                  StrokeStartLineCap="Flat" StrokeEndLineCap="Flat"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <TextBlock Canvas.Left="0" Canvas.Top="-15" 
+                           Text="{Binding BusyLines.Count}" Foreground="Red" FontSize="16" FontWeight="Bold"/>
                             </Canvas>
 
-                            <TextBlock Canvas.Left="0" Canvas.Top="18" 
-                   Width="{Binding Width}" TextAlignment="Center"
-                   Text="{Binding Name}" Foreground="Black" FontWeight="Bold" FontSize="11" 
-                   IsHitTestVisible="False"/>
+                            <TextBlock Canvas.Left="0" Canvas.Top="18" Width="{Binding Width}" TextAlignment="Center"
+                       Text="{Binding Name}" Foreground="Black" FontWeight="Bold" FontSize="11" 
+                       IsHitTestVisible="False"/>
                         </Canvas>
                     </DataTemplate>
 
@@ -190,6 +206,32 @@
                                        HorizontalAlignment="Center" Margin="0,-15,0,0"
                                        IsHitTestVisible="False"/>
                         </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type vis:RoutePointViewModel}">
+                        <Canvas ClipToBounds="False" ToolTip="{Binding Name}">
+
+                            <Border Canvas.Left="0" Canvas.Top="0"
+                Width="{Binding Width}" Height="{Binding Height}"
+                Background="{Binding FillColor}"
+                BorderBrush="{Binding StrokeColor}"
+                BorderThickness="{Binding StrokeThickness}"
+                Cursor="Hand">
+
+                                <Border.InputBindings>
+                                    <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}"/>
+                                </Border.InputBindings>
+
+                                <TextBlock Text="{Binding Name}" 
+                       Foreground="Black" 
+                       FontSize="9" 
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"
+                       IsHitTestVisible="False"/>
+                            </Border>
+
+                        </Canvas>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type vis:SwitchViewModel}">

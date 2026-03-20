@@ -94,6 +94,10 @@ namespace BPO_ex4.Visuals
         {
             X = x; Y = y; Name = name; ZIndex = 10;
         }
+        public void UpdateColor()
+        {
+            RaisePropertyChanged("SectionFillColor");
+        }
         private bool IsExactMatch(string description, string name)
         {
             if (string.IsNullOrWhiteSpace(description) || string.IsNullOrWhiteSpace(name)) return false;
