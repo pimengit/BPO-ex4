@@ -18,6 +18,9 @@ namespace BPO_ex4.Visuals
         public bool IsSwitchSection { get; set; }
         public PointCollection LockPoints { get; set; } = new PointCollection();
         public System.Collections.Generic.List<string> ChildSwitchNames { get; set; } = new System.Collections.Generic.List<string>();
+
+        // Список физических стрелок внутри этой секции!
+        public System.Collections.Generic.List<SwitchViewModel> ChildSwitches { get; set; } = new System.Collections.Generic.List<SwitchViewModel>();
         public System.Collections.ObjectModel.ObservableCollection<BusyLineVM> BusyLines { get; set; } = new System.Collections.ObjectModel.ObservableCollection<BusyLineVM>();
         public Visibility RectVisibility => IsSwitchSection ? Visibility.Collapsed : Visibility.Visible;
 
@@ -25,23 +28,18 @@ namespace BPO_ex4.Visuals
         {
             get
             {
+                if (IsSwitchSection) return Brushes.Transparent; // Фон всегда прозрачный, все рисуется линиями!
+
                 bool isOccupied = _occupancyNode != null && !_occupancyNode.Value;
                 bool isLz = _lzNode != null && _lzNode.Value;
                 bool isLs = _lsNode != null && _lsNode.Value;
                 bool isPz = _pzNode != null && _pzNode.Value;
                 bool isPreview = RoutePointViewModel.CurrentPreviewRouteId > 0 && RoutePointViewModel.CurrentPreviewSections.Contains(Name);
 
-                // 1. ЖЕЛЕЗНАЯ ЛОГИКА - Возвращаем родные цвета (Занятость и Зеленку) для ВСЕХ секций!
+                if (isPreview) return Brushes.Aqua;
                 if (isOccupied) return isLz ? Brushes.Yellow : Brushes.Red;
                 if (!isOccupied && isLs) return Brushes.Blue;
-                if (isPz) return Brushes.Lime; // Твоя зеленка снова в строю!
-
-                // 2. ПРЕДПРОСМОТР (Аквамарин)
-                if (isPreview)
-                {
-                    if (!IsSwitchSection) return Brushes.Aqua; // Обычный путь красим целиком
-                    return Brushes.LightGray; // Стрелку оставляем серой, Аквамарин нарисуют линии поверх!
-                }
+                if (isPz) return Brushes.Lime;
 
                 return Brushes.LightGray;
             }
@@ -50,14 +48,13 @@ namespace BPO_ex4.Visuals
         public SectionViewModel(double x, double y, double w, string name, bool isSwSection = false)
         {
             X = x; Y = y; Width = w; Name = name; IsSwitchSection = isSwSection;
-            ZIndex = isSwSection ? 50 : 5; // Вытаскиваем секцию наверх, чтобы Аквамарин лег ПОВЕРХ стрелки!
+            ZIndex = isSwSection ? 50 : 5;
             RoutePointViewModel.PreviewChanged += () => OnLogicChanged();
         }
 
         public override void BindToLogicSect(Context ctx, SimulationEngine engine)
         {
             _engine = engine;
-
             _occupancyNode = ctx.GetAllNodes().FirstOrDefault(n => n.Id.StartsWith("SECT_P") && (n.Description == Name || n.Description.Remove(0, 1) == Name));
             if (_occupancyNode != null) _occupancyNode.Changed += _ => OnLogicChanged();
 
@@ -88,75 +85,89 @@ namespace BPO_ex4.Visuals
         {
             RaisePropertyChanged(nameof(FillColor));
             RaisePropertyChanged(nameof(RectVisibility));
-
             if (IsSwitchSection) UpdateBusyLines();
         }
 
         private void UpdateBusyLines()
         {
             bool isOccupied = _occupancyNode != null && !_occupancyNode.Value;
-            bool isPreview = RoutePointViewModel.CurrentPreviewRouteId > 0 && RoutePointViewModel.CurrentPreviewSections.Contains(Name);
+            bool isLz = _lzNode != null && _lzNode.Value;
             bool isPz = _pzNode != null && _pzNode.Value;
+            bool isPreview = RoutePointViewModel.CurrentPreviewRouteId > 0 && RoutePointViewModel.CurrentPreviewSections.Contains(Name);
 
-            for (int i = 0; i < BusyLines.Count; i++)
+            Brush targetBrush = Brushes.Transparent;
+            if (isPreview) targetBrush = Brushes.Aqua;
+            if (isOccupied) targetBrush = isLz ? Brushes.Yellow : Brushes.Red;
+            else if (isPz) targetBrush = Brushes.Lime;
+
+            if (targetBrush == Brushes.Transparent)
             {
-                var line = BusyLines[i];
-                Brush lineBrush = Brushes.Transparent;
+                foreach (var l in BusyLines) l.LineBrush = Brushes.Transparent;
+                foreach (var sw in ChildSwitches) sw.UpdateBusyLines(Brushes.Transparent, Brushes.Transparent);
+                return;
+            }
 
-                // Рисуем Аквамарин только в предпросмотре, когда секция еще не замкнута и не занята
-                if (isPreview && !isPz && !isOccupied)
+            bool sw1Minus = false, sw2Minus = false;
+
+            if (isPreview && !isPz && !isOccupied)
+            {
+                if (RoutePointViewModel.RouteSwitchStates.TryGetValue(RoutePointViewModel.CurrentPreviewRouteId, out var reqStates))
                 {
-                    if (IsLineActiveForPreview(line, RoutePointViewModel.CurrentPreviewRouteId))
+                    if (ChildSwitchNames.Count > 0 && reqStates.TryGetValue(ChildSwitchNames[0], out bool s1)) sw1Minus = s1;
+                    if (ChildSwitchNames.Count > 1 && reqStates.TryGetValue(ChildSwitchNames[1], out bool s2)) sw2Minus = s2;
+                }
+            }
+            else
+            {
+                if (ChildSwitches.Count > 0) sw1Minus = ChildSwitches[0].IsMinus;
+                if (ChildSwitches.Count > 1) sw2Minus = ChildSwitches[1].IsMinus;
+            }
+
+            if (ChildSwitches.Count > 0) ChildSwitches[0].UpdateBusyLines(!sw1Minus ? targetBrush : Brushes.Transparent, sw1Minus ? targetBrush : Brushes.Transparent);
+            if (ChildSwitches.Count > 1) ChildSwitches[1].UpdateBusyLines(!sw2Minus ? targetBrush : Brushes.Transparent, sw2Minus ? targetBrush : Brushes.Transparent);
+
+            var diagonals = BusyLines.Where(l => System.Math.Abs(l.StartY - l.EndY) >= 2).OrderBy(l => System.Math.Min(l.StartX, l.EndX)).ToList();
+
+            foreach (var line in BusyLines)
+            {
+                line.X1 = line.StartX; line.Y1 = line.StartY; line.X2 = line.EndX; line.Y2 = line.EndY;
+                Brush lineBrush = targetBrush;
+                bool isStraight = System.Math.Abs(line.StartY - line.EndY) < 2;
+
+                if (isStraight)
+                {
+                    if (!sw1Minus && !sw2Minus) lineBrush = targetBrush;
+                    else
                     {
-                        lineBrush = Brushes.Aqua;
+                        double minX = System.Math.Min(line.StartX, line.EndX);
+                        double maxX = System.Math.Max(line.StartX, line.EndX);
+                        if (sw1Minus && diagonals.Count > 0) ApplyCut(line, diagonals[0], line.StartY, minX, maxX);
+                        else if (sw2Minus && diagonals.Count > 1) ApplyCut(line, diagonals[1], line.StartY, minX, maxX);
+                        else lineBrush = Brushes.Transparent;
                     }
                 }
-
+                else
+                {
+                    lineBrush = Brushes.Transparent;
+                }
                 line.LineBrush = lineBrush;
             }
         }
 
-        // МАТЕМАТИКА ГЕОМЕТРИИ ЛИНИЙ
-        private bool IsLineActiveForPreview(BusyLineVM line, int routeNum)
+        private void ApplyCut(BusyLineVM line, BusyLineVM diag, double hy, double minX, double maxX)
         {
-            if (!RoutePointViewModel.RouteSwitchStates.ContainsKey(routeNum)) return false;
-            var requiredStates = RoutePointViewModel.RouteSwitchStates[routeNum];
-
-            // 1. По координатам понимаем, прямая это магистраль или съезд
-            bool isStraightLine = System.Math.Abs(line.Y1 - line.Y2) < 2;
-
-            // 2. Узнаем, есть ли в этой секции стрелки, которым маршрут скомандовал "В минус" (xor_mask = 1)
-            var switchStates = ChildSwitchNames.Select(name => requiredStates.ContainsKey(name) && requiredStates[name]).ToList();
-            bool anyMinus = switchStates.Any(s => s);
-
-            if (isStraightLine)
-            {
-                // Прямую магистраль зажигаем ВСЕГДА, чтобы кусок пути до остряков не пропадал
-                return true;
-            }
-            else
-            {
-                // Если линия наклонная (диагональ), сортируем все диагонали этой секции слева направо (по оси X)
-                var allDiagonals = BusyLines.Where(l => System.Math.Abs(l.Y1 - l.Y2) >= 2).OrderBy(l => l.X1).ToList();
-                int diagIndex = allDiagonals.IndexOf(line);
-
-                // Если диагональ первая слева (индекс 0), она отвечает за первую стрелку. И так далее.
-                if (diagIndex >= 0 && diagIndex < switchStates.Count)
-                {
-                    return switchStates[diagIndex];
-                }
-
-                // Подстраховка
-                return anyMinus;
-            }
+            double touchX = System.Math.Abs(diag.StartY - hy) < 5 ? diag.StartX : diag.EndX;
+            double farX = System.Math.Abs(diag.StartY - hy) < 5 ? diag.EndX : diag.StartX;
+            bool rootIsLeft = farX > touchX;
+            line.X1 = touchX; line.Y1 = hy;
+            if (rootIsLeft) { line.X2 = minX; line.Y2 = hy; } else { line.X2 = maxX; line.Y2 = hy; }
         }
 
+
+        public void TriggerLogicChange() => OnLogicChanged();
         protected override void OnLeftClick()
         {
-            if (_node != null && _engine != null)
-            {
-                _engine.InjectChange(_node, !_node.Value);
-            }
+            if (_node != null && _engine != null) _engine.InjectChange(_node, !_node.Value);
         }
     }
 }

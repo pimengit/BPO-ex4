@@ -25,6 +25,24 @@ namespace BPO_ex4.Visuals
                 targetCollection.Add(new System.Windows.Media.LineGeometry(new System.Windows.Point(xb, yb), new System.Windows.Point(xe, ye)));
             }
         }
+        private static void ParseBusyLinesRelative(System.Xml.Linq.XElement parentNode, ObservableCollection<BusyLineVM> targetCollection)
+        {
+            if (parentNode == null) return;
+            var culture = CultureInfo.InvariantCulture;
+            double bx = double.Parse(parentNode.Attribute("x")?.Value ?? "0", culture);
+            double by = double.Parse(parentNode.Attribute("y")?.Value ?? "0", culture);
+
+            foreach (var line in parentNode.Elements("line"))
+            {
+                double xb = double.Parse(line.Attribute("xbegin")?.Value ?? "0", culture) + bx;
+                double yb = double.Parse(line.Attribute("ybegin")?.Value ?? "0", culture) + by;
+                double xe = double.Parse(line.Attribute("xend")?.Value ?? "0", culture) + bx;
+                double ye = double.Parse(line.Attribute("yend")?.Value ?? "0", culture) + by;
+                targetCollection.Add(new BusyLineVM(xb, yb, xe, ye));
+            }
+        }
+
+
         // !!! Добавили аргумент SimulationEngine engine !!!
         public static ObservableCollection<VisualObjectViewModel> Load(string xmlPath, Context ctx, SimulationEngine engine)
         {
@@ -113,6 +131,9 @@ namespace BPO_ex4.Visuals
 
                     var swVm = new SwitchViewModel(x, y, name);
 
+                    // Парсим толстые линии Плюса и Минуса для стрелки
+                    ParseBusyLinesRelative(el.Element("busy_in_plus"), swVm.BusyInPlusLines);
+                    ParseBusyLinesRelative(el.Element("busy_in_minus"), swVm.BusyInMinusLines);
 
 
                     // Считываем точки для ПЛЮСА
@@ -178,24 +199,10 @@ namespace BPO_ex4.Visuals
                     bool isSwSection = el.Attribute("sw_section")?.Value == "1";
                     var sectionVm = new SectionViewModel(x, y, dw, name, isSwSection);
 
-
-                    // Если это стрелочная секция, парсим её контур (lock)
-                    // Если это стрелочная секция, парсим её контур (lock)
+                    // Если это стрелочная секция
                     if (isSwSection)
                     {
-                        // === ВОССТАНОВЛЕНО: Парсим сам контур стрелки! Без него её не видно! ===
-                        var lockNode = el.Element("lock");
-                        if (lockNode != null)
-                        {
-                            foreach (var pt in lockNode.Elements("point"))
-                            {
-                                double px = double.Parse(pt.Attribute("x")?.Value ?? "0", culture);
-                                double py = double.Parse(pt.Attribute("y")?.Value ?? "0", culture);
-                                sectionVm.LockPoints.Add(new System.Windows.Point(px, py));
-                            }
-                        }
-
-                        // ПАРСИМ ТОЛСТЫЕ ЛИНИИ
+                        // ПАРСИМ ЛИНИИ МАГИСТРАЛИ (Они нужны для математики съездов)
                         var busyNode = el.Element("busy_line");
                         if (busyNode != null)
                         {
@@ -210,7 +217,7 @@ namespace BPO_ex4.Visuals
                             }
                         }
 
-                        // ПРИВЯЗЫВАЕМ СТРЕЛКИ ДЛЯ ПРЕДСКАЗАНИЯ
+                        // ПРИВЯЗЫВАЕМ СТРЕЛКИ К СЕКЦИИ
                         foreach (var swNode in el.Elements("switch"))
                         {
                             string swNumber = swNode.Attribute("number")?.Value;
@@ -219,16 +226,8 @@ namespace BPO_ex4.Visuals
                             if (childSwitch != null)
                             {
                                 childSwitch.ParentSection = sectionVm;
-
-                                // === ИСПРАВЛЕНИЕ №1: ЗАСТАВЛЯЕМ СТРЕЛКУ КРАСНЕТЬ ===
-                                // Когда секция меняет цвет, дергаем стрелку, чтобы она тоже обновилась!
-                                sectionVm.PropertyChanged += (sender, args) =>
-                                {
-                                    if (args.PropertyName == "FillColor")
-                                    {
-                                        childSwitch.UpdateColor(); // <--- ИСПРАВЛЕНО ЗДЕСЬ!
-                                    }
-                                };
+                                // === ВАЖНО: Добавляем физическую стрелку в список секции ===
+                                sectionVm.ChildSwitches.Add(childSwitch);
                             }
 
                             if (!string.IsNullOrEmpty(swNumber))

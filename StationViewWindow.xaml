@@ -244,6 +244,36 @@
                                     </Polygon.InputBindings>
                                 </Polygon>
 
+                                <ItemsControl ItemsSource="{Binding BusyInPlusLines}" Panel.ZIndex="10" IsHitTestVisible="False">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <Canvas/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Line X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}"
+                  Stroke="{Binding LineBrush}" StrokeThickness="11"
+                  StrokeStartLineCap="Flat" StrokeEndLineCap="Flat"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <ItemsControl ItemsSource="{Binding BusyInMinusLines}" Panel.ZIndex="10" IsHitTestVisible="False">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <Canvas/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Line X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}"
+                  Stroke="{Binding LineBrush}" StrokeThickness="11"
+                  StrokeStartLineCap="Flat" StrokeEndLineCap="Flat"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
                                 <Polygon Points="{Binding MinusPoints}" Fill="{Binding SectionFillColor}" Stroke="Black" StrokeThickness="1" Cursor="Hand" Panel.ZIndex="1">
                                     <Polygon.InputBindings>
                                         <MouseBinding Gesture="LeftClick" Command="{Binding ParentSection.ClickCommand}"/>
