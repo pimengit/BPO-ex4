@@ -35,25 +35,26 @@
                     </Style>
                 </ItemsControl.ItemContainerStyle>
 
+
                 <ItemsControl.Resources>
 
                     <DataTemplate DataType="{x:Type vis:SectionViewModel}">
                         <Canvas ToolTip="{Binding Name}" ClipToBounds="False" Background="Transparent">
 
                             <Rectangle Canvas.Left="0" Canvas.Top="0"
-                       Width="{Binding Width}" Height="{Binding Height}" 
-                       Fill="{Binding FillColor}"
-                       Visibility="{Binding RectVisibility}"
-                       Stroke="Black" StrokeThickness="1"
-                       RadiusX="1" RadiusY="1" Cursor="Hand">
+                                       Width="{Binding Width}" Height="{Binding Height}" 
+                                       Fill="{Binding FillColor}"
+                                       Visibility="{Binding RectVisibility}"
+                                       Stroke="Black" StrokeThickness="1"
+                                       RadiusX="1" RadiusY="1" Cursor="Hand">
                                 <Rectangle.InputBindings>
                                     <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}"/>
                                 </Rectangle.InputBindings>
                             </Rectangle>
 
                             <Canvas Canvas.Left="0" Canvas.Top="0" ClipToBounds="False" 
-                    Visibility="{Binding IsSwitchSection, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    IsHitTestVisible="False">
+                                    Visibility="{Binding IsSwitchSection, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    IsHitTestVisible="False">
 
                                 <ItemsControl ItemsSource="{Binding BusyLines}">
                                     <ItemsControl.ItemsPanel>
@@ -64,30 +65,30 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Line X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}"
-                                  Stroke="{Binding LineBrush}" StrokeThickness="11"
-                                  StrokeStartLineCap="Flat" StrokeEndLineCap="Flat"/>
+                                                  Stroke="{Binding LineBrush}" StrokeThickness="11"
+                                                  StrokeStartLineCap="Flat" StrokeEndLineCap="Flat"/>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
 
                                 <TextBlock Canvas.Left="0" Canvas.Top="-15" 
-                           Text="{Binding BusyLines.Count}" Foreground="Red" FontSize="16" FontWeight="Bold"/>
+                                           Text="{Binding BusyLines.Count}" Foreground="Red" FontSize="16" FontWeight="Bold"/>
                             </Canvas>
 
                             <TextBlock Canvas.Left="0" Canvas.Top="18" Width="{Binding Width}" TextAlignment="Center"
-                       Text="{Binding Name}" Foreground="Black" FontWeight="Bold" FontSize="11" 
-                       IsHitTestVisible="False"/>
+                                       Text="{Binding Name}" Foreground="Black" FontWeight="Bold" FontSize="11" 
+                                       IsHitTestVisible="False"/>
                         </Canvas>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type vis:LightViewModel}">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                             <TextBlock Text="{Binding Name}" Foreground="White" FontSize="10" 
-                   HorizontalAlignment="Center" Margin="0,-15,0,2"/>
+                                       HorizontalAlignment="Center" Margin="0,-15,0,2"/>
 
                             <Grid Background="Transparent"
-              PreviewMouseRightButtonDown="Light_OnRightDown" 
-              PreviewMouseRightButtonUp="Light_OnRightUp">
+                                  PreviewMouseRightButtonDown="Light_OnRightDown" 
+                                  PreviewMouseRightButtonUp="Light_OnRightUp">
 
                                 <StackPanel VerticalAlignment="Bottom" Margin="0,15,0,0">
                                     <Rectangle Width="4" Height="15" Fill="Black" HorizontalAlignment="Center"/>
@@ -95,8 +96,8 @@
                                 </StackPanel>
 
                                 <Border Background="Black" CornerRadius="9" Padding="2" 
-                    HorizontalAlignment="Center" VerticalAlignment="Top"
-                    ToolTip="{Binding Name}" Cursor="Hand">
+                                        HorizontalAlignment="Center" VerticalAlignment="Top"
+                                        ToolTip="{Binding Name}" Cursor="Hand">
 
                                     <Border.InputBindings>
                                         <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}"/>
@@ -104,13 +105,13 @@
 
                                     <StackPanel>
                                         <Ellipse Width="16" Height="16" 
-                             Fill="{Binding TopColor}" 
-                             Stroke="White" StrokeThickness="1"/>
+                                                 Fill="{Binding TopColor}" 
+                                                 Stroke="White" StrokeThickness="1"/>
 
                                         <Ellipse Width="16" Height="16" 
-                             Fill="{Binding BottomColor}" 
-                             Visibility="{Binding BottomLensVisibility}" 
-                             Stroke="White" StrokeThickness="1" Margin="0,2,0,0">
+                                                 Fill="{Binding BottomColor}" 
+                                                 Visibility="{Binding BottomLensVisibility}" 
+                                                 Stroke="White" StrokeThickness="1" Margin="0,2,0,0">
                                             <Ellipse.Style>
                                                 <Style TargetType="Ellipse">
                                                     <Style.Triggers>
@@ -119,11 +120,11 @@
                                                                 <BeginStoryboard x:Name="BlinkStoryboard">
                                                                     <Storyboard>
                                                                         <DoubleAnimation 
-                                                        Storyboard.TargetProperty="Opacity"
-                                                        From="1.0" To="0.0" 
-                                                        Duration="0:0:0.5" 
-                                                        AutoReverse="True" 
-                                                        RepeatBehavior="Forever"/>
+                                                                            Storyboard.TargetProperty="Opacity"
+                                                                            From="1.0" To="0.0" 
+                                                                            Duration="0:0:0.5" 
+                                                                            AutoReverse="True" 
+                                                                            RepeatBehavior="Forever"/>
                                                                     </Storyboard>
                                                                 </BeginStoryboard>
                                                             </DataTrigger.EnterActions>
@@ -145,30 +146,30 @@
                         <Canvas ClipToBounds="False" ToolTip="{Binding Name}">
 
                             <Rectangle Canvas.Left="0" Canvas.Top="0" 
-                   Width="{Binding RectW}" Height="{Binding RectH}" 
-                   Fill="{Binding FillColor}" Stroke="Black" StrokeThickness="1" />
+                                       Width="{Binding RectW}" Height="{Binding RectH}" 
+                                       Fill="{Binding FillColor}" Stroke="Black" StrokeThickness="1" />
 
                             <Line X1="{Binding LineX}" Y1="0" 
-              X2="{Binding LineX}" Y2="{Binding RectH}" 
-              Stroke="Black" StrokeThickness="1"/>
+                                  X2="{Binding LineX}" Y2="{Binding RectH}" 
+                                  Stroke="Black" StrokeThickness="1"/>
 
                             <TextBlock Canvas.Left="{Binding Cap1X}" Canvas.Top="0" 
-                   Width="{Binding Cap1W}" Height="{Binding RectH}"
-                   Text="{Binding TextLeft}" Foreground="Black" 
-                   FontSize="10" FontWeight="Bold" 
-                   TextAlignment="Center" VerticalAlignment="Center" 
-                   Padding="0,1,0,0"/>
+                                       Width="{Binding Cap1W}" Height="{Binding RectH}"
+                                       Text="{Binding TextLeft}" Foreground="Black" 
+                                       FontSize="10" FontWeight="Bold" 
+                                       TextAlignment="Center" VerticalAlignment="Center" 
+                                       Padding="0,1,0,0"/>
 
                             <TextBlock Canvas.Left="{Binding Cap2X}" Canvas.Top="0" 
-                   Width="{Binding Cap2W}" Height="{Binding RectH}"
-                   Text="{Binding TextRight}" Foreground="Black" 
-                   FontSize="10" FontWeight="Bold" 
-                   TextAlignment="Center" VerticalAlignment="Center"
-                   Padding="0,1,0,0"/>
+                                       Width="{Binding Cap2W}" Height="{Binding RectH}"
+                                       Text="{Binding TextRight}" Foreground="Black" 
+                                       FontSize="10" FontWeight="Bold" 
+                                       TextAlignment="Center" VerticalAlignment="Center"
+                                       Padding="0,1,0,0"/>
 
                             <TextBlock Text="{Binding Name}" Foreground="Black" FontSize="10" FontWeight="Bold"
-                   Canvas.Top="-15" Canvas.Left="-10" Width="50" TextAlignment="Center"
-                   IsHitTestVisible="False"/>
+                                       Canvas.Top="-15" Canvas.Left="-10" Width="50" TextAlignment="Center"
+                                       IsHitTestVisible="False"/>
                         </Canvas>
                     </DataTemplate>
 
@@ -212,23 +213,23 @@
                         <Canvas ClipToBounds="False" ToolTip="{Binding Name}">
 
                             <Border Canvas.Left="0" Canvas.Top="0"
-                Width="{Binding Width}" Height="{Binding Height}"
-                Background="{Binding FillColor}"
-                BorderBrush="{Binding StrokeColor}"
-                BorderThickness="{Binding StrokeThickness}"
-                Cursor="Hand">
+                                    Width="{Binding Width}" Height="{Binding Height}"
+                                    Background="{Binding FillColor}"
+                                    BorderBrush="{Binding StrokeColor}"
+                                    BorderThickness="{Binding StrokeThickness}"
+                                    Cursor="Hand">
 
                                 <Border.InputBindings>
                                     <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}"/>
                                 </Border.InputBindings>
 
                                 <TextBlock Text="{Binding Name}" 
-                       Foreground="Black" 
-                       FontSize="9" 
-                       FontWeight="Bold"
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Center"
-                       IsHitTestVisible="False"/>
+                                           Foreground="Black" 
+                                           FontSize="9" 
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center" 
+                                           VerticalAlignment="Center"
+                                           IsHitTestVisible="False"/>
                             </Border>
 
                         </Canvas>
@@ -238,13 +239,13 @@
                         <Grid>
                             <Canvas ClipToBounds="False">
 
-                                <Polygon Points="{Binding PlusPoints}" Fill="{Binding SectionFillColor}" Stroke="Black" StrokeThickness="1" Cursor="Hand" Panel.ZIndex="1">
+                                <Polygon Points="{Binding PlusPoints}" Fill="{Binding PlusFill}" Stroke="Black" StrokeThickness="1" Cursor="Hand" Panel.ZIndex="1">
                                     <Polygon.InputBindings>
                                         <MouseBinding Gesture="LeftClick" Command="{Binding ParentSection.ClickCommand}"/>
                                     </Polygon.InputBindings>
                                 </Polygon>
 
-                                <Polygon Points="{Binding MinusPoints}" Fill="{Binding SectionFillColor}" Stroke="Black" StrokeThickness="1" Cursor="Hand" Panel.ZIndex="1">
+                                <Polygon Points="{Binding MinusPoints}" Fill="{Binding MinusFill}" Stroke="Black" StrokeThickness="1" Cursor="Hand" Panel.ZIndex="1">
                                     <Polygon.InputBindings>
                                         <MouseBinding Gesture="LeftClick" Command="{Binding ParentSection.ClickCommand}"/>
                                     </Polygon.InputBindings>
@@ -259,7 +260,7 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Line X1="{Binding StartPoint.X}" Y1="{Binding StartPoint.Y}" X2="{Binding EndPoint.X}" Y2="{Binding EndPoint.Y}"
-                              Stroke="{Binding DataContext.ControlPlusBrush, RelativeSource={RelativeSource AncestorType=ItemsControl}}" StrokeThickness="14">
+                                                  Stroke="{Binding DataContext.ControlPlusBrush, RelativeSource={RelativeSource AncestorType=ItemsControl}}" StrokeThickness="14">
                                                 <Line.InputBindings>
                                                     <MouseBinding Gesture="LeftClick" Command="{Binding DataContext.LeftClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"/>
                                                     <MouseBinding Gesture="RightClick" Command="{Binding DataContext.RightClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"/>
@@ -278,7 +279,7 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Line X1="{Binding StartPoint.X}" Y1="{Binding StartPoint.Y}" X2="{Binding EndPoint.X}" Y2="{Binding EndPoint.Y}"
-                              Stroke="{Binding DataContext.ControlMinusBrush, RelativeSource={RelativeSource AncestorType=ItemsControl}}" StrokeThickness="14">
+                                                  Stroke="{Binding DataContext.ControlMinusBrush, RelativeSource={RelativeSource AncestorType=ItemsControl}}" StrokeThickness="14">
                                                 <Line.InputBindings>
                                                     <MouseBinding Gesture="LeftClick" Command="{Binding DataContext.LeftClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"/>
                                                     <MouseBinding Gesture="RightClick" Command="{Binding DataContext.RightClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"/>
@@ -289,16 +290,14 @@
                                 </ItemsControl>
 
                                 <TextBlock Canvas.Left="{Binding RectX}" Canvas.Top="{Binding RectY}" 
-                       Width="30" Height="30" 
-                       Text="{Binding Name}" Foreground="Black" FontWeight="Bold" FontSize="12"
-                       TextAlignment="Center" VerticalAlignment="Center" 
-                       IsHitTestVisible="False" Panel.ZIndex="11"/>
+                                           Width="30" Height="30" 
+                                           Text="{Binding Name}" Foreground="Black" FontWeight="Bold" FontSize="12"
+                                           TextAlignment="Center" VerticalAlignment="Center" 
+                                           IsHitTestVisible="False" Panel.ZIndex="11"/>
 
                             </Canvas>
                         </Grid>
                     </DataTemplate>
-
-
 
                 </ItemsControl.Resources>
             </ItemsControl>

@@ -20,62 +20,52 @@ namespace BPO_ex4.Visuals
         public double RectX { get; set; } = -120;
         public double RectY { get; set; } = -7;
 
-        // Длинные полигоны (Рельсовая цепь)
+        public bool IsMinus => _mkNode != null && _mkNode.Value;
+
         public PointCollection PlusPoints { get; set; } = new PointCollection();
         public PointCollection MinusPoints { get; set; } = new PointCollection();
 
-        // Короткие корешки (Контроль стрелки)
         public ObservableCollection<LineGeometry> ControlPlusLines { get; set; } = new ObservableCollection<LineGeometry>();
         public ObservableCollection<LineGeometry> ControlMinusLines { get; set; } = new ObservableCollection<LineGeometry>();
 
         private SectionViewModel _parentSection;
+
+        // Новые свойства для заливки конкретных полигонов
+        private Brush _routeBrush = Brushes.LightGray;
+        private bool _isRouteMinus = false;
+
+        public Brush PlusFill => _isRouteMinus ? Brushes.LightGray : _routeBrush;
+        public Brush MinusFill => _isRouteMinus ? _routeBrush : Brushes.LightGray;
+
+        // Метод, который принимает цвет маршрута и положение стрелки от секции
+        public void SetRouteState(Brush brush, bool isMinus)
+        {
+            _routeBrush = brush == Brushes.Transparent ? Brushes.LightGray : brush;
+            _isRouteMinus = isMinus;
+            RaisePropertyChanged(nameof(PlusFill));
+            RaisePropertyChanged(nameof(MinusFill));
+        }
+
         public SectionViewModel ParentSection
         {
             get => _parentSection;
-            set
-            {
-                _parentSection = value;
-                if (_parentSection != null)
-                {
-                    _parentSection.PropertyChanged += (s, e) =>
-                    {
-                        if (e.PropertyName == "FillColor")
-                        {
-                            RaisePropertyChanged(nameof(SectionFillColor));
-                        }
-                    };
-                }
-            }
+            set { _parentSection = value; }
         }
 
-        // 1. ЦВЕТ ВСЕЙ СТРЕЛКИ (Цвет путевой секции)
-        public Brush SectionFillColor
-        {
-            get
-            {
-                if (ParentSection == null) return Brushes.LightGray;
-                var c = ParentSection.FillColor;
-                // Свободная секция - серая, занятая - красная/желтая
-                return c == Brushes.Transparent ? Brushes.LightGray : c;
-            }
-        }
-
-        // 2. ЦВЕТ ПЛЮС-КОРЕШКА (Зеленый или Красный)
         public Brush ControlPlusBrush
         {
             get
             {
-                if (_pkNode == null || _mkNode == null) return Brushes.Lime; // Заглушка
+                if (_pkNode == null || _mkNode == null) return Brushes.Lime;
                 bool pk = _pkNode.Value, mk = _mkNode.Value;
 
-                if (pk && !mk) return Brushes.Lime;         // Стоит в плюсе
-                if (!pk && mk) return Brushes.Transparent;  // Переведена в минус (прячем)
+                if (pk && !mk) return Brushes.Lime;
+                if (!pk && mk) return Brushes.Transparent;
 
-                return Brushes.Red; // Нет контроля (0 0)
+                return Brushes.Red;
             }
         }
 
-        // 3. ЦВЕТ МИНУС-КОРЕШКА (Желтый или Красный)
         public Brush ControlMinusBrush
         {
             get
@@ -83,10 +73,10 @@ namespace BPO_ex4.Visuals
                 if (_pkNode == null || _mkNode == null) return Brushes.Transparent;
                 bool pk = _pkNode.Value, mk = _mkNode.Value;
 
-                if (!pk && mk) return Brushes.Yellow;       // Стоит в минусе
-                if (pk && !mk) return Brushes.Transparent;  // Переведена в плюс (прячем)
+                if (!pk && mk) return Brushes.Yellow;
+                if (pk && !mk) return Brushes.Transparent;
 
-                return Brushes.Red; // Нет контроля (0 0)
+                return Brushes.Red;
             }
         }
 
@@ -94,21 +84,21 @@ namespace BPO_ex4.Visuals
         {
             X = x; Y = y; Name = name; ZIndex = 10;
         }
+
         public void UpdateColor()
         {
-            RaisePropertyChanged("SectionFillColor");
+            RaisePropertyChanged(nameof(PlusFill));
+            RaisePropertyChanged(nameof(MinusFill));
         }
+
         private bool IsExactMatch(string description, string name)
         {
             if (string.IsNullOrWhiteSpace(description) || string.IsNullOrWhiteSpace(name)) return false;
-
-            // Отрезаем невидимые пробелы из имени (если в XML было "6 ")
             string safeName = Regex.Escape(name.Trim());
-
-            // Ищем точное совпадение отдельным словом
             string pattern = $@"(?<![\wа-яА-ЯёЁ]){safeName}(?![\wа-яА-ЯёЁ])";
             return Regex.IsMatch(description, pattern, RegexOptions.IgnoreCase);
         }
+
         public override void BindToLogic(Context ctx, SimulationEngine engine)
         {
             _engine = engine;
@@ -205,7 +195,8 @@ namespace BPO_ex4.Visuals
         {
             RaisePropertyChanged(nameof(ControlPlusBrush));
             RaisePropertyChanged(nameof(ControlMinusBrush));
-            RaisePropertyChanged(nameof(SectionFillColor));
+            RaisePropertyChanged(nameof(IsMinus));
+            ParentSection?.TriggerLogicChange();
         }
     }
 }

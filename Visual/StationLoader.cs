@@ -8,7 +8,6 @@ namespace BPO_ex4.Visuals
 {
     public static class StationLoader
     {
-
         private static void ParseLines(System.Xml.Linq.XElement parentNode, System.Collections.ObjectModel.ObservableCollection<System.Windows.Media.LineGeometry> targetCollection)
         {
             if (parentNode == null) return;
@@ -25,7 +24,7 @@ namespace BPO_ex4.Visuals
                 targetCollection.Add(new System.Windows.Media.LineGeometry(new System.Windows.Point(xb, yb), new System.Windows.Point(xe, ye)));
             }
         }
-        // !!! Добавили аргумент SimulationEngine engine !!!
+
         public static ObservableCollection<VisualObjectViewModel> Load(string xmlPath, Context ctx, SimulationEngine engine)
         {
             var collection = new ObservableCollection<VisualObjectViewModel>();
@@ -37,71 +36,37 @@ namespace BPO_ex4.Visuals
                 var doc = XDocument.Load(xmlPath);
                 var culture = CultureInfo.InvariantCulture;
 
-                // 1. ПАРСИНГ СЕКЦИЙ
-                var trackElements = doc.Descendants("tracks")
-                                       .Elements("section")
-                                       .Elements("object");
-
-                // 2. ЗР
-                var zrElements = doc.Descendants("sig_group")
-                                    .Elements("object");
-
-                
-
-                // 3. СТРЕЛКИ
+                var trackElements = doc.Descendants("tracks").Elements("section").Elements("object");
+                var zrElements = doc.Descendants("sig_group").Elements("object");
                 var switchElements = doc.Descendants("switch").Elements("object");
-                // Если в XML просто <object ... type="switch"> то искать надо иначе, 
-                // но судя по tracks->section, у тебя структура по типам папок.
-
-                // 4. ГАРС
-                var garsElements = doc.Descendants("gars_indicators")
-                      .Elements("object");
-
-                // 5. Светофоры
-                var lightElements = doc.Descendants("x_light")
-                       .Elements("object");
-
-                // 6. АРС/АБ
-                var VSElements = doc.Descendants("traffic_mode")
-                       .Elements("object");
+                var garsElements = doc.Descendants("gars_indicators").Elements("object");
+                var lightElements = doc.Descendants("x_light").Elements("object");
+                var VSElements = doc.Descendants("traffic_mode").Elements("object");
 
                 foreach (var el in lightElements)
                 {
                     double x = double.Parse(el.Attribute("x")?.Value ?? "0", culture);
                     double y = double.Parse(el.Attribute("y")?.Value ?? "0", culture);
                     string name = el.Attribute("name")?.Value ?? "???";
-
-                    // Считываем Number (ОБЯЗАТЕЛЬНО, это связь с OKSE)
                     int number = int.Parse(el.Attribute("number")?.Value ?? "0");
-
-                    // Направление (odd/even) - пригодится для рисования мачты
                     string dir = el.Attribute("dir")?.Value ?? "odd";
 
                     var lightVm = new LightViewModel(x, y, number, name, dir);
                     lightVm.BindToLogic(ctx, engine);
-
                     collection.Add(lightVm);
                 }
 
                 foreach (var el in garsElements)
                 {
-                    // Парсим координаты
                     double x = double.Parse(el.Attribute("x")?.Value ?? "0", culture);
                     double y = double.Parse(el.Attribute("y")?.Value ?? "0", culture);
-
-                    // Если ширины нет в XML, ставим 0 (тогда возьмется ширина из файла правил)
                     double w = double.Parse(el.Attribute("width")?.Value ?? el.Attribute("dw")?.Value ?? "0", culture);
-
                     string name = el.Attribute("name")?.Value ?? "???";
-
-                    // Безопасный парсинг номера
                     int number = 0;
                     int.TryParse(el.Attribute("number")?.Value, out number);
 
-                    // Теперь передаем 5 аргументов
                     var garsVm = new GarsViewModel(x, y, w, name, number);
                     garsVm.BindToLogic(ctx, engine);
-
                     collection.Add(garsVm);
                 }
 
@@ -113,9 +78,6 @@ namespace BPO_ex4.Visuals
 
                     var swVm = new SwitchViewModel(x, y, name);
 
-
-
-                    // Считываем точки для ПЛЮСА
                     var plusNode = el.Element("plus");
                     if (plusNode != null)
                     {
@@ -127,7 +89,6 @@ namespace BPO_ex4.Visuals
                         }
                     }
 
-                    // Считываем точки для МИНУСА
                     var minusNode = el.Element("minus");
                     if (minusNode != null)
                     {
@@ -139,27 +100,17 @@ namespace BPO_ex4.Visuals
                         }
                     }
 
-                    
-
-                    // Парсим всё одним махом!
                     ParseLines(el.Element("closed_in_plus"), swVm.ControlPlusLines);
                     ParseLines(el.Element("closed_in_minus"), swVm.ControlMinusLines);
 
-              
+                    // УДАЛЕН ПАРСИНГ busy_in_plus И busy_in_minus!
 
-                    // Достаем короткие корешки!
-                    ParseLines(el.Element("closed_in_plus"), swVm.ControlPlusLines);
-                    ParseLines(el.Element("closed_in_minus"), swVm.ControlMinusLines);
-
-                    // Координаты квадратика с цифрой
                     var rectNode = el.Element("rect");
                     if (rectNode != null)
                     {
                         swVm.RectX = double.Parse(rectNode.Attribute("x")?.Value ?? "0", culture);
                         swVm.RectY = double.Parse(rectNode.Attribute("y")?.Value ?? "0", culture);
                     }
-
-                    // ... остальной парсинг PlusPoints / MinusPoints ...
 
                     swVm.BindToLogic(ctx, engine);
                     collection.Add(swVm);
@@ -169,21 +120,14 @@ namespace BPO_ex4.Visuals
                 {
                     double x = double.Parse(el.Attribute("x")?.Value ?? "0", culture);
                     double y = double.Parse(el.Attribute("y")?.Value ?? "0", culture);
-
-                    // Если dw нет, ставим 0 (а не 60, чтобы не было "призраков")
                     double dw = double.Parse(el.Attribute("dw")?.Value ?? "0", culture);
                     string name = el.Attribute("name")?.Value ?? "???";
-
-                    // Проверяем, стрелочная ли это секция
                     bool isSwSection = el.Attribute("sw_section")?.Value == "1";
+
                     var sectionVm = new SectionViewModel(x, y, dw, name, isSwSection);
 
-
-                    // Если это стрелочная секция, парсим её контур (lock)
-                    // Если это стрелочная секция, парсим её контур (lock)
                     if (isSwSection)
                     {
-                        // === ВОССТАНОВЛЕНО: Парсим сам контур стрелки! Без него её не видно! ===
                         var lockNode = el.Element("lock");
                         if (lockNode != null)
                         {
@@ -195,7 +139,6 @@ namespace BPO_ex4.Visuals
                             }
                         }
 
-                        // ПАРСИМ ТОЛСТЫЕ ЛИНИИ
                         var busyNode = el.Element("busy_line");
                         if (busyNode != null)
                         {
@@ -210,7 +153,6 @@ namespace BPO_ex4.Visuals
                             }
                         }
 
-                        // ПРИВЯЗЫВАЕМ СТРЕЛКИ ДЛЯ ПРЕДСКАЗАНИЯ
                         foreach (var swNode in el.Elements("switch"))
                         {
                             string swNumber = swNode.Attribute("number")?.Value;
@@ -219,14 +161,13 @@ namespace BPO_ex4.Visuals
                             if (childSwitch != null)
                             {
                                 childSwitch.ParentSection = sectionVm;
+                                sectionVm.ChildSwitches.Add(childSwitch);
 
-                                // === ИСПРАВЛЕНИЕ №1: ЗАСТАВЛЯЕМ СТРЕЛКУ КРАСНЕТЬ ===
-                                // Когда секция меняет цвет, дергаем стрелку, чтобы она тоже обновилась!
                                 sectionVm.PropertyChanged += (sender, args) =>
                                 {
                                     if (args.PropertyName == "FillColor")
                                     {
-                                        childSwitch.UpdateColor(); // <--- ИСПРАВЛЕНО ЗДЕСЬ!
+                                        childSwitch.UpdateColor();
                                     }
                                 };
                             }
@@ -238,11 +179,10 @@ namespace BPO_ex4.Visuals
                         }
                     }
 
-                    // Привязка логики
                     sectionVm.BindToLogicSect(ctx, engine);
-
                     collection.Add(sectionVm);
                 }
+
                 foreach (var z in zrElements)
                 {
                     double x = double.Parse(z.Attribute("x")?.Value ?? "0", culture);
@@ -251,12 +191,10 @@ namespace BPO_ex4.Visuals
                     string name = z.Attribute("name")?.Value ?? "???";
 
                     var zrVm = new ZrViewModel(x, y, dw, name);
-
-                    // !!! Передаем движок в метод привязки !!!
                     zrVm.BindToLogicZr(ctx, engine);
-
                     collection.Add(zrVm);
                 }
+
                 foreach (var z in VSElements)
                 {
                     double x = double.Parse(z.Attribute("x")?.Value ?? "0", culture);
@@ -265,10 +203,7 @@ namespace BPO_ex4.Visuals
                     string name = z.Attribute("name")?.Value ?? "???";
 
                     var VSVm = new VSViewModel(x, y, dw, name);
-
-                    // !!! Передаем движок в метод привязки !!!
                     VSVm.BindToLogic(ctx, engine);
-
                     collection.Add(VSVm);
                 }
 
@@ -278,30 +213,20 @@ namespace BPO_ex4.Visuals
                     {
                         var routeDoc = XDocument.Load(routeObjectsPath);
                         var cultureR = CultureInfo.InvariantCulture;
-
-                        // Ищем ИМЕННО теги <route_point>, как они записаны в твоем файле!
                         var pointElements = routeDoc.Descendants("route_point").ToList();
-
-                        if (pointElements.Count == 0)
-                        {
-                            System.Windows.MessageBox.Show("Теги <route_point> не найдены!");
-                        }
 
                         foreach (var el in pointElements)
                         {
                             double x = double.Parse(el.Attribute("x")?.Value ?? "0", culture);
                             double y = double.Parse(el.Attribute("y")?.Value ?? "0", culture);
                             string name = el.Attribute("name")?.Value ?? "???";
-
                             int number = 0;
                             int.TryParse(el.Attribute("id")?.Value, out number);
-
                             string type = el.Attribute("type")?.Value ?? "light";
                             bool isEnd = el.Attribute("as_end")?.Value == "true";
 
                             var ptVm = new RoutePointViewModel(x, y, name, number, type, isEnd);
 
-                            // 1. Маршруты отсюда - это НАЧАЛЬНЫЕ маршруты для этой кнопки
                             foreach (var rNode in el.Elements("route"))
                             {
                                 if (int.TryParse(rNode.Attribute("number")?.Value, out int rNum))
@@ -309,8 +234,6 @@ namespace BPO_ex4.Visuals
                                     ptVm.StartRoutes.Add(rNum);
                                 }
                             }
-
-                            // ВНИМАНИЕ: BindToLogic отсюда убрали!
                             collection.Add(ptVm);
                         }
                     }
@@ -327,14 +250,12 @@ namespace BPO_ex4.Visuals
                     {
                         if (int.TryParse(routeNode.Attribute("number")?.Value, out int routeNum))
                         {
-                            // === ДОБАВЛЕНО: Парсим путевые участки (type="21") ===
                             var sections = routeNode.Elements("object")
                                 .Where(o => o.Attribute("type")?.Value == "21")
                                 .Select(o => o.Attribute("name")?.Value)
                                 .Where(n => !string.IsNullOrEmpty(n))
                                 .ToList();
 
-                            // Сохраняем секции в статический словарь
                             RoutePointViewModel.RouteSections[routeNum] = sections;
 
                             var switchStates = new Dictionary<string, bool>();
@@ -344,14 +265,12 @@ namespace BPO_ex4.Visuals
                                 var instr = obj.Element("instr");
                                 if (swName != null && instr != null)
                                 {
-                                    // xor_mask="1" означает минусовое положение
                                     bool isMinus = instr.Attribute("xor_mask")?.Value == "1";
                                     switchStates[swName] = isMinus;
                                 }
                             }
                             RoutePointViewModel.RouteSwitchStates[routeNum] = switchStates;
 
-                            // (Старый код поиска конца маршрута)
                             var pointNode = routeNode.Element("point");
                             if (pointNode != null && int.TryParse(pointNode.Attribute("id")?.Value, out int pointId))
                             {
