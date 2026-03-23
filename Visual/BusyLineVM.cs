@@ -29,12 +29,10 @@ public class BusyLineVM : VisualObjectViewModel
         set { _lineBrush = value; RaisePropertyChanged(nameof(LineBrush)); }
     }
 
-    // 2. В КОНСТРУКТОРЕ ОБЯЗАТЕЛЬНО ИХ ЗАПОЛНЯЕМ:
-    public BusyLineVM(double x1, double y1, double x2, double y2)
-    {
-        StartX = x1; StartY = y1; EndX = x2; EndY = y2; // <-- ДОБАВЬ ЭТУ СТРОКУ
-        X1 = x1; Y1 = y1; X2 = x2; Y2 = y2;
-    }
+        public BusyLineVM(double x1, double y1, double x2, double y2)
+        {
+            X1 = x1; Y1 = y1; X2 = x2; Y2 = y2;
+        }
 
     public override void BindToLogic(Context ctx, SimulationEngine engine) { }
 }
