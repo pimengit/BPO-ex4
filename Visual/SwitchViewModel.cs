@@ -80,18 +80,6 @@ namespace BPO_ex4.Visuals
             }
         }
 
-        // Добавить в SwitchViewModel.cs:
-        public System.Collections.ObjectModel.ObservableCollection<BusyLineVM> BusyInPlusLines { get; set; } = new System.Collections.ObjectModel.ObservableCollection<BusyLineVM>();
-        public System.Collections.ObjectModel.ObservableCollection<BusyLineVM> BusyInMinusLines { get; set; } = new System.Collections.ObjectModel.ObservableCollection<BusyLineVM>();
-
-        // Свойство, чтобы узнать реальное положение стрелки (True = минус, отклонение)
-        public bool IsMinus => _mkNode != null && _mkNode.Value;
-        // Метод для покраски извне
-        public void UpdateBusyLines(Brush plusBrush, Brush minusBrush)
-        {
-            foreach (var l in BusyInPlusLines) l.LineBrush = plusBrush;
-            foreach (var l in BusyInMinusLines) l.LineBrush = minusBrush;
-        }
         public SwitchViewModel(double x, double y, string name)
         {
             X = x; Y = y; Name = name; ZIndex = 10;

@@ -78,9 +78,6 @@ namespace BPO_ex4.Visuals
 
                     var swVm = new SwitchViewModel(x, y, name);
 
-
-
-                    // Считываем точки для ПЛЮСА
                     var plusNode = el.Element("plus");
                     if (plusNode != null)
                     {
@@ -129,12 +126,8 @@ namespace BPO_ex4.Visuals
 
                     var sectionVm = new SectionViewModel(x, y, dw, name, isSwSection);
 
-
-                    // Если это стрелочная секция, парсим её контур (lock)
-                    // Если это стрелочная секция, парсим её контур (lock)
                     if (isSwSection)
                     {
-                        // === ВОССТАНОВЛЕНО: Парсим сам контур стрелки! Без него её не видно! ===
                         var lockNode = el.Element("lock");
                         if (lockNode != null)
                         {
@@ -146,7 +139,6 @@ namespace BPO_ex4.Visuals
                             }
                         }
 
-                        // ПАРСИМ ТОЛСТЫЕ ЛИНИИ
                         var busyNode = el.Element("busy_line");
                         if (busyNode != null)
                         {
@@ -161,7 +153,6 @@ namespace BPO_ex4.Visuals
                             }
                         }
 
-                        // ПРИВЯЗЫВАЕМ СТРЕЛКИ ДЛЯ ПРЕДСКАЗАНИЯ
                         foreach (var swNode in el.Elements("switch"))
                         {
                             string swNumber = swNode.Attribute("number")?.Value;
@@ -170,14 +161,13 @@ namespace BPO_ex4.Visuals
                             if (childSwitch != null)
                             {
                                 childSwitch.ParentSection = sectionVm;
+                                sectionVm.ChildSwitches.Add(childSwitch);
 
-                                // === ИСПРАВЛЕНИЕ №1: ЗАСТАВЛЯЕМ СТРЕЛКУ КРАСНЕТЬ ===
-                                // Когда секция меняет цвет, дергаем стрелку, чтобы она тоже обновилась!
                                 sectionVm.PropertyChanged += (sender, args) =>
                                 {
                                     if (args.PropertyName == "FillColor")
                                     {
-                                        childSwitch.UpdateColor(); // <--- ИСПРАВЛЕНО ЗДЕСЬ!
+                                        childSwitch.UpdateColor();
                                     }
                                 };
                             }
