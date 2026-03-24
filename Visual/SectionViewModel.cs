@@ -19,13 +19,13 @@ namespace BPO_ex4.Visuals
         public System.Collections.Generic.List<SwitchViewModel> ChildSwitches { get; set; } = new System.Collections.Generic.List<SwitchViewModel>();
         public PointCollection LockPoints { get; set; } = new PointCollection();
         public System.Collections.Generic.List<string> ChildSwitchNames { get; set; } = new System.Collections.Generic.List<string>();
-        public System.Collections.ObjectModel.ObservableCollection<BusyLineVM> BusyLines { get; set; } = new System.Collections.ObjectModel.ObservableCollection<BusyLineVM>();
         public Visibility RectVisibility => IsSwitchSection ? Visibility.Collapsed : Visibility.Visible;
 
         public Brush FillColor
         {
             get
             {
+                // Для стрелок базовый контур ВСЕГДА серый
                 if (IsSwitchSection) return Brushes.LightGray;
 
                 bool isOccupied = _occupancyNode != null && !_occupancyNode.Value;
@@ -46,8 +46,7 @@ namespace BPO_ex4.Visuals
         public SectionViewModel(double x, double y, double w, string name, bool isSwSection = false)
         {
             X = x; Y = y; Width = w; Name = name; IsSwitchSection = isSwSection;
-            // ZIndex = 5 гарантирует, что соединительные линии секции будут ПОД полигоном стрелки!
-            ZIndex = 5;
+            ZIndex = 5; // Оставляем секцию ВНИЗУ, чтобы стрелки рисовались поверх!
             RoutePointViewModel.PreviewChanged += () => OnLogicChanged();
         }
 
@@ -85,11 +84,10 @@ namespace BPO_ex4.Visuals
         {
             RaisePropertyChanged(nameof(FillColor));
             RaisePropertyChanged(nameof(RectVisibility));
-
-            if (IsSwitchSection) UpdateBusyLines();
+            if (IsSwitchSection) UpdateSwitchColors();
         }
 
-        private void UpdateBusyLines()
+        private void UpdateSwitchColors()
         {
             bool isOccupied = _occupancyNode != null && !_occupancyNode.Value;
             bool isLz = _lzNode != null && _lzNode.Value;
@@ -98,15 +96,13 @@ namespace BPO_ex4.Visuals
             bool isPreview = RoutePointViewModel.CurrentPreviewRouteId > 0 && RoutePointViewModel.CurrentPreviewSections.Contains(Name);
 
             Brush targetBrush = Brushes.Transparent;
-
             if (isPreview) targetBrush = Brushes.Aqua;
             else if (isPz) targetBrush = Brushes.Lime;
             else if (isOccupied) targetBrush = isLz ? Brushes.Yellow : Brushes.Red;
             else if (isLs) targetBrush = Brushes.Blue;
 
             bool sw1Minus = false, sw2Minus = false;
-
-            if (isPreview)
+            if (isPreview && !isPz && !isOccupied && !isLs)
             {
                 if (RoutePointViewModel.RouteSwitchStates.TryGetValue(RoutePointViewModel.CurrentPreviewRouteId, out var reqStates))
                 {
@@ -120,74 +116,15 @@ namespace BPO_ex4.Visuals
                 if (ChildSwitches.Count > 1) sw2Minus = ChildSwitches[1].IsMinus;
             }
 
-            // 1. КРАСИМ САМИ ПОЛИГОНЫ СТРЕЛОК!
             if (ChildSwitches.Count > 0) ChildSwitches[0].SetRouteState(targetBrush, sw1Minus);
             if (ChildSwitches.Count > 1) ChildSwitches[1].SetRouteState(targetBrush, sw2Minus);
-
-            // 2. Красим соединительные линии секции (остаются под полигонами благодаря ZIndex)
-            if (targetBrush == Brushes.Transparent)
-            {
-                foreach (var l in BusyLines) l.LineBrush = Brushes.Transparent;
-                return;
-            }
-
-            var diagonals = BusyLines.Where(l => System.Math.Abs(l.StartY - l.EndY) >= 2).OrderBy(l => System.Math.Min(l.StartX, l.EndX)).ToList();
-
-            foreach (var line in BusyLines)
-            {
-                line.X1 = line.StartX; line.Y1 = line.StartY; line.X2 = line.EndX; line.Y2 = line.EndY;
-                Brush lineBrush = targetBrush;
-                bool isStraight = System.Math.Abs(line.StartY - line.EndY) < 2;
-
-                if (isStraight)
-                {
-                    if (isOccupied || isLs) lineBrush = targetBrush;
-                    else if (!sw1Minus && !sw2Minus) lineBrush = targetBrush;
-                    else if (sw1Minus && sw2Minus) lineBrush = Brushes.Transparent;
-                    else
-                    {
-                        double minX = System.Math.Min(line.StartX, line.EndX);
-                        double maxX = System.Math.Max(line.StartX, line.EndX);
-                        if (sw1Minus && diagonals.Count > 0) ApplyCut(line, diagonals[0], line.StartY, minX, maxX);
-                        else if (sw2Minus && diagonals.Count > 1) ApplyCut(line, diagonals[1], line.StartY, minX, maxX);
-                        else lineBrush = Brushes.Transparent;
-                    }
-                }
-                else
-                {
-                    if (isOccupied || isLs) lineBrush = targetBrush;
-                    else
-                    {
-                        int dIndex = diagonals.IndexOf(line);
-                        if (dIndex == 0 && !sw1Minus) lineBrush = Brushes.Transparent;
-                        if (dIndex == 1 && !sw2Minus) lineBrush = Brushes.Transparent;
-                    }
-                }
-                line.LineBrush = lineBrush;
-            }
-        }
-
-        private void ApplyCut(BusyLineVM line, BusyLineVM diag, double hy, double minX, double maxX)
-        {
-            bool startTouches = System.Math.Abs(diag.StartY - hy) < 5;
-            double touchX = startTouches ? diag.StartX : diag.EndX;
-            double farX = startTouches ? diag.EndX : diag.StartX;
-            bool rootIsLeft = farX > touchX;
-
-            line.X1 = touchX;
-            line.Y1 = hy;
-            line.Y2 = hy;
-            if (rootIsLeft) line.X2 = minX; else line.X2 = maxX;
         }
 
         public void TriggerLogicChange() => OnLogicChanged();
 
         protected override void OnLeftClick()
         {
-            if (_node != null && _engine != null)
-            {
-                _engine.InjectChange(_node, !_node.Value);
-            }
+            if (_node != null && _engine != null) _engine.InjectChange(_node, !_node.Value);
         }
     }
 }

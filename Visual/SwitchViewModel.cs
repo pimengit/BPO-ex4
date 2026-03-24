@@ -1,5 +1,4 @@
 ﻿using BPO_ex4.StationLogic;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -30,27 +29,40 @@ namespace BPO_ex4.Visuals
 
         private SectionViewModel _parentSection;
 
-        // Новые свойства для заливки конкретных полигонов
-        private Brush _routeBrush = Brushes.LightGray;
-        private bool _isRouteMinus = false;
+        // --- НОВАЯ ЛОГИКА ЦВЕТОВ ПОЛИГОНОВ ---
+        private Brush _plusFill = Brushes.Transparent;
+        public Brush PlusFill { get => _plusFill; set { _plusFill = value; RaisePropertyChanged(nameof(PlusFill)); } }
 
-        public Brush PlusFill => _isRouteMinus ? Brushes.LightGray : _routeBrush;
-        public Brush MinusFill => _isRouteMinus ? _routeBrush : Brushes.LightGray;
+        private Brush _minusFill = Brushes.Transparent;
+        public Brush MinusFill { get => _minusFill; set { _minusFill = value; RaisePropertyChanged(nameof(MinusFill)); } }
 
-        // Метод, который принимает цвет маршрута и положение стрелки от секции
-        public void SetRouteState(Brush brush, bool isMinus)
+        public void SetRouteState(Brush activeBrush, bool isMinus)
         {
-            _routeBrush = brush == Brushes.Transparent ? Brushes.LightGray : brush;
-            _isRouteMinus = isMinus;
-            RaisePropertyChanged(nameof(PlusFill));
-            RaisePropertyChanged(nameof(MinusFill));
+            Brush baseColor = Brushes.Transparent;
+            Brush routeColor = activeBrush == Brushes.Transparent ? Brushes.Transparent : activeBrush;
+
+            PlusFill = isMinus ? baseColor : routeColor;
+            MinusFill = isMinus ? routeColor : baseColor;
         }
+        // -------------------------------------
 
         public SectionViewModel ParentSection
         {
             get => _parentSection;
-            set { _parentSection = value; }
+            set
+            {
+                _parentSection = value;
+                if (_parentSection != null)
+                {
+                    _parentSection.PropertyChanged += (s, e) =>
+                    {
+                        if (e.PropertyName == "FillColor") RaisePropertyChanged(nameof(SectionFillColor));
+                    };
+                }
+            }
         }
+
+        public Brush SectionFillColor => ParentSection?.FillColor == Brushes.Transparent ? Brushes.LightGray : ParentSection?.FillColor ?? Brushes.LightGray;
 
         public Brush ControlPlusBrush
         {
@@ -82,14 +94,10 @@ namespace BPO_ex4.Visuals
 
         public SwitchViewModel(double x, double y, string name)
         {
-            X = x; Y = y; Name = name; ZIndex = 10;
+            X = x; Y = y; Name = name; ZIndex = 10; // Выше секции, чтобы полигоны ложились поверх!
         }
 
-        public void UpdateColor()
-        {
-            RaisePropertyChanged(nameof(PlusFill));
-            RaisePropertyChanged(nameof(MinusFill));
-        }
+        public void UpdateColor() => RaisePropertyChanged("SectionFillColor");
 
         private bool IsExactMatch(string description, string name)
         {
@@ -148,40 +156,19 @@ namespace BPO_ex4.Visuals
         private async void RunSwitchSequence(bool toPlus)
         {
             if (_engine == null || _inPlusNode == null || _inMinusNode == null) return;
-
-            AppLogger.Log($"AUTO SWITCH {Name}: Старт перевода в {(toPlus ? "ПЛЮС" : "МИНУС")}");
             _engine.InjectChange(_inPlusNode, false);
             _engine.InjectChange(_inMinusNode, false);
-
             await Task.Delay(1000);
-
-            if (toPlus)
-            {
-                _engine.InjectChange(_inPlusNode, true);
-                _engine.InjectChange(_inMinusNode, false);
-            }
-            else
-            {
-                _engine.InjectChange(_inPlusNode, false);
-                _engine.InjectChange(_inMinusNode, true);
-            }
-            AppLogger.Log($"AUTO SWITCH {Name}: Перевод завершен");
+            if (toPlus) { _engine.InjectChange(_inPlusNode, true); _engine.InjectChange(_inMinusNode, false); }
+            else { _engine.InjectChange(_inPlusNode, false); _engine.InjectChange(_inMinusNode, true); }
         }
 
         protected override void OnRightClick()
         {
             if (_engine == null || _inPlusNode == null || _inMinusNode == null) return;
             bool isPlus = (_pkNode != null && _pkNode.Value);
-            if (isPlus)
-            {
-                _engine.InjectChange(_inPlusNode, false);
-                _engine.InjectChange(_inMinusNode, true);
-            }
-            else
-            {
-                _engine.InjectChange(_inPlusNode, true);
-                _engine.InjectChange(_inMinusNode, false);
-            }
+            if (isPlus) { _engine.InjectChange(_inPlusNode, false); _engine.InjectChange(_inMinusNode, true); }
+            else { _engine.InjectChange(_inPlusNode, true); _engine.InjectChange(_inMinusNode, false); }
         }
 
         protected override void OnLeftClick()

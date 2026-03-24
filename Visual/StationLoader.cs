@@ -1,6 +1,8 @@
 ﻿using BPO_ex4.StationLogic;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Media;
 using System.Xml.Linq;
 
@@ -103,8 +105,6 @@ namespace BPO_ex4.Visuals
                     ParseLines(el.Element("closed_in_plus"), swVm.ControlPlusLines);
                     ParseLines(el.Element("closed_in_minus"), swVm.ControlMinusLines);
 
-                    // УДАЛЕН ПАРСИНГ busy_in_plus И busy_in_minus!
-
                     var rectNode = el.Element("rect");
                     if (rectNode != null)
                     {
@@ -139,20 +139,6 @@ namespace BPO_ex4.Visuals
                             }
                         }
 
-                        var busyNode = el.Element("busy_line");
-                        if (busyNode != null)
-                        {
-                            foreach (var line in busyNode.Elements("line"))
-                            {
-                                double xb = double.Parse(line.Attribute("xbegin")?.Value ?? "0", culture);
-                                double yb = double.Parse(line.Attribute("ybegin")?.Value ?? "0", culture);
-                                double xe = double.Parse(line.Attribute("xend")?.Value ?? "0", culture);
-                                double ye = double.Parse(line.Attribute("yend")?.Value ?? "0", culture);
-
-                                sectionVm.BusyLines.Add(new BusyLineVM(xb, yb, xe, ye));
-                            }
-                        }
-
                         foreach (var swNode in el.Elements("switch"))
                         {
                             string swNumber = swNode.Attribute("number")?.Value;
@@ -165,17 +151,11 @@ namespace BPO_ex4.Visuals
 
                                 sectionVm.PropertyChanged += (sender, args) =>
                                 {
-                                    if (args.PropertyName == "FillColor")
-                                    {
-                                        childSwitch.UpdateColor();
-                                    }
+                                    if (args.PropertyName == "FillColor") childSwitch.UpdateColor();
                                 };
                             }
 
-                            if (!string.IsNullOrEmpty(swNumber))
-                            {
-                                sectionVm.ChildSwitchNames.Add(swNumber);
-                            }
+                            if (!string.IsNullOrEmpty(swNumber)) sectionVm.ChildSwitchNames.Add(swNumber);
                         }
                     }
 
@@ -229,18 +209,12 @@ namespace BPO_ex4.Visuals
 
                             foreach (var rNode in el.Elements("route"))
                             {
-                                if (int.TryParse(rNode.Attribute("number")?.Value, out int rNum))
-                                {
-                                    ptVm.StartRoutes.Add(rNum);
-                                }
+                                if (int.TryParse(rNode.Attribute("number")?.Value, out int rNum)) ptVm.StartRoutes.Add(rNum);
                             }
                             collection.Add(ptVm);
                         }
                     }
-                    catch (System.Exception ex)
-                    {
-                        System.Windows.MessageBox.Show("Ошибка парсинга routeobjects.xml: " + ex.Message);
-                    }
+                    catch (System.Exception ex) { System.Windows.MessageBox.Show("Ошибка парсинга routeobjects.xml: " + ex.Message); }
                 }
 
                 if (System.IO.File.Exists(routesXmlPath))
@@ -250,11 +224,8 @@ namespace BPO_ex4.Visuals
                     {
                         if (int.TryParse(routeNode.Attribute("number")?.Value, out int routeNum))
                         {
-                            var sections = routeNode.Elements("object")
-                                .Where(o => o.Attribute("type")?.Value == "21")
-                                .Select(o => o.Attribute("name")?.Value)
-                                .Where(n => !string.IsNullOrEmpty(n))
-                                .ToList();
+                            var sections = routeNode.Elements("object").Where(o => o.Attribute("type")?.Value == "21")
+                                .Select(o => o.Attribute("name")?.Value).Where(n => !string.IsNullOrEmpty(n)).ToList();
 
                             RoutePointViewModel.RouteSections[routeNum] = sections;
 
@@ -263,11 +234,7 @@ namespace BPO_ex4.Visuals
                             {
                                 string swName = obj.Attribute("name")?.Value;
                                 var instr = obj.Element("instr");
-                                if (swName != null && instr != null)
-                                {
-                                    bool isMinus = instr.Attribute("xor_mask")?.Value == "1";
-                                    switchStates[swName] = isMinus;
-                                }
+                                if (swName != null && instr != null) switchStates[swName] = instr.Attribute("xor_mask")?.Value == "1";
                             }
                             RoutePointViewModel.RouteSwitchStates[routeNum] = switchStates;
 
@@ -281,15 +248,9 @@ namespace BPO_ex4.Visuals
                     }
                 }
             }
-            catch (System.Exception ex)
-            {
-                System.Windows.MessageBox.Show("Ошибка загрузки XML: " + ex.Message);
-            }
+            catch (System.Exception ex) { System.Windows.MessageBox.Show("Ошибка загрузки XML: " + ex.Message); }
 
-            foreach (var ptVm in collection.OfType<RoutePointViewModel>())
-            {
-                ptVm.BindToLogic(ctx, engine);
-            }
+            foreach (var ptVm in collection.OfType<RoutePointViewModel>()) ptVm.BindToLogic(ctx, engine);
 
             return collection;
         }

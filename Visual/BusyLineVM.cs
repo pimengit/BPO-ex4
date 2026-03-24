@@ -4,11 +4,12 @@ using System.Windows.Media;
 
 public class BusyLineVM : VisualObjectViewModel
 {
-    // 1. ДОБАВЬ ВОТ ЭТИ 4 СТРОКИ:
     public double StartX { get; set; }
     public double StartY { get; set; }
     public double EndX { get; set; }
     public double EndY { get; set; }
+
+    public string Tag { get; set; } = ""; // <-- НОВОЕ СВОЙСТВО ДЛЯ МАРКИРОВКИ КУСКОВ
 
     private double _x1;
     public double X1 { get => _x1; set { _x1 = value; RaisePropertyChanged(nameof(X1)); } }
@@ -29,10 +30,11 @@ public class BusyLineVM : VisualObjectViewModel
         set { _lineBrush = value; RaisePropertyChanged(nameof(LineBrush)); }
     }
 
-        public BusyLineVM(double x1, double y1, double x2, double y2)
-        {
-            X1 = x1; Y1 = y1; X2 = x2; Y2 = y2;
-        }
+    public BusyLineVM(double x1, double y1, double x2, double y2)
+    {
+        StartX = x1; StartY = y1; EndX = x2; EndY = y2;
+        X1 = x1; Y1 = y1; X2 = x2; Y2 = y2;
+    }
 
     public override void BindToLogic(Context ctx, SimulationEngine engine) { }
 }
