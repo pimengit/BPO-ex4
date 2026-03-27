@@ -1418,6 +1418,9 @@ namespace BPO_ex4.StationLogic
                 if (ist == "4.5")
                     return $"AVTODO_AOP[{num}]";
 
+                if (ist == "4.4")
+                    return $"KOD_PNT[{num}]";
+
                 if (ist == "4.3")
                     return $"AVTODO_DARsb[{num}]";
 
@@ -1632,6 +1635,12 @@ namespace BPO_ex4.StationLogic
 
                 if (ist == "6.11")
                     return $"SIGNAL_PS2[{num}]";
+
+                if (ist == "6.10")
+                    return $"AVTOSTOP_OA[{num}]";
+
+                if (ist == "6.9")
+                    return $"KOD_PNT[{num}]";
 
                 if (ist == "6.6")
                     return $"METALL_MKBV[{num}]";
@@ -2656,8 +2665,14 @@ namespace BPO_ex4.StationLogic
                 if (ist == "3.9")
                     return $"SPEED_OS70[{num}]";
 
+                if (ist == "3.8")
+                    return $"KOD_PNT[{num}]";
+
                 if (ist == "3.4")
                     return $"SECT_LS[{num}]";
+
+                if (ist == "3.3")
+                    return $"SECT_OUPN[{num}]";
 
                 if (ist == "3.2")
                     return $"SECT_P[{num}]";
@@ -3317,8 +3332,17 @@ namespace BPO_ex4.StationLogic
                 if (ist == "5.15")
                     return $"MAKET_MIV[{num}]";
 
-                if (ist == "5.13")
-                    return $"MAKET_MV[{num}]";
+                if (ist == "5.2")
+                    return $"SPEED_PNTP[{num}]";
+
+                if (ist == "5.1")
+                    return $"ROUTE_KNO[{num}]";
+
+                if (ist == "5.0")
+                    return $"AVTODO_OAR[{num}]";
+
+                if (ist == "5.15")
+                    return $"MAKET_MIV[{num}]";
 
                 if (ist == "6.8")
                     return $"GEN_K40RS[{num}]";
