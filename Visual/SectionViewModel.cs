@@ -34,15 +34,15 @@ namespace BPO_ex4.Visuals
             var group = new DrawingGroup();
             // Базовый фон
             group.Children.Add(new GeometryDrawing(baseColor, null,
-                new RectangleGeometry(new Rect(0, 0, 10, 10))));
+                new RectangleGeometry(new Rect(0, 0, 30, 30))));
             // Вертикальная полоса 4px из 8px — та же пропорция что и квадратик 4x4 из 8x8
             group.Children.Add(new GeometryDrawing(patternColor, null,
-                new RectangleGeometry(new Rect(0, 0, 10, 20))));
+                new RectangleGeometry(new Rect(1, 5, 18, 18))));
 
             var db = new DrawingBrush
             {
                 Drawing = group,
-                Viewport = new Rect(0, 0, 20, 20),
+                Viewport = new Rect(0, 0, 13, 16),
                 ViewportUnits = BrushMappingMode.Absolute,
                 TileMode = TileMode.Tile
             };
