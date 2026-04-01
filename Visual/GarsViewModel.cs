@@ -1,5 +1,7 @@
 using BPO_ex4.StationLogic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 
 namespace BPO_ex4.Visuals
@@ -9,17 +11,22 @@ namespace BPO_ex4.Visuals
         private Node[] _frNodes = new Node[3];
         private Node[] _pfrNodes = new Node[3];
 
-        // --- БЕРЕМ ГЕОМЕТРИЮ ИЗ РАСПАРСЕННЫХ ПРАВИЛ ---
-        public double RectW { get; set; } = 46; // Делаем пошире
-        public double RectH { get; set; } = 16; // Чуть выше
+        // --- НОВЫЕ УЗЛЫ ДЛЯ КЛИКОВ ---
+        private Node _rogNode;
+        private Node _oroNode;
+        private Node _roMk;
+        private Node _oroMk;
 
-        public double LineX { get; set; } = 23; // Разделитель ровно по центру (46 / 2)
+        public double RectW { get; set; } = 46;
+        public double RectH { get; set; } = 16;
+
+        public double LineX { get; set; } = 23;
 
         public double Cap1X { get; set; } = 0;
-        public double Cap1W { get; set; } = 23; // Половина ширины для левого текста
+        public double Cap1W { get; set; } = 23;
 
-        public double Cap2X { get; set; } = 24; // Правый текст начинается после разделителя
-        public double Cap2W { get; set; } = 22; // И занимает оставшееся место
+        public double Cap2X { get; set; } = 24;
+        public double Cap2W { get; set; } = 22;
 
         public int Number { get; set; }
 
@@ -37,11 +44,17 @@ namespace BPO_ex4.Visuals
             set { _textRight = value; RaisePropertyChanged(nameof(TextRight)); }
         }
 
+        // --- НОВЫЕ СВОЙСТВА ДЛЯ UI ---
+        public bool IsRogActive => _rogNode?.Value == true;
+
+        public Brush StrokeColor => IsRogActive ? Brushes.Red : Brushes.Black;
+        public double StrokeThick => IsRogActive ? 2.0 : 1.0;
+        public Visibility TextVisibility => IsRogActive ? Visibility.Collapsed : Visibility.Visible;
+
         public Brush FillColor
         {
             get
             {
-                // Нет связи - серый, есть связь - белый (CWH из XML)
                 if (_frNodes[0] == null && _frNodes[1] == null && _frNodes[2] == null)
                     return Brushes.LightGray;
                 return Brushes.White;
@@ -55,9 +68,6 @@ namespace BPO_ex4.Visuals
             Name = name;
             ZIndex = 20;
             Number = number;
-
-            // Если в основном XML задан dw/width > 0, берем его. Иначе берем из правил.
-            //RectW = w > 0 ? w : GarsTemplateRules.RectW;
         }
 
         public override void BindToLogic(Context ctx, SimulationEngine engine)
@@ -77,6 +87,16 @@ namespace BPO_ex4.Visuals
                 _pfrNodes[i] = ctx.GetAllNodes().FirstOrDefault(n => n.Id == id);
                 if (_pfrNodes[i] != null) _pfrNodes[i].Changed += _ => OnLogicChanged();
             }
+
+            // Ищем узлы ROG и ORO (по номеру или имени)
+            _rogNode = ctx.GetAllNodes().FirstOrDefault(n => n.Id == $"GEN_ROG[{Number}]" || (n.Id.StartsWith("GEN_ROG") && n.Description == Name));
+            _oroNode = ctx.GetAllNodes().FirstOrDefault(n => n.Id == $"GEN_ORO[{Number}]" || (n.Id.StartsWith("GEN_ORO") && n.Description == Name));
+
+            // Ищем курки
+            _roMk = FindMkNode(ctx, _rogNode, "GEN_RO_MK");
+            _oroMk = FindMkNode(ctx, _oroNode, "GEN_ORO_MK");
+
+            if (_rogNode != null) _rogNode.Changed += _ => OnLogicChanged();
 
             OnLogicChanged();
         }
@@ -125,6 +145,54 @@ namespace BPO_ex4.Visuals
         {
             UpdateState();
             RaisePropertyChanged(nameof(FillColor));
+
+            // Обновляем визуализацию блокировки
+            RaisePropertyChanged(nameof(StrokeColor));
+            RaisePropertyChanged(nameof(StrokeThick));
+            RaisePropertyChanged(nameof(TextVisibility));
+        }
+
+        // --- ЛОГИКА КЛИКОВ ---
+        protected override void OnLeftClick()
+        {
+            if (IsRogActive)
+            {
+                PulseNode(_oroMk, "GEN_ORO_MK");
+            }
+            else
+            {
+                PulseNode(_roMk, "GEN_RO_MK");
+            }
+        }
+
+        private async void PulseNode(Node targetMkNode, string expectedName)
+        {
+            if (targetMkNode == null || _engine == null)
+            {
+                AppLogger.Log($"[GARS] ОШИБКА: Курок '{expectedName}' для {Name} не найден!");
+                return;
+            }
+
+            AppLogger.Log($"[GARS] Импульс команды: {targetMkNode.Id}");
+            _engine.InjectChange(targetMkNode, true);
+
+            await Task.Delay(500);
+
+            _engine.InjectChange(targetMkNode, false);
+        }
+
+        private Node FindMkNode(Context ctx, Node parentNode, string targetPrefix)
+        {
+            if (parentNode?.LogicSource?.Groups != null)
+            {
+                foreach (var group in parentNode.LogicSource.Groups)
+                {
+                    if (group == null) continue;
+                    var found = group.FirstOrDefault(n => n.Id.StartsWith(targetPrefix));
+                    if (found != null) return found;
+                }
+            }
+            return ctx.GetAllNodes().FirstOrDefault(n => n.Id.StartsWith(targetPrefix) && (n.Id.EndsWith($"[{Number}]") || n.Description == Name));
         }
     }
 }

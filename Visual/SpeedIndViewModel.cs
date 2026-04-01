@@ -40,7 +40,7 @@ namespace BPO_ex4.Visuals
 
         // Цвета
         public Brush BgColor => IsRestricted ? Brushes.White : Brushes.Transparent;
-        public Brush BorderColor => IsRestricted ? Brushes.Red : Brushes.DarkGray;
+        public Brush BorderColor => IsRestricted ? Brushes.Red : Brushes.White;
         public Thickness BorderThick => IsRestricted ? new Thickness(2) : new Thickness(1);
         public Brush TextColor => IsRestricted ? Brushes.Red : Brushes.Black;
 

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace BPO_ex4.Visuals
@@ -16,6 +17,8 @@ namespace BPO_ex4.Visuals
         private Node _puNode;
         private Node _muNode;
 
+        public Brush SwitchBorderBrush => ParentSection?.SectionBorderBrush == Brushes.Red ? Brushes.Red : Brushes.Black;
+        public double SwitchBorderThickness => ParentSection?.SectionBorderBrush == Brushes.Red ? 2 : 1;
         public double RectX { get; set; } = -120;
         public double RectY { get; set; } = -7;
 
@@ -57,6 +60,13 @@ namespace BPO_ex4.Visuals
                     _parentSection.PropertyChanged += (s, e) =>
                     {
                         if (e.PropertyName == "FillColor") RaisePropertyChanged(nameof(SectionFillColor));
+
+                        // ДОБАВИТЬ ВОТ ЭТИ 3 СТРОКИ:
+                        if (e.PropertyName == "SectionBorderBrush")
+                        {
+                            RaisePropertyChanged(nameof(SwitchBorderBrush));
+                            RaisePropertyChanged(nameof(SwitchBorderThickness));
+                        }
                     };
                 }
             }
@@ -163,8 +173,23 @@ namespace BPO_ex4.Visuals
             else { _engine.InjectChange(_inPlusNode, false); _engine.InjectChange(_inMinusNode, true); }
         }
 
+        // =======================================================
+        // ИЗМЕНЕННЫЙ ОБРАБОТЧИК КЛИКА: УЧИТЫВАЕМ SHIFT ДЛЯ МЕНЮ
+        // =======================================================
         protected override void OnRightClick()
         {
+            // Проверяем, зажат ли SHIFT
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                // Если SHIFT зажат -> открываем меню АРМ ДСП (родительской секции)
+                if (ParentSection != null)
+                {
+                    ParentSection.IsMenuOpen = true;
+                }
+                return; // Не переводим стрелку!
+            }
+
+            // --- Твоя оригинальная логика перевода стрелки ---
             if (_engine == null || _inPlusNode == null || _inMinusNode == null) return;
             bool isPlus = (_pkNode != null && _pkNode.Value);
             if (isPlus) { _engine.InjectChange(_inPlusNode, false); _engine.InjectChange(_inMinusNode, true); }

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vis="clr-namespace:BPO_ex4.Visuals"
         Title="Схема станции" Height="800" Width="1200"
-        Background="Gray">
+        Background="DarkGray">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
@@ -17,7 +17,7 @@
 
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Canvas Width="5000" Height="3000" Background="Gray"/>
+                        <Canvas Width="5000" Height="3000" Background="DarkGray"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
@@ -32,22 +32,40 @@
                 <ItemsControl.Resources>
 
                     <DataTemplate DataType="{x:Type vis:SectionViewModel}">
-                        <Canvas ToolTip="{Binding Name}" ClipToBounds="False" Background="Transparent">
+                        <Grid Width="{Binding Width}" Height="{Binding Height}" ToolTip="{Binding Name}" Background="Transparent">
 
-                            <Rectangle Canvas.Left="0" Canvas.Top="0" Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding FillColor}" Visibility="{Binding RectVisibility}" Stroke="Black" StrokeThickness="1" RadiusX="1" RadiusY="1" Cursor="Hand">
-                                <Rectangle.InputBindings>
-                                    <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}"/>
-                                </Rectangle.InputBindings>
-                            </Rectangle>
+                            <Grid.InputBindings>
+                                <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}" />
+                            </Grid.InputBindings>
 
-                            <Polygon Points="{Binding LockPoints}" Fill="{Binding FillColor}" Stroke="Black" StrokeThickness="1" Visibility="{Binding IsSwitchSection, Converter={StaticResource BooleanToVisibilityConverter}}" Cursor="Hand">
-                                <Polygon.InputBindings>
-                                    <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}"/>
-                                </Polygon.InputBindings>
-                            </Polygon>
+                            <Grid.ContextMenu>
+                                <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                                    <MenuItem Header="Снятие ложной свободности" Command="{Binding SlsCommand}" Visibility="{Binding LsMenuVisibility}"/>
+                                    <MenuItem Header="{Binding UpnMenuText}" Command="{Binding UpnCommand}"/>
+                                    <MenuItem Header="{Binding BrcMenuText}" Command="{Binding BrcCommand}"/>
+                                </ContextMenu>
+                            </Grid.ContextMenu>
 
-                            <TextBlock Canvas.Left="0" Canvas.Top="18" Width="{Binding Width}" TextAlignment="Center" Text="{Binding Name}" Foreground="Black" FontWeight="Bold" FontSize="11" IsHitTestVisible="False"/>
-                        </Canvas>
+                            <Rectangle Fill="{Binding FillColor}" 
+                   Visibility="{Binding RectVisibility}"
+                   Stroke="{Binding SectionBorderBrush}"
+                   StrokeThickness="{Binding SectionBorderThickness}"/>
+
+                            <TextBlock Text="ВН" 
+                   Foreground="{Binding VnColor}" 
+                   Visibility="{Binding VnVisibility}" 
+                   FontSize="10" FontWeight="Bold"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Top" 
+                   Margin="0,-12,0,0" 
+                   Cursor="Hand"
+                   Panel.ZIndex="10">
+                                <TextBlock.InputBindings>
+                                    <MouseBinding Gesture="LeftClick" Command="{Binding VnClickCommand}" />
+                                </TextBlock.InputBindings>
+                            </TextBlock>
+
+                        </Grid>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type vis:LightViewModel}">
@@ -91,12 +109,32 @@
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type vis:GarsViewModel}">
-                        <Canvas ClipToBounds="False" ToolTip="{Binding Name}">
-                            <Rectangle Canvas.Left="0" Canvas.Top="0" Width="{Binding RectW}" Height="{Binding RectH}" Fill="{Binding FillColor}" Stroke="Black" StrokeThickness="1" />
-                            <Line X1="{Binding LineX}" Y1="0" X2="{Binding LineX}" Y2="{Binding RectH}" Stroke="Black" StrokeThickness="1"/>
-                            <TextBlock Canvas.Left="{Binding Cap1X}" Canvas.Top="0" Width="{Binding Cap1W}" Height="{Binding RectH}" Text="{Binding TextLeft}" Foreground="Black" FontSize="10" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" Padding="0,1,0,0"/>
-                            <TextBlock Canvas.Left="{Binding Cap2X}" Canvas.Top="0" Width="{Binding Cap2W}" Height="{Binding RectH}" Text="{Binding TextRight}" Foreground="Black" FontSize="10" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" Padding="0,1,0,0"/>
-                            <TextBlock Text="{Binding Name}" Foreground="Black" FontSize="10" FontWeight="Bold" Canvas.Top="-15" Canvas.Left="-10" Width="50" TextAlignment="Center" IsHitTestVisible="False"/>
+                        <Canvas ClipToBounds="False" ToolTip="{Binding Name}" Cursor="Hand" Background="Transparent">
+
+                            <Canvas.InputBindings>
+                                <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}" />
+                            </Canvas.InputBindings>
+
+                            <Rectangle Canvas.Left="0" Canvas.Top="0" Width="{Binding RectW}" Height="{Binding RectH}" 
+                   Fill="{Binding FillColor}" 
+                   Stroke="{Binding StrokeColor}" 
+                   StrokeThickness="{Binding StrokeThick}" />
+
+                            <Line X1="{Binding LineX}" Y1="0" X2="{Binding LineX}" Y2="{Binding RectH}" 
+              Stroke="Black" StrokeThickness="1" Visibility="{Binding TextVisibility}"/>
+
+                            <TextBlock Canvas.Left="{Binding Cap1X}" Canvas.Top="0" Width="{Binding Cap1W}" Height="{Binding RectH}" 
+                   Text="{Binding TextLeft}" Foreground="Black" FontSize="10" FontWeight="Bold" 
+                   TextAlignment="Center" VerticalAlignment="Center" Padding="0,1,0,0" 
+                   Visibility="{Binding TextVisibility}" IsHitTestVisible="False"/>
+
+                            <TextBlock Canvas.Left="{Binding Cap2X}" Canvas.Top="0" Width="{Binding Cap2W}" Height="{Binding RectH}" 
+                   Text="{Binding TextRight}" Foreground="Black" FontSize="10" FontWeight="Bold" 
+                   TextAlignment="Center" VerticalAlignment="Center" Padding="0,1,0,0" 
+                   Visibility="{Binding TextVisibility}" IsHitTestVisible="False"/>
+
+                            <TextBlock Text="{Binding Name}" Foreground="Black" FontSize="10" FontWeight="Bold" 
+                   Canvas.Top="-15" Canvas.Left="-10" Width="50" TextAlignment="Center" IsHitTestVisible="False"/>
                         </Canvas>
                     </DataTemplate>
 
@@ -171,16 +209,30 @@
                         <Grid>
                             <Canvas ClipToBounds="False">
 
-                                <Polygon Points="{Binding PlusPoints}" Fill="{Binding PlusFill}" Stroke="Black" StrokeThickness="1" Cursor="Hand" Panel.ZIndex="2">
+                                <Polygon Points="{Binding PlusPoints}" Fill="{Binding PlusFill}" Stroke="{Binding SwitchBorderBrush}"  StrokeThickness= "{Binding SwitchBorderThickness}" Cursor="Hand" Panel.ZIndex="2">
                                     <Polygon.InputBindings>
                                         <MouseBinding Gesture="LeftClick" Command="{Binding ParentSection.ClickCommand}"/>
                                     </Polygon.InputBindings>
+                                    <Polygon.ContextMenu>
+                                        <ContextMenu DataContext="{Binding PlacementTarget.DataContext.ParentSection, RelativeSource={RelativeSource Self}}">
+                                            <MenuItem Header="Снятие ложной свободности" Command="{Binding SlsCommand}" Visibility="{Binding LsMenuVisibility}"/>
+                                            <MenuItem Header="{Binding UpnMenuText}" Command="{Binding UpnCommand}"/>
+                                            <MenuItem Header="{Binding BrcMenuText}" Command="{Binding BrcCommand}"/>
+                                        </ContextMenu>
+                                    </Polygon.ContextMenu>
                                 </Polygon>
 
-                                <Polygon Points="{Binding MinusPoints}" Fill="{Binding MinusFill}" Stroke="Black" StrokeThickness="1" Cursor="Hand" Panel.ZIndex="2">
+                                <Polygon Points="{Binding MinusPoints}" Fill="{Binding MinusFill}" Stroke="{Binding SwitchBorderBrush}"  StrokeThickness= "{Binding SwitchBorderThickness}" Cursor="Hand" Panel.ZIndex="2">
                                     <Polygon.InputBindings>
                                         <MouseBinding Gesture="LeftClick" Command="{Binding ParentSection.ClickCommand}"/>
                                     </Polygon.InputBindings>
+                                    <Polygon.ContextMenu>
+                                        <ContextMenu DataContext="{Binding PlacementTarget.DataContext.ParentSection, RelativeSource={RelativeSource Self}}">
+                                            <MenuItem Header="Снятие ложной свободности" Command="{Binding SlsCommand}" Visibility="{Binding LsMenuVisibility}"/>
+                                            <MenuItem Header="{Binding UpnMenuText}" Command="{Binding UpnCommand}"/>
+                                            <MenuItem Header="{Binding BrcMenuText}" Command="{Binding BrcCommand}"/>
+                                        </ContextMenu>
+                                    </Polygon.ContextMenu>
                                 </Polygon>
 
                                 <ItemsControl ItemsSource="{Binding ControlPlusLines}" Panel.ZIndex="10" Cursor="Hand">
