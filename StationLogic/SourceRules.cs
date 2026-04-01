@@ -372,7 +372,7 @@ namespace BPO_ex4.StationLogic
                 if (ist == "3.14")
                     return $"RELAY_KRK1[{num}]";
 
-                if (ist == "3.1") return "CONST_1";
+                if (ist == "3.13") return "CONST_1";
 
                 if (ist == "3.9")
                     return $"SECT_OUPN[{num}]";

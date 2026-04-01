@@ -44,6 +44,7 @@ namespace BPO_ex4.Visuals
                 var garsElements = doc.Descendants("gars_indicators").Elements("object");
                 var lightElements = doc.Descendants("x_light").Elements("object");
                 var VSElements = doc.Descendants("traffic_mode").Elements("object");
+                var speedIndElements = doc.Descendants("metro").Elements("speed_limits").Elements("object");
 
                 foreach (var el in lightElements)
                 {
@@ -68,6 +69,19 @@ namespace BPO_ex4.Visuals
                     int.TryParse(el.Attribute("number")?.Value, out number);
 
                     var garsVm = new GarsViewModel(x, y, w, name, number);
+                    garsVm.BindToLogic(ctx, engine);
+                    collection.Add(garsVm);
+                }
+
+                foreach (var el in speedIndElements)
+                {
+                    double x = double.Parse(el.Attribute("x")?.Value ?? "0", culture);
+                    double y = double.Parse(el.Attribute("y")?.Value ?? "0", culture);
+                    string name = el.Attribute("name")?.Value ?? "???";
+                    int number = 0;
+                    int.TryParse(el.Attribute("number")?.Value, out number);
+
+                    var garsVm = new SpeedIndViewModel(x, y, name, number);
                     garsVm.BindToLogic(ctx, engine);
                     collection.Add(garsVm);
                 }

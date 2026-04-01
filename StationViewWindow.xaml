@@ -100,6 +100,40 @@
                         </Canvas>
                     </DataTemplate>
 
+                    <DataTemplate DataType="{x:Type vis:SpeedIndViewModel}">
+                        <Grid Width="{Binding Width}" Height="{Binding Height}" ToolTip="{Binding Name}" Cursor="Hand">
+
+                            <Grid.InputBindings>
+                                <MouseBinding Gesture="RightClick" Command="{Binding RightClickCommand}" />
+                                <MouseBinding Gesture="LeftClick" Command="{Binding LeftClickCommand}" />
+                            </Grid.InputBindings>
+
+                            <Grid.ContextMenu>
+                                <ContextMenu IsOpen="{Binding IsMenuOpen, Mode=TwoWay}">
+                                    <MenuItem Header="Ограничение 0 км/ч" Command="{Binding SetOS0Command}"/>
+                                    <MenuItem Header="Ограничение 40 км/ч" Command="{Binding SetOS40Command}"/>
+                                    <MenuItem Header="Ограничение 60 км/ч" Command="{Binding SetOS60Command}"/>
+                                    <MenuItem Header="Ограничение 70 км/ч" Command="{Binding SetOS70Command}"/>
+                                </ContextMenu>
+                            </Grid.ContextMenu>
+
+                            <Border CornerRadius="100" 
+                Background="{Binding BgColor}" 
+                BorderBrush="{Binding BorderColor}" 
+                BorderThickness="{Binding BorderThick}">
+
+                                <TextBlock Text="{Binding SpeedText}" 
+                       Foreground="{Binding TextColor}" 
+                       FontSize="9" 
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"
+                       IsHitTestVisible="False"/>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+
+
                     <DataTemplate DataType="{x:Type vis:ZrViewModel}">
                         <Grid>
                             <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding FillColor}" Stroke="Black" StrokeThickness="1" RadiusX="1" RadiusY="1" ToolTip="{Binding Name}" Cursor="Hand">

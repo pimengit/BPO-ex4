@@ -495,7 +495,7 @@ namespace BPO_ex4
 
         protected override void OnClosed(EventArgs e)
         {
-            try { _excelSession.Save(); } catch { } // Автосейв при выходе
+            //try { _excelSession.Save(); } catch { } // Автосейв при выходе
             _excelSession.Dispose();
             base.OnClosed(e);
         }
