@@ -8,12 +8,12 @@ namespace BPO_ex4.LogicSheets
         public AVTODO_OAR()
         {
             OnDelay  = TimeSpan.FromMilliseconds(50);
-            OffDelay = TimeSpan.FromSeconds(0.6);
+            OffDelay = TimeSpan.FromMilliseconds(50);
         }
         //
         public override bool Compute()
         {
-            return (!V(2) && V(3) && V(4)) || (V(1) && V(3));
+            return !V(4) && V(5) && V(6) || V(3) && V(5) || V(1) && !V(2);
         }
     }
 }
