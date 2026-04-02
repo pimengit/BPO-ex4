@@ -101,10 +101,19 @@ namespace BPO_ex4.Visuals
         {
             get
             {
+                // Сначала проверяем, задано ли направление (наивысший приоритет)
+                if (_pnNode?.Value == true)
+                {
+                    return Brushes.Yellow;
+                }
+
+                // Если направление не задано, но есть возможность его задать
                 if (_vpnNode?.Value == true)
                 {
-                    return (_pnNode?.Value == false) ? Brushes.Black : Brushes.Yellow;
+                    return Brushes.Black;
                 }
+
+                // Если и направления нет, и возможности нет
                 return Brushes.LightGray;
             }
         }
@@ -113,7 +122,7 @@ namespace BPO_ex4.Visuals
         public ICommand BrcCommand { get; }
 
         public Brush SectionBorderBrush => (_brcNode?.Value == true) ? Brushes.Red : Brushes.Black;
-        public Thickness SectionBorderThickness => (_brcNode?.Value == true) ? new Thickness(2) : new Thickness(2);
+        public double SectionBorderThickness => (_brcNode?.Value == true) ? 2.0 : 2.0;
         // ===================================
 
         public Brush FillColor

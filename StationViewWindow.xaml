@@ -8,8 +8,41 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
     <Grid>
-        <ScrollViewer Name="MapScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" PanningMode="Both" PreviewMouseWheel="MapScrollViewer_PreviewMouseWheel">
-            <ItemsControl Name="MainCanvasControl" ItemsSource="{Binding VisualObjects}" MouseMove="StationCanvas_MouseMove">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <Border Grid.Row="0" Background="#333" Padding="10,5">
+            <StackPanel Orientation="Horizontal" DataContext="{Binding TopPanel}">
+
+                <Button Content="START" 
+                        Command="{Binding ToggleStartCommand}" 
+                        Background="{Binding StartBrush}" 
+                        Width="80" Height="30" Margin="0,0,20,0" 
+                        FontWeight="Bold"/>
+
+                <Button Content="{Binding OdText}" 
+                        Command="{Binding ClickOdCommand}" 
+                        Background="{Binding OdBrush}" 
+                        IsEnabled="{Binding IsOdOodEnabled}"
+                        Width="80" Height="30" Margin="0,0,10,0" 
+                        FontWeight="Bold"/>
+
+                <Button Content="ООД" 
+                        Command="{Binding ClickOodCommand}" 
+                        Background="{Binding OodBrush}" 
+                        IsEnabled="{Binding IsOdOodEnabled}"
+                        Width="80" Height="30" 
+                        FontWeight="Bold"/>
+
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" Name="MapScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" PanningMode="Both" PreviewMouseWheel="MapScrollViewer_PreviewMouseWheel">
+            <ItemsControl Name="MainCanvasControl"  MouseMove="StationCanvas_MouseMove">
 
                 <ItemsControl.LayoutTransform>
                     <ScaleTransform x:Name="MapScale" ScaleX="1" ScaleY="1"/>
@@ -290,7 +323,7 @@
             </ItemsControl>
         </ScrollViewer>
 
-        <Border x:Name="DraggablePanel" VerticalAlignment="Top" HorizontalAlignment="Left" Background="#CCEEEEEE" BorderBrush="Black" BorderThickness="1" Margin="10,50,0,0" Padding="5" CornerRadius="3" MaxWidth="400" MaxHeight="600" Cursor="SizeAll" MouseLeftButtonDown="Panel_MouseDown" MouseLeftButtonUp="Panel_MouseUp" MouseMove="Panel_MouseMove" RenderTransformOrigin="0,0">
+        <Border Grid.Row="1" x:Name="DraggablePanel" VerticalAlignment="Top" HorizontalAlignment="Left" Background="#CCEEEEEE" BorderBrush="Black" BorderThickness="1" Margin="10,50,0,0" Padding="5" CornerRadius="3" MaxWidth="400" MaxHeight="600" Cursor="SizeAll" MouseLeftButtonDown="Panel_MouseDown" MouseLeftButtonUp="Panel_MouseUp" MouseMove="Panel_MouseMove" RenderTransformOrigin="0,0">
             <Border.RenderTransform>
                 <TranslateTransform x:Name="PanelTranslate"/>
             </Border.RenderTransform>
@@ -317,7 +350,7 @@
             </ScrollViewer>
         </Border>
 
-        <Border VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="#CC000000" Padding="10" Margin="20" CornerRadius="5">
+        <Border Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="#CC000000" Padding="10" Margin="20" CornerRadius="5">
             <TextBlock Text="ЛКМ - Управление | ПКМ - Доп. действия | Ctrl+Scroll - Зум" Foreground="White"/>
         </Border>
     </Grid>

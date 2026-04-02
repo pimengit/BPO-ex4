@@ -19,10 +19,7 @@ namespace BPO_ex4.StationLogic
                 if (_value != value)
                 {
                     _value = value;
-                    // ТЕПЕРЬ ЛЮБОЕ ИЗМЕНЕНИЕ ВЫЗЫВАЕТ СОБЫТИЕ!
-                    // И график сразу узнает об этом.
                     RaiseChanged();
-                    //Changed?.Invoke(this);
                 }
             }
         }
@@ -41,13 +38,15 @@ namespace BPO_ex4.StationLogic
         private bool _hasPending;
         private object _lock = new object();
 
+        // === НОВОЕ: Защита от таймеров-призраков ===
+        private long _timerVersion = 0;
+
         // === ГЛАВНЫЙ МЕТОД ПЕРЕСЧЕТА ===
         public bool Recompute()
         {
             if (Compute == null) return false;
 
             bool newValue;
-            // Считаем новое значение по формуле
             try
             {
                 newValue = Compute();
@@ -66,77 +65,96 @@ namespace BPO_ex4.StationLogic
                     if (_hasPending)
                     {
                         _hasPending = false; // Сброс таймера (дребезг)
-                        //AppLogger.Log($"CANCEL TIMER: {Id} (signal lost)");
+                        _timerVersion++;     // УБИВАЕМ СТАРЫЕ ФОНОВЫЕ ТАЙМЕРЫ!
                     }
                 }
                 return false; // Изменений нет
             }
 
             // 2. Определяем задержку
-            var delay = newValue ? OnDelay : OffDelay;
+            // Если в самом узле задержка 0, пытаемся вытащить её напрямую из исходного класса логики
+            TimeSpan actualOnDelay = this.OnDelay > TimeSpan.Zero ? this.OnDelay : (LogicSource?.OnDelay ?? TimeSpan.Zero);
+            TimeSpan actualOffDelay = this.OffDelay > TimeSpan.Zero ? this.OffDelay : (LogicSource?.OffDelay ?? TimeSpan.Zero);
+
+            var delay = newValue ? actualOnDelay : actualOffDelay;
 
             // 3. МГНОВЕННОЕ ИЗМЕНЕНИЕ (Нет задержки)
             if (delay <= TimeSpan.Zero)
             {
-                lock (_lock) _hasPending = false;
-                // Меняем значение сразу
+                lock (_lock)
+                {
+                    _hasPending = false;
+                    _timerVersion++; // На всякий случай отменяем все старые задержки
+                }
+
                 bool changed = UpdateValue(newValue);
                 if (changed)
                 {
-                    // ЛОГ ПИШЕМ ПРЯМО ТУТ!
                     AppLogger.Log($"AUTO: {Id} -> {newValue}");
                 }
                 return changed;
             }
 
             // 4. ЗАПУСК ТАЙМЕРА
+            long myVersion; // Запоминаем версию именно ЭТОГО таймера
             lock (_lock)
             {
                 if (_hasPending && _pendingValue == newValue)
-                    return false; // Таймер уже тикает
+                    return false; // Такой таймер уже тикает
 
                 _pendingValue = newValue;
                 _hasPending = true;
-            }
 
-            // ЛОГ О ЗАПУСКЕ ТАЙМЕРА
-            //AppLogger.Log($"START TIMER: {Id} -> {newValue} ({delay.TotalSeconds}s)");
+                _timerVersion++; // Генерируем уникальный ID для нового таймера
+                myVersion = _timerVersion;
+            }
 
             var ms = delay.TotalMilliseconds;
             if (ms < 0 || ms > int.MaxValue) ms = 0;
 
             Task.Delay((int)ms).ContinueWith(_ =>
             {
+                lock (_lock)
+                {
+                    // Самая важная проверка!
+                    // Если с момента старта этого Delay версия изменилась (был сброс или новый старт)
+                    if (!_hasPending || _timerVersion != myVersion)
+                        return; // ... то это таймер-призрак. Тихо выходим, не трогая станцию!
+                }
+
+                // Иначе всё ок, дергаем ядро
                 DelayedUpdateReady?.Invoke(this);
             });
 
-            // Возвращаем false, так как ПРЯМО СЕЙЧАС значение еще старое
             return false;
         }
 
+        // 2.04 ApplyPending
         public bool ApplyPending()
         {
+            bool valueToApply;
+
+            // 1. Хватаем замок ТОЛЬКО чтобы забрать значение и сбросить флаг
             lock (_lock)
             {
                 if (!_hasPending) return false;
                 _hasPending = false;
-
-                // Применяем отложенное значение
-                bool changed = UpdateValue(_pendingValue);
-                if (changed)
-                {
-                    // ЛОГ СРАБАТЫВАНИЯ ТАЙМЕРА
-                    AppLogger.Log($"TIMER TICK: {Id} {Description}-> {Value}");
-                }
-                return changed;
+                valueToApply = _pendingValue;
             }
+
+            // 2. Спокойно применяем значение без блокировки потоков
+            bool changed = UpdateValue(valueToApply);
+            if (changed)
+            {
+                AppLogger.Log($"TIMER TICK: {Id} {Description}-> {Value}");
+            }
+            return changed;
         }
 
         private bool UpdateValue(bool newValue)
         {
             if (Value == newValue) return false;
             Value = newValue;
-            //Changed?.Invoke(this); // Уведомляем движок
             return true;
         }
 
@@ -148,7 +166,6 @@ namespace BPO_ex4.StationLogic
             var app = Application.Current;
             if (app != null && !app.Dispatcher.CheckAccess())
             {
-                // синхронный вызов в UI-потоке — чтобы исключить гонки внутри WPF binding engine
                 app.Dispatcher.Invoke(() => handler(this));
             }
             else

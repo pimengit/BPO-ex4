@@ -26,14 +26,19 @@ namespace BPO_ex4
         public ObservableCollection<RouteButtonViewModel> RouteButtons { get; set; }
             = new ObservableCollection<RouteButtonViewModel>();
 
+        public TopPanelViewModel TopPanel { get; set; } = new TopPanelViewModel();
         public StationViewWindow(Context ctx, SimulationEngine engine, string xmlpath)
         {
             InitializeComponent();
+            this.DataContext = this;
             _engine = engine;
+
+            TopPanel.BindToLogic(ctx, engine);
 
             // 2. УСТАНАВЛИВАЕМ КОНТЕКСТ ДАННЫХ
             // Это говорит окну: "Ищи переменные (RouteButtons) внутри этого же файла"
             DataContext = this;
+
 
             // 3. СНАЧАЛА ЗАГРУЖАЕМ СХЕМУ
             LoadScheme(ctx, xmlpath);

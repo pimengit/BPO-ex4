@@ -40,26 +40,30 @@ namespace BPO_ex4.StationLogic
                 // Логирование изменений (можно раскомментировать для отладки)
                 n.Changed += node =>
                 {
-                     Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] CHANGED: {node.Id} = {node.Value}");
+                     //Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] CHANGED: {node.Id} = {node.Value}");
                 };
 
                 // Обработка задержек (Task.Delay завершился и нода готова применить значение)
                 n.DelayedUpdateReady += node =>
                 {
-                    lock (_queueLock)
+                    // ПРОБЛЕМА БЫЛА ЗДЕСЬ: Заставляем фоновый таймер передать работу в главный поток UI!
+                    System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
                     {
-                        // Пытаемся применить отложенное значение
-                        if (node.ApplyPending())
+                        lock (_queueLock)
                         {
-                            Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] TIMER APPLY: {node.Id} -> {node.Value}");
+                            // Пытаемся применить отложенное значение
+                            if (node.ApplyPending())
+                            {
+                                //Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] TIMER APPLY: {node.Id} -> {node.Value}");
 
-                            // Если значение изменилось -> добавляем зависимых в очередь
-                            EnqueueDependents(node);
+                                // Если значение изменилось -> добавляем зависимых в очередь
+                                EnqueueDependents(node);
 
-                            // Запускаем обработку очереди
-                            ProcessQueue();
+                                // Запускаем обработку очереди
+                                ProcessQueue();
+                            }
                         }
-                    }
+                    });
                 };
 
                 nodes[id] = n;

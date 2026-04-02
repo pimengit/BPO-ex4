@@ -83,8 +83,22 @@ namespace BPO_ex4.StationLogic
         {
             EnqueueDependents(startNode);
 
+            int safetyCounter = 0;
+            // Предохранитель: максимальное количество пересчетов за одну волну.
+            // Ни одна реальная станция не пересчитывает логику 2000 раз подряд за мгновение.
+            const int MAX_ITERATIONS = 2000;
+
             while (_queue.Count > 0)
             {
+                safetyCounter++;
+                if (safetyCounter > MAX_ITERATIONS)
+                {
+                    // РУБИМ ЦЕПЬ!
+                    AppLogger.Log("ERROR: Обнаружена бесконечная генерация (логическая петля)! Защита сбросила очередь.");
+                    _queue.Clear();
+                    break;
+                }
+
                 var node = _queue.Dequeue();
                 if (node.Recompute())
                 {

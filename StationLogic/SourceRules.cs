@@ -2828,7 +2828,7 @@ namespace BPO_ex4.StationLogic
                 }
 
                 // OUT: 0.x
-                if (ist.StartsWith("0.") & (ist != "0.7" | ist != "0.6" | ist != "0.5" | ist != "0.4" | ist != "0.3" | ist != "0.2"))
+                if (ist.StartsWith("0.") && ist != "0.7" && ist != "0.6" && ist != "0.5" && ist != "0.4" && ist != "0.3" && ist != "0.2")
                 {
                     var ch = int.Parse(ist.Substring(2));
                     return $"GEN_OUT[{num}:{ch}]";
@@ -3281,10 +3281,8 @@ namespace BPO_ex4.StationLogic
                 }
 
                 if (ist == "4.3")
-                {
-                    var ch = int.Parse(ist.Substring(2));
-                    return $"KOD_LNK[{num}:{ch}]";
-                }
+                    return "CONST_1";
+                
 
                 if (ist == "3.2")
                 {
@@ -3299,11 +3297,11 @@ namespace BPO_ex4.StationLogic
                 if (ist == "4.14")
                     return $"KOD_OOD[{num}]";
 
-                //if (ist == "4.13")
-                //return $"KOD_tOD[{num}]";
-
                 if (ist == "4.13")
-                    return "CONST_0";
+                return $"KOD_tOD[{num}]";
+
+                //if (ist == "4.13")
+                   // return "CONST_0";
 
                 if (ist == "4.12")
                     return $"SIGNAL_SVOD2[{num}]";
@@ -3341,8 +3339,8 @@ namespace BPO_ex4.StationLogic
                 if (ist == "5.0")
                     return $"AVTODO_OAR[{num}]";
 
-                if (ist == "5.15")
-                    return $"MAKET_MIV[{num}]";
+                if (ist == "5.13")
+                    return $"MAKET_MV[{num}]";
 
                 if (ist == "6.8")
                     return $"GEN_K40RS[{num}]";
