@@ -3736,9 +3736,9 @@ namespace BPO_ex4.StationLogic
             }
 
             // =========================
-            // BELL_*  (OUT)
+            // UV_*  (OUT)
             // =========================
-            if (targetSheet.StartsWith("BELL_"))
+            if (targetSheet.StartsWith("UV_"))
             {
                 if (num == null)
                     throw new Exception($"BELL: missing controller for ist={ist}");

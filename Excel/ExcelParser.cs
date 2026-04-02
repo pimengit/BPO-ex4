@@ -106,36 +106,41 @@ namespace BPO_ex4.Excel
         }
         static void ParseSheet(ExcelWorksheet ws, Context ctx)
         {
-            // 1. АНАЛИЗ МАСКИ (Ваша надежная логика без Dimension)
             var groupsMapping = new List<List<int>>();
             groupsMapping.Add(new List<int>()); // 0-я группа пустая
 
-            int col;
-            if (ws.Name.Contains("UV_EX"))
-                col = 6;
+            bool isUvEx = ws.Name.StartsWith("UV_EX");
+
+            // 1. АНАЛИЗ МАСКИ
+            if (isUvEx)
+            {
+                // Для листов увязки жестко задаем чтение колонки 6 (F - источник)
+                // (Колонка E - номер - будет вычислена ниже как cIndex - 1)
+                groupsMapping.Add(new List<int> { 6 });
+            }
             else
-                col = 5;
+            {
+                // Стандартный парсинг маски для обычных листов
+                int col = 5;
                 List<int> currentGroup = null;
 
-            while (true)
-            {
-                // Используем .Value, так как .Text может зависеть от ширины колонки или зума
-                var maskVal = ws.Cells[1, col].Value?.ToString();
-
-                // Если пусто - значит конец таблицы
-                if (string.IsNullOrWhiteSpace(maskVal)) break;
-
-                if (maskVal == "1")
+                while (true)
                 {
-                    currentGroup = new List<int>();
-                    currentGroup.Add(col);
-                    groupsMapping.Add(currentGroup);
+                    var maskVal = ws.Cells[1, col].Value?.ToString();
+                    if (string.IsNullOrWhiteSpace(maskVal)) break;
+
+                    if (maskVal == "1")
+                    {
+                        currentGroup = new List<int>();
+                        currentGroup.Add(col);
+                        groupsMapping.Add(currentGroup);
+                    }
+                    else if (maskVal == "0")
+                    {
+                        if (currentGroup != null) currentGroup.Add(col);
+                    }
+                    col += 2;
                 }
-                else if (maskVal == "0")
-                {
-                    if (currentGroup != null) currentGroup.Add(col);
-                }
-                col += 2;
             }
 
             // 2. ЧТЕНИЕ СТРОК
@@ -164,6 +169,7 @@ namespace BPO_ex4.Excel
 
                     foreach (var cIndex in colIndices)
                     {
+                        // Для UV_EX cIndex = 6 (F), cIndex-1 = 5 (E)
                         var istCell = ws.Cells[row, cIndex].Value?.ToString();
                         var numCell = ws.Cells[row, cIndex - 1].Value?.ToString();
 
@@ -176,8 +182,15 @@ namespace BPO_ex4.Excel
 
                             try
                             {
-                                // Важно: SourceRules должен быть у вас в проекте
                                 string srcId = SourceRules.Resolve(ws.Name, ist, num);
+
+                                // === МАГИЯ УВЯЗКИ: ПРЕФИКС IN_ ===
+                                // Если в формулах мы ссылаемся на порт увязки, значит ждем сигнал извне
+                                if (srcId.StartsWith("UV_EX"))
+                                {
+                                    srcId = "IN_" + srcId;
+                                }
+
                                 nodeList.Add(ctx.Get(srcId));
                             }
                             catch { }
@@ -186,12 +199,18 @@ namespace BPO_ex4.Excel
                     inputs[i] = nodeList;
                 }
 
-                // 3. СОЗДАНИЕ
+                // 3. СОЗДАНИЕ УЗЛА
                 try
                 {
+                    // Логику ищем по оригинальному имени (чтобы нашел класс UV_EX1)
                     var logic = CreateLogic(ws.Name);
-                    // Вызываем Фабрику (она пропишет Dependents)
-                    VariableFactory.Create(ctx, ws.Name, objectIndex, inputs, logic, stopend);
+
+                    // === МАГИЯ УВЯЗКИ: ПРЕФИКС OUT_ ===
+                    // Если мы парсим сам лист увязки, регистрируем его как исходящий узел
+                    string targetSheetName = isUvEx ? "OUT_" + ws.Name : ws.Name;
+
+                    // Вызываем Фабрику
+                    VariableFactory.Create(ctx, targetSheetName, objectIndex, inputs, logic, stopend);
                 }
                 catch { }
 
