@@ -184,7 +184,7 @@ namespace BPO_ex4.Visuals
                 foreach (var group in _occupancyNode.LogicSource.Groups)
                 {
                     if (group == null) continue;
-                    var inputNode = group.FirstOrDefault(n => n.Id.StartsWith("SECT_IN") || n.Id.StartsWith("RELAY_KRK") || n.Id.StartsWith("SECT_EI1"));
+                    var inputNode = group.FirstOrDefault(n => n.Id.StartsWith("SECT_IN") || n.Id.StartsWith("RELAY_KRK") || n.Id.StartsWith("SECT_EI1") || n.Id.StartsWith("SECT_EI2"));
                     if (inputNode != null) { _node = inputNode; break; }
                 }
             }
