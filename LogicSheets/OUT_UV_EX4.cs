@@ -3,9 +3,9 @@ using BPO_ex4.StationLogic;
 
 namespace BPO_ex4.LogicSheets
 {
-    class UV_EX1 : SheetLogic
+    class OUT_UV_EX4 : SheetLogic
     {
-        public UV_EX1()
+        public OUT_UV_EX4()
         {
             OnDelay  = TimeSpan.FromMilliseconds(50);
             OffDelay = TimeSpan.FromMilliseconds(50);
@@ -13,7 +13,7 @@ namespace BPO_ex4.LogicSheets
 
         public override bool Compute()
         {
-            return (V(1) || !V(2));
+            return V(1);
         }
     }
 }

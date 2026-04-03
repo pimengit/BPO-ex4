@@ -306,26 +306,22 @@ namespace BPO_ex4.StationLogic
                 if (ist == "7.15")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI1[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX1[{num}]";                }
 
                 if (ist == "7.14")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI2[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX2[{num}]";                }
 
                 if (ist == "7.13")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI3[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX3[{num}]";                }
 
                 if (ist == "7.12")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI4[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX4[{num}]";                }
 
                 // логические связи
                 if (ist == "2.15")
@@ -611,26 +607,22 @@ namespace BPO_ex4.StationLogic
                 if (ist == "7.15")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"METALL_EI1[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX1[{num}]";                }
 
                 if (ist == "7.14")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"METALL_EI2[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX2[{num}]";                }
 
                 if (ist == "7.13")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"METALL_EI3[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX3[{num}]";                }
 
                 if (ist == "7.12")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"METALL_EI4[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX4[{num}]";                }
 
                 throw new Exception($"METALL: unknown ist={ist}");
             }
@@ -648,26 +640,22 @@ namespace BPO_ex4.StationLogic
                 if (ist == "7.15")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"STAGE_EI1[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX1[{num}]";                }
 
                 if (ist == "7.14")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"STAGE_EI2[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX2[{num}]";                }
 
                 if (ist == "7.13")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"STAGE_EI3[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX3[{num}]";                }
 
                 if (ist == "7.12")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"STAGE_EI4[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX4[{num}]";                }
 
 
                 if (ist == "1.0")
@@ -996,26 +984,22 @@ namespace BPO_ex4.StationLogic
                 if (ist == "7.15")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"IS_EI1[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX1[{num}]";                }
 
                 if (ist == "7.14")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"IS_EI2[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX2[{num}]";                }
 
                 if (ist == "7.13")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"IS_EI3[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX3[{num}]";                }
 
                 if (ist == "7.12")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"IS_EI4[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX4[{num}]";                }
 
                 throw new Exception($"IS: unknown ist={ist}");
             }
@@ -1648,26 +1632,22 @@ namespace BPO_ex4.StationLogic
                 if (ist == "7.15")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI1[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX1[{num}]";                }
 
                 if (ist == "7.14")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI2[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX2[{num}]";                }
 
                 if (ist == "7.13")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI3[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX3[{num}]";                }
 
                 if (ist == "7.12")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI4[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX4[{num}]";                }
 
                 if (ist == "7.11")
                     return $"PARTROUTE_Zc[{num}]";
@@ -2204,26 +2184,22 @@ namespace BPO_ex4.StationLogic
                 if (ist == "7.15")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI1[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX1[{num}]";                }
 
                 if (ist == "7.14")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI2[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX2[{num}]";                }
 
                 if (ist == "7.13")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI3[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX3[{num}]";                }
 
                 if (ist == "7.12")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI4[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX4[{num}]";                }
 
                 if (ist == "7.11")
                     return $"METALL_MKBV[{num}]";
@@ -2498,26 +2474,22 @@ namespace BPO_ex4.StationLogic
                 if (ist == "7.15")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECURITY_EI1[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX1[{num}]";                }
 
                 if (ist == "7.14")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECURITY_EI2[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX2[{num}]";                }
 
                 if (ist == "7.13")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECURITY_EI3[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX3[{num}]";                }
 
                 if (ist == "7.12")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECURITY_EI4[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX4[{num}]";                }
 
                 throw new Exception($"SECURITY: unknown ist={ist}");
             }
@@ -2541,26 +2513,22 @@ namespace BPO_ex4.StationLogic
                 if (ist == "7.15")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"AGP_EI1[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX1[{num}]";                }
 
                 if (ist == "7.14")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"AGP_EI2[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX2[{num}]";                }
 
                 if (ist == "7.13")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"AGP_EI3[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX3[{num}]";                }
 
                 if (ist == "7.12")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"AGP_EI4[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX4[{num}]";                }
 
                 throw new Exception($"AGP: unknown ist={ist}");
             }
@@ -2783,26 +2751,22 @@ namespace BPO_ex4.StationLogic
                 if (ist == "7.15")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SPEED_EI1[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX1[{num}]";                }
 
                 if (ist == "7.14")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SPEED_EI2[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX2[{num}]";                }
 
                 if (ist == "7.13")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SPEED_EI3[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX3[{num}]";                }
 
                 if (ist == "7.12")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SPEED_EI4[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX4[{num}]";                }
 
                 throw new Exception($"SPEED: unknown ist={ist}");
             }
@@ -3038,26 +3002,22 @@ namespace BPO_ex4.StationLogic
                 if (ist == "3.15")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"GEN_EI1[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX1[{num}]";                }
 
                 if (ist == "3.14")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"GEN_EI2[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX2[{num}]";                }
 
                 if (ist == "3.13")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"GEN_EI3[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX3[{num}]";                }
 
                 if (ist == "3.12")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"GEN_EI4[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX4[{num}]";                }
 
 
 
@@ -3630,26 +3590,22 @@ namespace BPO_ex4.StationLogic
                 if (ist == "7.15")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"UU_EI1[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX1[{num}]";                }
 
                 if (ist == "7.14")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"UU_EI2[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX2[{num}]";                }
 
                 if (ist == "7.13")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"UU_EI3[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX3[{num}]";                }
 
                 if (ist == "7.12")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"UU_EI4[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX4[{num}]";                }
 
                 throw new Exception($"UU: unknown ist={ist}");
             }
@@ -3683,26 +3639,22 @@ namespace BPO_ex4.StationLogic
                 if (ist == "7.15")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI1[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX1[{num}]";                }
 
                 if (ist == "7.14")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI2[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX2[{num}]";                }
 
                 if (ist == "7.13")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI3[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX3[{num}]";                }
 
                 if (ist == "7.12")
                 {
                     var ch = int.Parse(ist.Substring(2));
-                    return $"SECT_EI4[{num}:{ch}]";
-                }
+                    return $"IN_UV_EX4[{num}]";                }
 
 
                 if (ist == "4.13")
@@ -3780,7 +3732,7 @@ namespace BPO_ex4.StationLogic
                 if (ist == "4.6") return $"RELAY_KRK1[{num}]";
                 if (ist == "4.5") return $"SIGNAL_RO_ARS[{num}]";
                 if (ist == "4.4") return $"SIGNAL_RO_AB[{num}]";
-                if (ist == "4.3") return null; // ¬ВС — нет
+                if (ist == "4.3") return $"INV_STAGE_VS[{num}]";
                 if (ist == "4.2") return $"SPEED_HV[{num}]";
                 if (ist == "4.1") return $"SECT_Lz[{num}]";
                 if (ist == "4.0") return $"SECT_LS[{num}]";

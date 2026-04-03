@@ -34,10 +34,13 @@ namespace BPO_ex4
         }
         private void LogicTabContent_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            // Если мы стали видимы (IsVisible == true) И данные устарели -> обновляемся
-            if ((bool)e.NewValue && _isDirty)
+            if (this.IsVisible)
             {
-                RefreshUI();
+                // Асинхронно просим обновить UI. WPF сделает это безопасно, когда освободится.
+                Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    RefreshUI();
+                });
             }
         }
         public void Initialize(Context ctx, SimulationEngine engine, ExcelSession session, List<Node> cache, Node startNode)
@@ -61,23 +64,23 @@ namespace BPO_ex4
             }), frame);
             Dispatcher.PushFrame(frame);
         }
-
+        //03.04 комментирую этот метод ниже
         public void RefreshUI()
         {
-            if (!this.IsVisible)
-            {
-                _isDirty = true;
-                return;
-            }
+            /* if (!this.IsVisible)
+             {
+                 _isDirty = true;
+                 return;
+             }
 
-            // Если мы дошли сюда, значит вкладка видна. Сбрасываем флаг.
-            _isDirty = false;
+             // Если мы дошли сюда, значит вкладка видна. Сбрасываем флаг.
+             _isDirty = false;
 
-            if (_currentNode != null)
-            {
-                RenderTable(_currentNode);
-                AllowUIToUpdate();
-            }
+             if (_currentNode != null)
+             {
+                 RenderTable(_currentNode);
+                 AllowUIToUpdate();
+             }*/
         }
 
         private void RenderTable(Node node)

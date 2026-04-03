@@ -188,7 +188,7 @@ namespace BPO_ex4.Excel
                                 // Если в формулах мы ссылаемся на порт увязки, значит ждем сигнал извне
                                 if (srcId.StartsWith("UV_EX"))
                                 {
-                                    srcId = "IN_" + srcId;
+                                    srcId = "IN_" + srcId; 
                                 }
 
                                 nodeList.Add(ctx.Get(srcId));
@@ -203,11 +203,12 @@ namespace BPO_ex4.Excel
                 try
                 {
                     // Логику ищем по оригинальному имени (чтобы нашел класс UV_EX1)
-                    var logic = CreateLogic(ws.Name);
+                    
 
                     // === МАГИЯ УВЯЗКИ: ПРЕФИКС OUT_ ===
                     // Если мы парсим сам лист увязки, регистрируем его как исходящий узел
                     string targetSheetName = isUvEx ? "OUT_" + ws.Name : ws.Name;
+                    var logic = CreateLogic(targetSheetName);
 
                     // Вызываем Фабрику
                     VariableFactory.Create(ctx, targetSheetName, objectIndex, inputs, logic, stopend);
