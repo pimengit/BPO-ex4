@@ -3741,255 +3741,105 @@ namespace BPO_ex4.StationLogic
             if (targetSheet.StartsWith("UV_"))
             {
                 if (num == null)
-                    throw new Exception($"BELL: missing controller for ist={ist}");
-
-                if (ist == "2.3")
-                    return $"STAGE_CHN[{num}]";
-
-                if (ist == "2.2")
-                    return $"STAGE_CHK[{num}]";
-
-                if (ist == "2.1")
-                    return $"STAGE_ACHK[{num}]";
-
-                if (ist == "2.0")
-                    return $"STAGE_NN[{num}]";
-
-                if (ist == "3.15")
-                    return $"STAGE_NK[{num}]";
-
-                if (ist == "3.14")
-                    return $"STAGE_ANK[{num}]";
-
-                if (ist == "3.13")
-                    return $"STAGE_SVPM[{num}]";
-
-                if (ist == "3.12")
-                    return $"SIGGROUP_TSKNO[{num}]";
-
-                if (ist == "3.11")
-                    return $"SIGGROUP_TSPP[{num}]";
-
-                if (ist == "3.10")
-                    return $"SIGGROUP_TSGS[{num}]";
-
-                if (ist == "3.9")
-                    return $"SIGGROUP_TSM2[{num}]";
-
-                if (ist == "3.8")
-                    return $"SIGGROUP_TSM1[{num}]";
-
-                if (ist == "3.7")
-                    return $"SIGGROUP_ISK[{num}]";
-
-                if (ist == "3.6")
-                    return $"STAGE_DS[{num}]";
-
-                if (ist == "3.5")
-                    return $"STAGE_ZS[{num}]";
-
-                if (ist == "3.4")
-                    return $"SIGNAL_OKO[{num}]";
-
-                if (ist == "3.3")
-                    return $"SECT_zD45[{num}]";
-
-                if (ist == "3.2")
-                    return $"SECT_zD13[{num}]";
-
-                if (ist == "4.15")
-                    return $"OKSE_RMS[{num}]";
-
-                if (ist == "4.14")
-                    return $"PARTROUTE_Zc[{num}]";
-
-                if (ist == "4.13")
-                    return $"GEN_K275[{num}]";
-
-                if (ist == "4.12")
-                    return $"GEN_KSAO[{num}]";
-
-                if (ist == "4.11")
-                    return $"SIGNAL_SVOD[{num}]";
-
-                if (ist == "4.10")
-                    return $"SECURITY_OHR[{num}]";
-
-                if (ist == "4.9")
-                    return $"SECURITY_RU[{num}]";
-
-                if (ist == "4.8")
-                    return $"SPEED_CHRS[{num}]";
-
-                if (ist == "4.7")
-                    return $"SPEED_NRS[{num}]";
-
-                if (ist == "4.6")
-                    return $"RELAY_KRK1[{num}]";
-
-                if (ist == "4.5")
-                    return $"SIGNAL_RO_ARS[{num}]";
-
-                if (ist == "4.4")
-                    return $"SIGNAL_RO_AB[{num}]";
-
-                if (ist == "4.3")
-                    return $"STAGE_VS[{num}]";
-
-                if (ist == "4.2")
-                    return $"SPEED_HV[{num}]";
-
-                if (ist == "4.1")
-                    return $"SECT_Lz[{num}]";
-
-                if (ist == "4.0")
-                    return $"SECT_LS[{num}]";
-
-                if (ist == "5.15")
-                    return $"GEN_ON[{num}]";
-
-                if (ist == "5.14")
-                    return $"GEN_ROG[{num}]";
-
-                if (ist == "5.13")
-                    return $"GEN_C[{num}]";
-
-                if (ist == "5.12")
-                    return $"GEN_N[{num}]";
-
-                if (ist == "5.11")
-                    return $"SPEED_OS70[{num}]";
-
-                if (ist == "5.10")
-                    return $"SPEED_OS60[{num}]";
-
-                if (ist == "5.9")
-                    return $"SPEED_OS40[{num}]";
-
-                if (ist == "5.8")
-                    return $"SPEED_OS0[{num}]";
-
-                if (ist == "5.7")
-                    return $"SPEED_SDS[{num}]";
-
-                if (ist == "5.6")
-                    return $"SPEED_FH[{num}]";
-
-                if (ist == "5.5")
-                    return $"SPEED_80U[{num}]";
-
-                if (ist == "5.4")
-                    return $"SPEED_70U[{num}]";
-
-                if (ist == "5.3")
-                    return $"SPEED_60U[{num}]";
-
-                if (ist == "5.2")
-                    return $"SPEED_40U[{num}]";
-
-                if (ist == "5.1")
-                    return $"ROUTESECT_40CUM[{num}]";
-
-                if (ist == "5.0")
-                    return $"ROUTESECT_40NUM[{num}]";
-
-                if (ist == "6.15")
-                    return $"SIGNAL_VU[{num}]";
-
-                if (ist == "6.14")
-                    return $"SIGNAL_BSV[{num}]";
-
-                if (ist == "6.13")
-                    return $"SIGNAL_IS[{num}]";
-
-                if (ist == "6.12")
-                    return $"SIGNAL_ASS[{num}]";
-
-                if (ist == "6.11")
-                    return $"SIGNAL_AV[{num}]";
-
-                if (ist == "6.10")
-                    return $"SIGNAL_PSO[{num}]";
-
-                if (ist == "6.9")
-                    return $"SIGNAL_1zHO[{num}]";
-
-                if (ist == "6.8")
-                    return $"SIGNAL_2ZhO[{num}]";
-
-                if (ist == "6.7")
-                    return $"SIGNAL_BO[{num}]";
-
-                if (ist == "6.6")
-                    return $"SIGNAL_SO[{num}]";
-
-                if (ist == "6.5")
-                    return $"SIGNAL_zO[{num}]";
-
-                if (ist == "6.4")
-                    return $"SIGNAL_KO[{num}]";
-
-                if (ist == "6.3")
-                    return $"SIGGROUP_z[{num}]";
-
-                if (ist == "6.2")
-                    return $"PARTROUTE_Uch[{num}]";
-
-                if (ist == "6.1")
-                    return $"ROUTE_S[{num}]";
-
-                if (ist == "6.0")
-                    return $"ROUTE_SU[{num}]";
-
-                if (ist == "7.15")
-                    return $"STAGE_BLP[{num}]";
-
-                if (ist == "7.14")
-                    return $"SWITCH_MK[{num}]";
-
-                if (ist == "7.13")
-                    return $"SWITCH_PK[{num}]";
-
-                if (ist == "7.12")
-                    return $"KURBEL_KKUK[{num}]";
-
-                if (ist == "7.11")
-                    return $"STAGE_SVP[{num}]";
-
-                if (ist == "7.10")
-                    return $"STAGE_OP_U[{num}]";
-
-                if (ist == "7.9")
-                    return $"ROUTE_vS[{num}]";
-
-                if (ist == "7.8")
-                    return $"METALL_MKBV[{num}]";
-
-                if (ist == "7.7")
-                    return $"METALL_MKR[{num}]";
-
-                if (ist == "7.6")
-                    return $"METALL_MKKV[{num}]";
-
-                if (ist == "7.5")
-                    return $"AVTOSTOP_VA[{num}]";
-
-                if (ist == "7.4")
-                    return $"KGU_OKGU[{num}]";
-
-                if (ist == "7.3")
-                    return $"SECT_BRC[{num}]";
-
-                if (ist == "7.2")
-                    return $"SECT_zD125[{num}]";
-
-                if (ist == "7.1")
-                    return $"SECT_P[{num}]";
-
-                if (ist == "7.0")
-                    return $"AGP_NAGP[{num}]";
-
-                throw new Exception($"BELL: unknown ist={ist}");
+                    throw new Exception($"UV: missing controller for ist={ist}");
+
+                // ТИП 2
+                if (ist == "2.5") return $"SECT_OUPN[{num}]";
+                if (ist == "2.4") return $"SECT_OUPN[{num}]";
+                if (ist == "2.3") return $"STAGE_CHN[{num}]";
+                if (ist == "2.2") return $"STAGE_CHK[{num}]";
+                if (ist == "2.1") return $"STAGE_ACHK[{num}]";
+                if (ist == "2.0") return $"STAGE_NN[{num}]";
+
+                // ТИП 3
+                if (ist == "3.15") return $"STAGE_NK[{num}]";
+                if (ist == "3.14") return $"STAGE_ANK[{num}]";
+                if (ist == "3.13") return $"STAGE_SVPM[{num}]";
+                if (ist == "3.12") return $"SPEED_OOS[{num}]";
+                if (ist == "3.11") return $"SECT_PN[{num}]";
+                if (ist == "3.10") return $"GEN_K40RS[{num}]";
+                if (ist == "3.9") return $"SECT_UPN[{num}]";
+                if (ist == "3.8") return $"SECT_VPN[{num}]";
+                if (ist == "3.7") return $"SIGGROUP_ISK[{num}]";
+                if (ist == "3.6") return $"STAGE_DS[{num}]";
+                if (ist == "3.5") return $"STAGE_ZS[{num}]";
+                if (ist == "3.4") return $"SIGNAL_OKO[{num}]";
+                if (ist == "3.3") return $"SECT_zD45[{num}]";
+                if (ist == "3.2") return $"SECT_zD13[{num}]";
+
+                // ТИП 4
+                if (ist == "4.15") return $"OKSE_RMS[{num}]";
+                if (ist == "4.14") return $"PARTROUTE_Zc[{num}]";
+                if (ist == "4.13") return $"GEN_K275[{num}]";
+                if (ist == "4.12") return $"GEN_KSAO[{num}]";
+                if (ist == "4.11") return $"SIGNAL_SVOD[{num}]";
+                if (ist == "4.10") return $"SECURITY_OHR[{num}]";
+                if (ist == "4.9") return $"SECURITY_RU[{num}]";
+                if (ist == "4.8") return $"SPEED_CHRS[{num}]";
+                if (ist == "4.7") return $"SPEED_NRS[{num}]";
+                if (ist == "4.6") return $"RELAY_KRK1[{num}]";
+                if (ist == "4.5") return $"SIGNAL_RO_ARS[{num}]";
+                if (ist == "4.4") return $"SIGNAL_RO_AB[{num}]";
+                if (ist == "4.3") return null; // ¬ВС — нет
+                if (ist == "4.2") return $"SPEED_HV[{num}]";
+                if (ist == "4.1") return $"SECT_Lz[{num}]";
+                if (ist == "4.0") return $"SECT_LS[{num}]";
+
+                // ТИП 5
+                if (ist == "5.15") return $"GEN_ON[{num}]";
+                if (ist == "5.14") return $"GEN_ROG[{num}]";
+                if (ist == "5.13") return $"GEN_C[{num}]"; 
+                if (ist == "5.12") return $"GEN_N[{num}]"; 
+                if (ist == "5.11") return $"SPEED_OS70[{num}]";
+                if (ist == "5.10") return $"SPEED_OS60[{num}]";
+                if (ist == "5.9") return $"SPEED_OS40[{num}]";
+                if (ist == "5.8") return $"SPEED_OS0[{num}]";
+                if (ist == "5.7") return $"SPEED_SDS[{num}]";
+                if (ist == "5.6") return $"SPEED_FH[{num}]";
+                if (ist == "5.5") return $"SPEED_80U[{num}]";
+                if (ist == "5.4") return $"SPEED_70U[{num}]";
+                if (ist == "5.3") return $"SPEED_60U[{num}]";
+                if (ist == "5.2") return $"SPEED_40U[{num}]";
+                if (ist == "5.1") return $"ROUTESECT_40CUM[{num}]";
+                if (ist == "5.0") return $"ROUTESECT_40NUM[{num}]";
+
+                // ТИП 6
+                if (ist == "6.15") return $"SIGNAL_VU[{num}]";
+                if (ist == "6.14") return $"SIGNAL_BSV[{num}]";
+                if (ist == "6.13") return $"SIGNAL_IS[{num}]";
+                if (ist == "6.12") return $"SIGNAL_ASS[{num}]";
+                if (ist == "6.11") return $"SIGNAL_AV[{num}]";
+                if (ist == "6.10") return $"SIGNAL_PSO[{num}]";
+                if (ist == "6.9") return $"SIGNAL_1ZhO[{num}]";
+                if (ist == "6.8") return $"SIGNAL_2ZhO[{num}]";
+                if (ist == "6.7") return $"SIGNAL_BO[{num}]";
+                if (ist == "6.6") return $"SIGNAL_SO[{num}]";
+                if (ist == "6.5") return $"SIGNAL_zO[{num}]";
+                if (ist == "6.4") return $"SIGNAL_KO[{num}]";
+                if (ist == "6.3") return $"SIGGROUP_z[{num}]";
+                if (ist == "6.2") return $"PARTROUTE_Uch[{num}]";
+                if (ist == "6.1") return $"ROUTE_S[{num}]";
+                if (ist == "6.0") return $"ROUTE_SU[{num}]";
+
+                // ТИП 7
+                if (ist == "7.15") return $"STAGE_BLP[{num}]";
+                if (ist == "7.14") return $"SWITCH_MK[{num}]";
+                if (ist == "7.13") return $"SWITCH_PK[{num}]";
+                if (ist == "7.12") return $"KURBEL_KKUK[{num}]";
+                if (ist == "7.11") return $"STAGE_SVP[{num}]";
+                if (ist == "7.10") return $"STAGE_OP_U[{num}]";
+                if (ist == "7.9") return $"STAGE_VS[{num}]"; 
+                if (ist == "7.8") return $"METALL_MKBV[{num}]";
+                if (ist == "7.7") return $"METALL_MKR[{num}]";
+                if (ist == "7.6") return $"METALL_MKKV[{num}]";
+                if (ist == "7.5") return $"AVTOSTOP_VA[{num}]";
+                if (ist == "7.4") return $"KGU_OKGU[{num}]";
+                if (ist == "7.3") return $"SECT_BRC[{num}]";
+                if (ist == "7.2") return $"SECT_zD125[{num}]";
+                if (ist == "7.1") return $"SECT_P[{num}]";
+                if (ist == "7.0") return $"AGP_NAGP[{num}]";
+
+                throw new Exception($"UV: unknown ist={ist}");
             }
             throw new Exception(
                 $"No SourceRule: sheet={targetSheet}, ist={ist}, num={num}");
