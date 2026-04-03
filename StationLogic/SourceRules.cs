@@ -455,7 +455,7 @@ namespace BPO_ex4.StationLogic
                     return $"ROUTE_z_M[{num}]";
 
                 if (ist == "7.1")
-                    return $"ROUTE_KN[{num}]";
+                    return $"ROUTE_KN2[{num}]";
 
                 if (ist == "7.0")
                     return $"SECT_PN[{num}]";
@@ -1230,7 +1230,7 @@ namespace BPO_ex4.StationLogic
                     return $"MAKET_MV[{num}]";
 
                 if (ist == "5.3")
-                    return $"ROUTE_KN[{num}]";
+                    return $"ROUTE_KN2[{num}]";
 
                 if (ist == "5.2")
                     return $"SECT_P[{num}]";
@@ -1361,7 +1361,7 @@ namespace BPO_ex4.StationLogic
                     return $"ROUTE_KNO[{num}]";
 
                 if (ist == "3.14")
-                    return $"ROUTE_KN[{num}]";
+                    return $"ROUTE_KN2[{num}]";
 
                 if (ist == "3.13")
                     return $"KOD_OD2[{num}]";
@@ -1471,7 +1471,7 @@ namespace BPO_ex4.StationLogic
                     return $"ROUTE_KNO[{num}]";
 
                 if (ist == "3.14")
-                    return $"ROUTE_KN[{num}]";
+                    return $"ROUTE_KN2[{num}]";
 
                 if (ist == "3.13")
                     return $"KOD_OD2[{num}]";
@@ -1625,6 +1625,9 @@ namespace BPO_ex4.StationLogic
 
                 if (ist == "6.9")
                     return $"KOD_PNT[{num}]";
+
+                if (ist == "6.8")
+                    return $"ROUTE_KN[{num}]";
 
                 if (ist == "6.6")
                     return $"METALL_MKBV[{num}]";
@@ -1795,7 +1798,7 @@ namespace BPO_ex4.StationLogic
                 }
 
                 if (ist == "3.13")
-                    return $"ROUTE_KN[{num}]";
+                    return $"ROUTE_KN2[{num}]";
 
                 if (ist == "3.12")
                     return $"SIGGROUP_z[{num}]";
@@ -2114,7 +2117,7 @@ namespace BPO_ex4.StationLogic
                     return $"SIGNAL_RMSV[{num}]";
 
                 if (ist == "5.14")
-                    return $"ROUTE_KN[{num}]";
+                    return $"ROUTE_KN2[{num}]";
 
                 if (ist == "5.13")
                     return $"ROUTE_MSTR[{num}]";
@@ -3536,7 +3539,7 @@ namespace BPO_ex4.StationLogic
                     return $"AVTODO_OAR[{num}]";
 
                 if (ist == "4.2")
-                    return $"ROUTE_KN[{num}]";
+                    return $"ROUTE_KN2[{num}]";
 
                 if (ist == "4.1")
                     return $"ROUTE_KNO[{num}]";
